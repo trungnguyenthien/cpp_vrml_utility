@@ -103,35 +103,42 @@ vector<float> parseColor(string token) {
   return colors;
 }
 
-// Loại bỏ tất cả khoảng trắng ở đầu và cuối line
-// chia line thành nhiều phần bởi các ký tự: {,}, [,]
-// Loại bỏ các phần tử empty
-// return vector các chuỗi đã qua xử lý
+// Step 1: Loại bỏ tất cả khoảng trắng ở đầu và cuối line
+// Step 2: replace chuỗi "[" thành "_BEGIN_ARRAY ["
+// Step 3: replace chuỗi "]" thành "_END_ARRAY ]"
+// Step 4: chia line thành nhiều phần bởi các ký tự: {,}, [,]
+// Step 5: Loại bỏ các phần tử empty
+// Step 6: return vector các chuỗi đã qua xử lý
 vector<string> vrml2tokenStrings(string line) {
   std::vector<std::string> tokens;
-  std::string trimmedLine = trim(line);
 
+  // Step 1
+  trim(line);
+
+  // Steps 2 and 3
+  // replaceAll(line, "[", "_BEGIN_ARRAY [");
+  replaceAll(line, "]", "_END_ARRAY ]");
+
+  // Step 4: Split
+  std::vector<std::string> tokens;
+  std::istringstream iss(line);
   std::string token;
-  for (char ch : trimmedLine) {
-    if (ch == '{' || ch == '}' || ch == '[' || ch == ']') {
-      if (!token.empty()) {
-        tokens.push_back(token);
-        token.clear();
-      }
-      tokens.push_back(std::string(1, ch));
-    } else if (!std::isspace(ch)) {
-      token += ch;
-    } else if (!token.empty()) {
-      tokens.push_back(token);
-      token.clear();
+  const std::string delimiters = "{}[]";
+  size_t prev = 0, next = 0;
+  while ((next = line.find_first_of(delimiters, prev)) != std::string::npos) {
+    if (next - prev != 0) {
+      tokens.push_back(line.substr(prev, next - prev));
     }
+    if (delimiters.find(line[next]) != std::string::npos) {
+      tokens.push_back(line.substr(next, 1));
+    }
+    prev = next + 1;
+  }
+  if (prev < line.size()) {
+    tokens.push_back(line.substr(prev));
   }
 
-  if (!token.empty()) {
-    tokens.push_back(token);
-  }
-
-  // Loại bỏ các phần tử rỗng
+  // Step 5: Remove empty elements
   tokens.erase(
       std::remove_if(tokens.begin(), tokens.end(), [](const std::string &s) { return s.empty(); }),
       tokens.end());

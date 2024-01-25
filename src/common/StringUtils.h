@@ -17,4 +17,6 @@ string toLowerCase(const string &str);
 string trim(const string &str);
 bool isNumber(const std::string &s);
 
+std::string &replaceAll(std::string &str, const std::string &from, const std::string &to);
+
 #endif /* ED4F3CE3_8488_4B5C_8BB2_C42FB8AD02CE */
