@@ -48,6 +48,36 @@ Point parsePoint(string token) {
   return Point(x, y, z);
 }
 
+// using FaceDef = vector<int>;
+
+// Token có các định dạng như dưới đây
+// 0, 3, 2, 1, -1,
+// 4, 7, 3, 0, -1,
+// 7, 6, 2, 3, -1,
+// 6, 5, 1, 2, -1,
+// 5 4 0 -1
+// 5 4 0 -1,
+// Số lượng number trong token không giới hạn.
+// Các token có thể phân cách bằng khoảng trắng hoặc dấu phẩy (,)
+// Loại bỏ số -1 cuối token, Trả về đối tượng FaceDef chứa các chữ số còn lại (theo đúng thứ tự)
+FaceDef parseFace(string token) {
+  FaceDef face;
+  std::istringstream iss(token);
+  int num;
+  char delim;
+
+  while (iss >> num) {
+    if (num != -1) {
+      face.push_back(num);
+    }
+    if (iss.peek() == ',' || iss.peek() == ' ') {
+      iss >> delim;  // Đọc dấu phẩy hoặc khoảng trắng
+    }
+  }
+
+  return face;
+}
+
 // Nếu token có định dạng sau
 // {colorName} {floatRed} {floatGreen} {floatBlue}
 // Ví dụ: "diffuseColor 0 0 1", "emissiveColor 0 0 1"
@@ -163,9 +193,13 @@ vector<VrmlObject> read_vrml_file(string file) {
     bool isNumbers = isNumberArray(token);
 
     if (isNumbers && number_set == NUMBERSET_POINT) {
+      points.push_back(parsePoint(token));
+      continue;
     }
 
     if (isNumbers && number_set == NUMBERSET_COORINDEX) {
+      faces.push_back(parseFace(token));
+      continue;
     }
 
     if (!isNumbers) {

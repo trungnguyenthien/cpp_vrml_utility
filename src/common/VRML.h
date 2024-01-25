@@ -28,6 +28,7 @@ public:
 
 bool isNumberArray(string str);
 Point parsePoint(string token);
+FaceDef parseFace(string token);
 vector<float> parseColor(string token);
 vector<string> vrml2tokenStrings(string line);
 vector<VrmlObject> read_vrml_file(string file);
