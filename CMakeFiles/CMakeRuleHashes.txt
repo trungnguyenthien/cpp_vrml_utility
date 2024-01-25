@@ -1,0 +1,2 @@
+# Hashes of file build rules.
+50419d79d26f0b096ffe88e327c8249f modules/cli11/tests/data/unicode.txt
