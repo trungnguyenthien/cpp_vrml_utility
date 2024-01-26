@@ -17,11 +17,12 @@ public:
   vector<Point> points;
 };
 
-class IndexedFaceSet : VrmlObject {
+class VrmlFaceSet : public VrmlObject {
 public:
+  VrmlFaceSet();
   vector<FaceDef> faces;
 };
-class IndexedLineSet : VrmlObject {
+class VrmlLineSet : public VrmlObject {
 public:
   vector<Point> polylines;
 };
@@ -31,6 +32,6 @@ Point parsePoint(string token);
 FaceDef parseFace(string token);
 vector<float> parseColor(string token);
 vector<string> vrml2tokenStrings(string line);
-vector<VrmlObject> read_vrml_file(string file);
-
+vector<VrmlObject *> read_vrml_file(string file);
+vector<FaceDef> makeFaces(vector<vector<int>> points);
 #endif  // COMMON_VRML_H_

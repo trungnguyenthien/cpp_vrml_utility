@@ -59,7 +59,7 @@ Point parsePoint(string token) {
 // 5 4 0 -1,
 // Số lượng number trong token không giới hạn.
 // Các token có thể phân cách bằng khoảng trắng hoặc dấu phẩy (,)
-// Loại bỏ số -1 cuối token, Trả về đối tượng FaceDef chứa các chữ số còn lại (theo đúng thứ tự)
+// Trả về đối tượng FaceDef chứa các chữ số còn lại (theo đúng thứ tự)
 FaceDef parseFace(string token) {
   FaceDef face;
   std::istringstream iss(token);
@@ -70,12 +70,53 @@ FaceDef parseFace(string token) {
     if (num != -1) {
       face.push_back(num);
     }
+    // Đọc qua dấu phẩy hoặc khoảng trắng
     if (iss.peek() == ',' || iss.peek() == ' ') {
-      iss >> delim;  // Đọc dấu phẩy hoặc khoảng trắng
+      iss >> delim;
     }
   }
 
   return face;
+}
+
+/**
+ Vector points chứa các vector (kiểu int như sau:)
+ {0, 3, 2, 1, -1, 0, 3, 2, 1, -1,}
+ {0, 3, 2, 1}
+ {-1, 5, 1, 2}
+
+ Hãy thực hiện các bước sau:
+ Step 1: Join lại thành 1 vector {0, 3, 2, 1, -1, 0, 3, 2, 1, -1 0, 3, 2, 1, -1, 5, 1, 2}
+ Step 2: Chia ra và return vector<vector<int>> tại các giá trị -1 (các vector<int> mới không chứa
+ -1)
+ */
+vector<vector<int>> makeFaces(vector<vector<int>> points) {
+  std::vector<int> joined;
+  // Step 1: Join vectors
+  for (const auto &vec : points) {
+    joined.insert(joined.end(), vec.begin(), vec.end());
+  }
+
+  std::vector<std::vector<int>> faces;
+  std::vector<int> currentFace;
+
+  // Step 2: Split at -1 and remove -1
+  for (int num : joined) {
+    if (num != -1) {
+      currentFace.push_back(num);
+    } else {
+      if (!currentFace.empty()) {
+        faces.push_back(currentFace);
+        currentFace.clear();
+      }
+    }
+  }
+  // Add the last face if -1 is not the last element
+  if (!currentFace.empty()) {
+    faces.push_back(currentFace);
+  }
+
+  return faces;
 }
 
 // Nếu token có định dạng sau
@@ -116,8 +157,8 @@ vector<string> vrml2tokenStrings(string line) {
   trim(line);
 
   // Steps 2 and 3
-  // replaceAll(line, "[", "_BEGIN_ARRAY [");
-  replaceAll(line, "]", "_END_ARRAY ]");
+  replaceAll(line, "}", "] _END_OBJECT");
+  replaceAll(line, "]", "] _END_ARRAY");
 
   // Step 4: Split
   std::vector<std::string> tokens;
@@ -127,15 +168,15 @@ vector<string> vrml2tokenStrings(string line) {
   size_t prev = 0, next = 0;
   while ((next = line.find_first_of(delimiters, prev)) != std::string::npos) {
     if (next - prev != 0) {
-      tokens.push_back(line.substr(prev, next - prev));
+      tokens.push_back(trim(line.substr(prev, next - prev)));
     }
     if (delimiters.find(line[next]) != std::string::npos) {
-      tokens.push_back(line.substr(next, 1));
+      tokens.push_back(trim(line.substr(next, 1)));
     }
     prev = next + 1;
   }
   if (prev < line.size()) {
-    tokens.push_back(line.substr(prev));
+    tokens.push_back(trim(line.substr(prev)));
   }
 
   // Step 5: Remove empty elements
@@ -146,7 +187,7 @@ vector<string> vrml2tokenStrings(string line) {
   return tokens;
 }
 
-vector<VrmlObject> read_vrml_file(string file) {
+vector<VrmlObject *> read_vrml_file(string file) {
   vector<string> tokens;
   forEachLine(file, [&tokens](long index, string line) {
     vector<string> tokensInLine = vrml2tokenStrings(line);
@@ -155,7 +196,10 @@ vector<VrmlObject> read_vrml_file(string file) {
     }
   });
 
-  vector<VrmlObject> vrmlObject;
+  vector<VrmlObject *> vrmlObject;
+
+  const string TOKEN_END_ARRAY = "_END_ARRAY";
+  const string TOKEN_END_OBJECT = "_END_OBJECT";
 
   const int FLG_READ_END = 0;
   const int FLG_READ_START = 1;
@@ -172,14 +216,15 @@ vector<VrmlObject> read_vrml_file(string file) {
   vector<FaceDef> faces = {};
 
   for (string token : tokens) {
-    if (token == "Shape") {
-      flag_read = FLG_READ_END;
-      number_set = NUMBERSET_UNKNOWN;
-      continue;
-    }
+    // if (token == "Shape") {
+    //   flag_read = FLG_READ_END;
+    //   number_set = NUMBERSET_UNKNOWN;
+    //   continue;
+    // }
 
     if (token == "geometry IndexedFaceSet") {
       flag_read = FLG_READ_START;
+      number_set = NUMBERSET_UNKNOWN;
       continue;
     }
 
@@ -189,11 +234,13 @@ vector<VrmlObject> read_vrml_file(string file) {
 
     if (token == "point") {
       number_set = NUMBERSET_POINT;
-      continue;
+    } else if (token == "coordIndex") {
+      number_set = NUMBERSET_COORINDEX;
+    } else if (token == TOKEN_END_ARRAY) {
+      number_set = NUMBERSET_UNKNOWN;
     }
 
-    if (token == "coordIndex") {
-      number_set = NUMBERSET_COORINDEX;
+    if (number_set == NUMBERSET_UNKNOWN) {
       continue;
     }
 
@@ -204,12 +251,32 @@ vector<VrmlObject> read_vrml_file(string file) {
       continue;
     }
 
+    // if (token == TOKEN_END_ARRAY && number_set == NUMBERSET_POINT) {
+    //   // Do nothing
+    // }
+
     if (isNumbers && number_set == NUMBERSET_COORINDEX) {
       faces.push_back(parseFace(token));
       continue;
     }
 
-    if (!isNumbers) {
+    // if (token == TOKEN_END_ARRAY && number_set == NUMBERSET_COORINDEX) {
+    //   faces = makeFaces(faces);
+    //   continue;
+    // }
+
+    if (token == TOKEN_END_OBJECT && !faces.empty() && !points.empty()) {
+      // faces = makeFaces(faces);
+
+      VrmlFaceSet *faceSet = new VrmlFaceSet();
+      faceSet->points = points;
+      faceSet->faces = makeFaces(faces);
+      vrmlObject.push_back(faceSet);
+
+      points = {};
+      faces = {};
+      flag_read = FLG_READ_END;
+      number_set = NUMBERSET_UNKNOWN;
     }
   }
 
