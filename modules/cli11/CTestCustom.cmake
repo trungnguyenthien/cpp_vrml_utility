@@ -1,1 +1,0 @@
-set(CTEST_CUSTOM_PRE_TEST "/Users/trung/cpp_vrml_utility/informational")
