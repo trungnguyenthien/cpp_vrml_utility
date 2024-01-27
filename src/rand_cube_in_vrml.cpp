@@ -15,6 +15,10 @@ int main(int argc, char **argv) {
   float sizeCube = 1;
   app.add_option("-s,--size", sizeCube, "Size cube");
 
+  cout << "filename:" << filename << endl;
+  cout << "number:" << numberCube << endl;
+  cout << "size:" << sizeCube << endl;
+
   CLI11_PARSE(app, argc, argv);
   if (filename.empty()) {
     return 0;
