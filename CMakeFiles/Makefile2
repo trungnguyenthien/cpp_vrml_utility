@@ -65,15 +65,18 @@ CMAKE_BINARY_DIR = /Users/trung/cpp_vrml_utility
 # The main recursive "all" target.
 all: CMakeFiles/rand_cube_in_vrml.dir/all
 all: modules/cli11/all
+all: modules/geos/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
 preinstall: modules/cli11/preinstall
+preinstall: modules/geos/preinstall
 .PHONY : preinstall
 
 # The main recursive "clean" target.
 clean: CMakeFiles/rand_cube_in_vrml.dir/clean
 clean: modules/cli11/clean
+clean: modules/geos/clean
 .PHONY : clean
 
 #=============================================================================
@@ -125,18 +128,121 @@ modules/cli11/src/clean: modules/cli11/src/CMakeFiles/CLI11.dir/clean
 .PHONY : modules/cli11/src/clean
 
 #=============================================================================
+# Directory level rules for directory modules/geos
+
+# Recursive "all" directory target.
+modules/geos/all: modules/geos/CMakeFiles/geos.dir/all
+modules/geos/all: modules/geos/CMakeFiles/geos_c.dir/all
+modules/geos/all: modules/geos/include/all
+modules/geos/all: modules/geos/src/all
+modules/geos/all: modules/geos/capi/all
+modules/geos/all: modules/geos/tools/all
+.PHONY : modules/geos/all
+
+# Recursive "preinstall" directory target.
+modules/geos/preinstall: modules/geos/include/preinstall
+modules/geos/preinstall: modules/geos/src/preinstall
+modules/geos/preinstall: modules/geos/capi/preinstall
+modules/geos/preinstall: modules/geos/tools/preinstall
+.PHONY : modules/geos/preinstall
+
+# Recursive "clean" directory target.
+modules/geos/clean: modules/geos/CMakeFiles/geos.dir/clean
+modules/geos/clean: modules/geos/CMakeFiles/geos_c.dir/clean
+modules/geos/clean: modules/geos/include/clean
+modules/geos/clean: modules/geos/src/clean
+modules/geos/clean: modules/geos/capi/clean
+modules/geos/clean: modules/geos/tools/clean
+.PHONY : modules/geos/clean
+
+#=============================================================================
+# Directory level rules for directory modules/geos/capi
+
+# Recursive "all" directory target.
+modules/geos/capi/all:
+.PHONY : modules/geos/capi/all
+
+# Recursive "preinstall" directory target.
+modules/geos/capi/preinstall:
+.PHONY : modules/geos/capi/preinstall
+
+# Recursive "clean" directory target.
+modules/geos/capi/clean:
+.PHONY : modules/geos/capi/clean
+
+#=============================================================================
+# Directory level rules for directory modules/geos/include
+
+# Recursive "all" directory target.
+modules/geos/include/all:
+.PHONY : modules/geos/include/all
+
+# Recursive "preinstall" directory target.
+modules/geos/include/preinstall:
+.PHONY : modules/geos/include/preinstall
+
+# Recursive "clean" directory target.
+modules/geos/include/clean:
+.PHONY : modules/geos/include/clean
+
+#=============================================================================
+# Directory level rules for directory modules/geos/src
+
+# Recursive "all" directory target.
+modules/geos/src/all: modules/geos/src/deps/all
+.PHONY : modules/geos/src/all
+
+# Recursive "preinstall" directory target.
+modules/geos/src/preinstall: modules/geos/src/deps/preinstall
+.PHONY : modules/geos/src/preinstall
+
+# Recursive "clean" directory target.
+modules/geos/src/clean: modules/geos/src/deps/clean
+.PHONY : modules/geos/src/clean
+
+#=============================================================================
+# Directory level rules for directory modules/geos/src/deps
+
+# Recursive "all" directory target.
+modules/geos/src/deps/all: modules/geos/src/deps/CMakeFiles/ryu.dir/all
+.PHONY : modules/geos/src/deps/all
+
+# Recursive "preinstall" directory target.
+modules/geos/src/deps/preinstall:
+.PHONY : modules/geos/src/deps/preinstall
+
+# Recursive "clean" directory target.
+modules/geos/src/deps/clean: modules/geos/src/deps/CMakeFiles/ryu.dir/clean
+.PHONY : modules/geos/src/deps/clean
+
+#=============================================================================
+# Directory level rules for directory modules/geos/tools
+
+# Recursive "all" directory target.
+modules/geos/tools/all:
+.PHONY : modules/geos/tools/all
+
+# Recursive "preinstall" directory target.
+modules/geos/tools/preinstall:
+.PHONY : modules/geos/tools/preinstall
+
+# Recursive "clean" directory target.
+modules/geos/tools/clean:
+.PHONY : modules/geos/tools/clean
+
+#=============================================================================
 # Target rules for target CMakeFiles/rand_cube_in_vrml.dir
 
 # All Build rule for target.
 CMakeFiles/rand_cube_in_vrml.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/rand_cube_in_vrml.dir/build.make CMakeFiles/rand_cube_in_vrml.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/rand_cube_in_vrml.dir/build.make CMakeFiles/rand_cube_in_vrml.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/trung/cpp_vrml_utility/CMakeFiles --progress-num=1,2,3,4,5,6,7,8 "Built target rand_cube_in_vrml"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/trung/cpp_vrml_utility/CMakeFiles --progress-num=98,99 "Built target rand_cube_in_vrml"
 .PHONY : CMakeFiles/rand_cube_in_vrml.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/rand_cube_in_vrml.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/trung/cpp_vrml_utility/CMakeFiles 8
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/trung/cpp_vrml_utility/CMakeFiles 2
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/rand_cube_in_vrml.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/trung/cpp_vrml_utility/CMakeFiles 0
 .PHONY : CMakeFiles/rand_cube_in_vrml.dir/rule
@@ -175,6 +281,84 @@ CLI11: modules/cli11/src/CMakeFiles/CLI11.dir/rule
 modules/cli11/src/CMakeFiles/CLI11.dir/clean:
 	$(MAKE) $(MAKESILENT) -f modules/cli11/src/CMakeFiles/CLI11.dir/build.make modules/cli11/src/CMakeFiles/CLI11.dir/clean
 .PHONY : modules/cli11/src/CMakeFiles/CLI11.dir/clean
+
+#=============================================================================
+# Target rules for target modules/geos/CMakeFiles/geos.dir
+
+# All Build rule for target.
+modules/geos/CMakeFiles/geos.dir/all: modules/geos/src/deps/CMakeFiles/ryu.dir/all
+	$(MAKE) $(MAKESILENT) -f modules/geos/CMakeFiles/geos.dir/build.make modules/geos/CMakeFiles/geos.dir/depend
+	$(MAKE) $(MAKESILENT) -f modules/geos/CMakeFiles/geos.dir/build.make modules/geos/CMakeFiles/geos.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/trung/cpp_vrml_utility/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97 "Built target geos"
+.PHONY : modules/geos/CMakeFiles/geos.dir/all
+
+# Build rule for subdir invocation for target.
+modules/geos/CMakeFiles/geos.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/trung/cpp_vrml_utility/CMakeFiles 98
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 modules/geos/CMakeFiles/geos.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/trung/cpp_vrml_utility/CMakeFiles 0
+.PHONY : modules/geos/CMakeFiles/geos.dir/rule
+
+# Convenience name for target.
+geos: modules/geos/CMakeFiles/geos.dir/rule
+.PHONY : geos
+
+# clean rule for target.
+modules/geos/CMakeFiles/geos.dir/clean:
+	$(MAKE) $(MAKESILENT) -f modules/geos/CMakeFiles/geos.dir/build.make modules/geos/CMakeFiles/geos.dir/clean
+.PHONY : modules/geos/CMakeFiles/geos.dir/clean
+
+#=============================================================================
+# Target rules for target modules/geos/CMakeFiles/geos_c.dir
+
+# All Build rule for target.
+modules/geos/CMakeFiles/geos_c.dir/all: modules/geos/CMakeFiles/geos.dir/all
+	$(MAKE) $(MAKESILENT) -f modules/geos/CMakeFiles/geos_c.dir/build.make modules/geos/CMakeFiles/geos_c.dir/depend
+	$(MAKE) $(MAKESILENT) -f modules/geos/CMakeFiles/geos_c.dir/build.make modules/geos/CMakeFiles/geos_c.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/trung/cpp_vrml_utility/CMakeFiles --progress-num= "Built target geos_c"
+.PHONY : modules/geos/CMakeFiles/geos_c.dir/all
+
+# Build rule for subdir invocation for target.
+modules/geos/CMakeFiles/geos_c.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/trung/cpp_vrml_utility/CMakeFiles 98
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 modules/geos/CMakeFiles/geos_c.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/trung/cpp_vrml_utility/CMakeFiles 0
+.PHONY : modules/geos/CMakeFiles/geos_c.dir/rule
+
+# Convenience name for target.
+geos_c: modules/geos/CMakeFiles/geos_c.dir/rule
+.PHONY : geos_c
+
+# clean rule for target.
+modules/geos/CMakeFiles/geos_c.dir/clean:
+	$(MAKE) $(MAKESILENT) -f modules/geos/CMakeFiles/geos_c.dir/build.make modules/geos/CMakeFiles/geos_c.dir/clean
+.PHONY : modules/geos/CMakeFiles/geos_c.dir/clean
+
+#=============================================================================
+# Target rules for target modules/geos/src/deps/CMakeFiles/ryu.dir
+
+# All Build rule for target.
+modules/geos/src/deps/CMakeFiles/ryu.dir/all:
+	$(MAKE) $(MAKESILENT) -f modules/geos/src/deps/CMakeFiles/ryu.dir/build.make modules/geos/src/deps/CMakeFiles/ryu.dir/depend
+	$(MAKE) $(MAKESILENT) -f modules/geos/src/deps/CMakeFiles/ryu.dir/build.make modules/geos/src/deps/CMakeFiles/ryu.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/trung/cpp_vrml_utility/CMakeFiles --progress-num=100 "Built target ryu"
+.PHONY : modules/geos/src/deps/CMakeFiles/ryu.dir/all
+
+# Build rule for subdir invocation for target.
+modules/geos/src/deps/CMakeFiles/ryu.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/trung/cpp_vrml_utility/CMakeFiles 1
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 modules/geos/src/deps/CMakeFiles/ryu.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/trung/cpp_vrml_utility/CMakeFiles 0
+.PHONY : modules/geos/src/deps/CMakeFiles/ryu.dir/rule
+
+# Convenience name for target.
+ryu: modules/geos/src/deps/CMakeFiles/ryu.dir/rule
+.PHONY : ryu
+
+# clean rule for target.
+modules/geos/src/deps/CMakeFiles/ryu.dir/clean:
+	$(MAKE) $(MAKESILENT) -f modules/geos/src/deps/CMakeFiles/ryu.dir/build.make modules/geos/src/deps/CMakeFiles/ryu.dir/clean
+.PHONY : modules/geos/src/deps/CMakeFiles/ryu.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

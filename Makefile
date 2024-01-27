@@ -207,6 +207,45 @@ CLI11/fast:
 	$(MAKE) $(MAKESILENT) -f modules/cli11/src/CMakeFiles/CLI11.dir/build.make modules/cli11/src/CMakeFiles/CLI11.dir/build
 .PHONY : CLI11/fast
 
+#=============================================================================
+# Target rules for targets named geos
+
+# Build rule for target.
+geos: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 geos
+.PHONY : geos
+
+# fast build rule for target.
+geos/fast:
+	$(MAKE) $(MAKESILENT) -f modules/geos/CMakeFiles/geos.dir/build.make modules/geos/CMakeFiles/geos.dir/build
+.PHONY : geos/fast
+
+#=============================================================================
+# Target rules for targets named geos_c
+
+# Build rule for target.
+geos_c: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 geos_c
+.PHONY : geos_c
+
+# fast build rule for target.
+geos_c/fast:
+	$(MAKE) $(MAKESILENT) -f modules/geos/CMakeFiles/geos_c.dir/build.make modules/geos/CMakeFiles/geos_c.dir/build
+.PHONY : geos_c/fast
+
+#=============================================================================
+# Target rules for targets named ryu
+
+# Build rule for target.
+ryu: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ryu
+.PHONY : ryu
+
+# fast build rule for target.
+ryu/fast:
+	$(MAKE) $(MAKESILENT) -f modules/geos/src/deps/CMakeFiles/ryu.dir/build.make modules/geos/src/deps/CMakeFiles/ryu.dir/build
+.PHONY : ryu/fast
+
 src/common/FileUtils.o: src/common/FileUtils.cpp.o
 .PHONY : src/common/FileUtils.o
 
@@ -390,7 +429,10 @@ help:
 	@echo "... package_source"
 	@echo "... rebuild_cache"
 	@echo "... CLI11"
+	@echo "... geos"
+	@echo "... geos_c"
 	@echo "... rand_cube_in_vrml"
+	@echo "... ryu"
 	@echo "... src/common/FileUtils.o"
 	@echo "... src/common/FileUtils.i"
 	@echo "... src/common/FileUtils.s"

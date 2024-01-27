@@ -14,8 +14,20 @@
 # EXTERNAL cache entries
 ########################
 
+//Build astyle (Artistic Style) tool
+BUILD_ASTYLE:BOOL=OFF
+
+//Build GEOS benchmarks
+BUILD_BENCHMARKS:BOOL=OFF
+
+//Build GEOS with shared libraries
+BUILD_SHARED_LIBS:BOOL=ON
+
 //Build the testing tree.
 BUILD_TESTING:BOOL=ON
+
+//Build website
+BUILD_WEBSITE:BOOL=OFF
 
 //Value Computed by CMake
 CLI11_BINARY_DIR:STATIC=/Users/trung/cpp_vrml_utility/modules/cli11
@@ -71,6 +83,9 @@ CMAKE_CXX_FLAGS_RELEASE:STRING=-O3 -DNDEBUG
 
 //Flags used by the CXX compiler during RELWITHDEBINFO builds.
 CMAKE_CXX_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG
+
+//C++ standard version to use (default is 14)
+CMAKE_CXX_STANDARD:STRING=14
 
 //C compiler
 CMAKE_C_COMPILER:FILEPATH=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc
@@ -377,6 +392,15 @@ FETCHCONTENT_QUIET:BOOL=ON
 //Enables UPDATE_DISCONNECTED behavior for all content population
 FETCHCONTENT_UPDATES_DISCONNECTED:BOOL=OFF
 
+//Value Computed by CMake
+GEOS_BINARY_DIR:STATIC=/Users/trung/cpp_vrml_utility/modules/geos
+
+//Value Computed by CMake
+GEOS_IS_TOP_LEVEL:STATIC=OFF
+
+//Value Computed by CMake
+GEOS_SOURCE_DIR:STATIC=/Users/trung/cpp_vrml_utility/modules/geos
+
 //Command to build the project
 MAKECOMMAND:STRING=/usr/local/Cellar/cmake/3.28.1/bin/cmake --build . --config "${CTEST_CONFIGURATION_TYPE}"
 
@@ -388,6 +412,12 @@ MEMORYCHECK_SUPPRESSIONS_FILE:FILEPATH=
 
 //Name of the computer/site where compile is being run
 SITE:STRING=Trungs-MacBook-Pro.local
+
+//Use ccache (or clcache for MSVC) to compile C/C++ objects
+USE_CCACHE:BOOL=OFF
+
+//Add version suffix to MinGW shared libraries
+VERSION_MINGW_SHARED_LIBS:BOOL=OFF
 
 //Value Computed by CMake
 g4_gamoslog_to_cubic_BINARY_DIR:STATIC=/Users/trung/cpp_vrml_utility
@@ -436,6 +466,8 @@ CLI11_INSTALL:INTERNAL=ON
 CMAKE_ADDR2LINE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_AR
 CMAKE_AR-ADVANCED:INTERNAL=1
+//STRINGS property for variable: CMAKE_BUILD_TYPE
+CMAKE_BUILD_TYPE-STRINGS:INTERNAL=Debug;Release;MinSizeRel;RelWithDebInfo;ASAN
 //This is the directory where this CMakeCache.txt was created
 CMAKE_CACHEFILE_DIR:INTERNAL=/Users/trung/cpp_vrml_utility
 //Major version of cmake used to create the current loaded cache
@@ -558,7 +590,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=4
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=10
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP
@@ -641,6 +673,8 @@ DART_TESTING_TIMEOUT-ADVANCED:INTERNAL=1
 DOXYGEN_DOT_EXECUTABLE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: DOXYGEN_EXECUTABLE
 DOXYGEN_EXECUTABLE-ADVANCED:INTERNAL=1
+//Have library m
+HAVE_LIBM:INTERNAL=1
 //ADVANCED property for variable: MAKECOMMAND
 MAKECOMMAND-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: MEMORYCHECK_COMMAND

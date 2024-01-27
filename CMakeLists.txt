@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.0)
 # set(APP_NAME "gtool")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/dist")
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 if (APPLE)
@@ -27,6 +27,7 @@ set(executable_sources
 )
 # Link to cli11
 add_subdirectory(modules/cli11)
+add_subdirectory(modules/geos)
 foreach(source ${executable_sources})
     # Lấy tên của file mã nguồn mà không có phần mở rộng (.cpp)
     get_filename_component(exec_name ${source} NAME_WE)
@@ -34,6 +35,7 @@ foreach(source ${executable_sources})
     # Tạo target cho mỗi file mã nguồn
     add_executable(${exec_name} ${source} ${SOURCES} ${HEADERS})
     target_include_directories(${exec_name} PRIVATE modules/cli11/include)
+    target_include_directories(${exec_name} PRIVATE modules/geos/include)
 endforeach()
 # target_include_directories(${APP_NAME} PRIVATE modules/cli11/include)
 
