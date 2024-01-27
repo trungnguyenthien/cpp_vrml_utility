@@ -221,7 +221,7 @@ CMAKE_PROJECT_DESCRIPTION:STATIC=
 CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=g4_gamoslog_to_cubic
+CMAKE_PROJECT_NAME:STATIC=rand_cube_in_vrml
 
 //Value Computed by CMake
 CMAKE_PROJECT_VERSION:STATIC=2.3.2
@@ -406,6 +406,15 @@ g4_replace_structure_value_IS_TOP_LEVEL:STATIC=ON
 
 //Value Computed by CMake
 g4_replace_structure_value_SOURCE_DIR:STATIC=/Users/trung/cpp_vrml_utility
+
+//Value Computed by CMake
+rand_cube_in_vrml_BINARY_DIR:STATIC=/Users/trung/cpp_vrml_utility
+
+//Value Computed by CMake
+rand_cube_in_vrml_IS_TOP_LEVEL:STATIC=ON
+
+//Value Computed by CMake
+rand_cube_in_vrml_SOURCE_DIR:STATIC=/Users/trung/cpp_vrml_utility
 
 
 ########################

@@ -63,8 +63,7 @@ CMAKE_BINARY_DIR = /Users/trung/cpp_vrml_utility
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/g4_replace_structure_value.dir/all
-all: CMakeFiles/g4_gamoslog_to_cubic.dir/all
+all: CMakeFiles/rand_cube_in_vrml.dir/all
 all: modules/cli11/all
 .PHONY : all
 
@@ -73,8 +72,7 @@ preinstall: modules/cli11/preinstall
 .PHONY : preinstall
 
 # The main recursive "clean" target.
-clean: CMakeFiles/g4_replace_structure_value.dir/clean
-clean: CMakeFiles/g4_gamoslog_to_cubic.dir/clean
+clean: CMakeFiles/rand_cube_in_vrml.dir/clean
 clean: modules/cli11/clean
 .PHONY : clean
 
@@ -127,56 +125,30 @@ modules/cli11/src/clean: modules/cli11/src/CMakeFiles/CLI11.dir/clean
 .PHONY : modules/cli11/src/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/g4_replace_structure_value.dir
+# Target rules for target CMakeFiles/rand_cube_in_vrml.dir
 
 # All Build rule for target.
-CMakeFiles/g4_replace_structure_value.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/g4_replace_structure_value.dir/build.make CMakeFiles/g4_replace_structure_value.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/g4_replace_structure_value.dir/build.make CMakeFiles/g4_replace_structure_value.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/trung/cpp_vrml_utility/CMakeFiles --progress-num=9,10,11,12,13,14,15,16 "Built target g4_replace_structure_value"
-.PHONY : CMakeFiles/g4_replace_structure_value.dir/all
+CMakeFiles/rand_cube_in_vrml.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rand_cube_in_vrml.dir/build.make CMakeFiles/rand_cube_in_vrml.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rand_cube_in_vrml.dir/build.make CMakeFiles/rand_cube_in_vrml.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/trung/cpp_vrml_utility/CMakeFiles --progress-num=1,2,3,4,5,6,7,8 "Built target rand_cube_in_vrml"
+.PHONY : CMakeFiles/rand_cube_in_vrml.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/g4_replace_structure_value.dir/rule: cmake_check_build_system
+CMakeFiles/rand_cube_in_vrml.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/trung/cpp_vrml_utility/CMakeFiles 8
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/g4_replace_structure_value.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/rand_cube_in_vrml.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/trung/cpp_vrml_utility/CMakeFiles 0
-.PHONY : CMakeFiles/g4_replace_structure_value.dir/rule
+.PHONY : CMakeFiles/rand_cube_in_vrml.dir/rule
 
 # Convenience name for target.
-g4_replace_structure_value: CMakeFiles/g4_replace_structure_value.dir/rule
-.PHONY : g4_replace_structure_value
+rand_cube_in_vrml: CMakeFiles/rand_cube_in_vrml.dir/rule
+.PHONY : rand_cube_in_vrml
 
 # clean rule for target.
-CMakeFiles/g4_replace_structure_value.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/g4_replace_structure_value.dir/build.make CMakeFiles/g4_replace_structure_value.dir/clean
-.PHONY : CMakeFiles/g4_replace_structure_value.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/g4_gamoslog_to_cubic.dir
-
-# All Build rule for target.
-CMakeFiles/g4_gamoslog_to_cubic.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/g4_gamoslog_to_cubic.dir/build.make CMakeFiles/g4_gamoslog_to_cubic.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/g4_gamoslog_to_cubic.dir/build.make CMakeFiles/g4_gamoslog_to_cubic.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/trung/cpp_vrml_utility/CMakeFiles --progress-num=1,2,3,4,5,6,7,8 "Built target g4_gamoslog_to_cubic"
-.PHONY : CMakeFiles/g4_gamoslog_to_cubic.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/g4_gamoslog_to_cubic.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/trung/cpp_vrml_utility/CMakeFiles 8
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/g4_gamoslog_to_cubic.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/trung/cpp_vrml_utility/CMakeFiles 0
-.PHONY : CMakeFiles/g4_gamoslog_to_cubic.dir/rule
-
-# Convenience name for target.
-g4_gamoslog_to_cubic: CMakeFiles/g4_gamoslog_to_cubic.dir/rule
-.PHONY : g4_gamoslog_to_cubic
-
-# clean rule for target.
-CMakeFiles/g4_gamoslog_to_cubic.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/g4_gamoslog_to_cubic.dir/build.make CMakeFiles/g4_gamoslog_to_cubic.dir/clean
-.PHONY : CMakeFiles/g4_gamoslog_to_cubic.dir/clean
+CMakeFiles/rand_cube_in_vrml.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rand_cube_in_vrml.dir/build.make CMakeFiles/rand_cube_in_vrml.dir/clean
+.PHONY : CMakeFiles/rand_cube_in_vrml.dir/clean
 
 #=============================================================================
 # Target rules for target modules/cli11/src/CMakeFiles/CLI11.dir

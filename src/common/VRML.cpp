@@ -3,6 +3,11 @@
 #include "FileUtils.h"
 #include "StringUtils.h"
 
+#define PRINT_DEBUG_INFO(token, number_set, flag_read) \
+  std::cout << "Token:" << token << "-- "              \
+            << "Number Set:" << number_set << "-- "    \
+            << "Flag Read:" << flag_read << std::endl;
+
 // Trả về true nếu str có format như dưới đây
 // 0, 3, 2, 1, -1,
 // 0, 3, 2, 1, -1
@@ -10,15 +15,23 @@
 // 1 -5 -15
 // 0.883634 0.00439464 20.0001,
 // 0.883634 0.00439464
+// Giữa các number có thể phân cách bằng khoảng trắng hoặc dấu phẩy (,)
+// Cuối str có thể có dấu phẩy (,) hoặc không có
 bool isNumberArray(string str) {
   std::istringstream iss(str);
   std::string token;
-  while (std::getline(iss, token, ',')) {
-    token.erase(std::remove_if(token.begin(), token.end(), ::isspace), token.end());
-    if (!token.empty() && !isNumber(token)) {
+
+  while (iss >> token) {
+    // Loại bỏ dấu phẩy nếu có
+    if (token.back() == ',') {
+      token.pop_back();
+    }
+
+    if (!isNumber(token)) {
       return false;
     }
   }
+
   return true;
 }
 
@@ -67,9 +80,7 @@ FaceDef parseFace(string token) {
   char delim;
 
   while (iss >> num) {
-    if (num != -1) {
-      face.push_back(num);
-    }
+    face.push_back(num);
     // Đọc qua dấu phẩy hoặc khoảng trắng
     if (iss.peek() == ',' || iss.peek() == ' ') {
       iss >> delim;
@@ -77,6 +88,24 @@ FaceDef parseFace(string token) {
   }
 
   return face;
+}
+
+void printVector2Int(string message, vector<vector<int>> contents) {
+  std::cout << message << std::endl;
+  for (const auto &subVec : contents) {
+    for (int num : subVec) {
+      std::cout << num << " ";
+    }
+    std::cout << std::endl;
+  }
+}
+
+void printVectorInt(const std::string &message, const std::vector<int> &contents) {
+  std::cout << message << std::endl;
+  for (int num : contents) {
+    std::cout << num << " ";
+  }
+  std::cout << std::endl;
 }
 
 /**
@@ -87,20 +116,19 @@ FaceDef parseFace(string token) {
 
  Hãy thực hiện các bước sau:
  Step 1: Join lại thành 1 vector {0, 3, 2, 1, -1, 0, 3, 2, 1, -1 0, 3, 2, 1, -1, 5, 1, 2}
- Step 2: Chia ra và return vector<vector<int>> tại các giá trị -1 (các vector<int> mới không chứa
- -1)
+ Step 2: Chia ra thành nhiều vector<int> tại các giá trị -1 (các vector<int> mới không chứa -1)
+ Step 3: Trả về vector<vector<int>>
  */
 vector<vector<int>> makeFaces(vector<vector<int>> points) {
+  // Step 1: Join all sub-vectors into a single vector
   std::vector<int> joined;
-  // Step 1: Join vectors
-  for (const auto &vec : points) {
-    joined.insert(joined.end(), vec.begin(), vec.end());
+  for (const auto &subVec : points) {
+    joined.insert(joined.end(), subVec.begin(), subVec.end());
   }
 
+  // Step 2: Split the joined vector at -1 and exclude -1 from sub-vectors
   std::vector<std::vector<int>> faces;
   std::vector<int> currentFace;
-
-  // Step 2: Split at -1 and remove -1
   for (int num : joined) {
     if (num != -1) {
       currentFace.push_back(num);
@@ -111,11 +139,11 @@ vector<vector<int>> makeFaces(vector<vector<int>> points) {
       }
     }
   }
-  // Add the last face if -1 is not the last element
+
+  // Add the last face if there was no -1 at the end
   if (!currentFace.empty()) {
     faces.push_back(currentFace);
   }
-
   return faces;
 }
 
@@ -145,19 +173,17 @@ vector<float> parseColor(string token) {
 }
 
 // Step 1: Loại bỏ tất cả khoảng trắng ở đầu và cuối line
-// Step 2: replace chuỗi "[" thành "_BEGIN_ARRAY ["
-// Step 3: replace chuỗi "]" thành "_END_ARRAY ]"
+// Step 2: replace chuỗi "}" thành "} _END_OBJECT"
+// Step 3: replace chuỗi "]" thành "] _END_ARRAY"
 // Step 4: chia line thành nhiều phần bởi các ký tự: {,}, [,]
-// Step 5: Loại bỏ các phần tử empty
+// Step 5: Loại bỏ các phần tử empty,  {,}, [,]
 // Step 6: return vector các chuỗi đã qua xử lý
 vector<string> vrml2tokenStrings(string line) {
-  std::vector<std::string> tokens;
-
   // Step 1
   trim(line);
 
   // Steps 2 and 3
-  replaceAll(line, "}", "] _END_OBJECT");
+  replaceAll(line, "}", "} _END_OBJECT");
   replaceAll(line, "]", "] _END_ARRAY");
 
   // Step 4: Split
@@ -168,23 +194,46 @@ vector<string> vrml2tokenStrings(string line) {
   size_t prev = 0, next = 0;
   while ((next = line.find_first_of(delimiters, prev)) != std::string::npos) {
     if (next - prev != 0) {
-      tokens.push_back(trim(line.substr(prev, next - prev)));
-    }
-    if (delimiters.find(line[next]) != std::string::npos) {
-      tokens.push_back(trim(line.substr(next, 1)));
+      token = line.substr(prev, next - prev);
+      token = trim(token);  // Trim each token
+      if (!token.empty()) {
+        tokens.push_back(token);
+      }
     }
     prev = next + 1;
   }
   if (prev < line.size()) {
-    tokens.push_back(trim(line.substr(prev)));
+    token = line.substr(prev);
+    token = trim(token);  // Trim last token
+    if (!token.empty()) {
+      tokens.push_back(token);
+    }
   }
 
-  // Step 5: Remove empty elements
-  tokens.erase(
-      std::remove_if(tokens.begin(), tokens.end(), [](const std::string &s) { return s.empty(); }),
-      tokens.end());
-
   return tokens;
+}
+
+VrmlFaceSet::VrmlFaceSet() {}
+
+string VrmlFaceSet::debug_description() {
+  ostringstream oss;
+  oss << "\nSTART--------- VrmlFaceSet -------------------------------------------------------\n";
+  // Mô tả các điểm
+  oss << "Points: " << points.size() << endl;
+  for (const auto &point : points) {
+    oss << point.toString() << "\n";
+  }
+
+  // Mô tả các mặt
+  oss << "Faces: " << faces.size() << "\n";
+  for (const auto &face : faces) {
+    for (int index : face) {
+      oss << index << "\t";
+    }
+    oss << "\n";
+  }
+  oss << "END --------- VrmlFaceSet -------------------------------------------------------\n";
+  return oss.str();
 }
 
 vector<VrmlObject *> read_vrml_file(string file) {
@@ -195,8 +244,6 @@ vector<VrmlObject *> read_vrml_file(string file) {
       tokens.push_back(token);
     }
   });
-
-  vector<VrmlObject *> vrmlObject;
 
   const string TOKEN_END_ARRAY = "_END_ARRAY";
   const string TOKEN_END_OBJECT = "_END_OBJECT";
@@ -212,19 +259,16 @@ vector<VrmlObject *> read_vrml_file(string file) {
   int flag_read = FLG_READ_END;
   int count_shape = 0;
 
+  vector<VrmlObject *> vrmlObjects;
   vector<Point> points = {};
   vector<FaceDef> faces = {};
 
   for (string token : tokens) {
-    // if (token == "Shape") {
-    //   flag_read = FLG_READ_END;
-    //   number_set = NUMBERSET_UNKNOWN;
-    //   continue;
-    // }
-
     if (token == "geometry IndexedFaceSet") {
       flag_read = FLG_READ_START;
       number_set = NUMBERSET_UNKNOWN;
+
+      PRINT_DEBUG_INFO(token, number_set, flag_read);
       continue;
     }
 
@@ -236,9 +280,9 @@ vector<VrmlObject *> read_vrml_file(string file) {
       number_set = NUMBERSET_POINT;
     } else if (token == "coordIndex") {
       number_set = NUMBERSET_COORINDEX;
-    } else if (token == TOKEN_END_ARRAY) {
-      number_set = NUMBERSET_UNKNOWN;
     }
+
+    PRINT_DEBUG_INFO(token, number_set, flag_read);
 
     if (number_set == NUMBERSET_UNKNOWN) {
       continue;
@@ -251,34 +295,34 @@ vector<VrmlObject *> read_vrml_file(string file) {
       continue;
     }
 
-    // if (token == TOKEN_END_ARRAY && number_set == NUMBERSET_POINT) {
-    //   // Do nothing
-    // }
-
     if (isNumbers && number_set == NUMBERSET_COORINDEX) {
       faces.push_back(parseFace(token));
       continue;
     }
 
-    // if (token == TOKEN_END_ARRAY && number_set == NUMBERSET_COORINDEX) {
-    //   faces = makeFaces(faces);
-    //   continue;
-    // }
-
     if (token == TOKEN_END_OBJECT && !faces.empty() && !points.empty()) {
-      // faces = makeFaces(faces);
-
       VrmlFaceSet *faceSet = new VrmlFaceSet();
       faceSet->points = points;
       faceSet->faces = makeFaces(faces);
-      vrmlObject.push_back(faceSet);
+      vrmlObjects.push_back(faceSet);
 
       points = {};
       faces = {};
       flag_read = FLG_READ_END;
       number_set = NUMBERSET_UNKNOWN;
     }
+
+    PRINT_DEBUG_INFO(token, number_set, flag_read);
   }
 
-  return vrmlObject;
+  for (VrmlObject *vrml : vrmlObjects) {
+    VrmlFaceSet *faceSet = dynamic_cast<VrmlFaceSet *>(vrml);
+    if (faceSet != NULL) {
+      cout << faceSet->debug_description() << endl;
+    }
+  }
+
+  return vrmlObjects;
 }
+
+VrmlObject::VrmlObject() : diffuseColor(0, 0, 0), emissiveColor(0, 0, 0) {}
