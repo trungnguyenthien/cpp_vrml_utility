@@ -6,6 +6,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/dist")
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+
 if (APPLE)
     # Fix: Could NOT find GMP (missing: GMP_LIBRARIES GMP_INCLUDE_DIR)
     # Note: find correct path by `brew --prefix gmp`
@@ -15,6 +16,10 @@ if (APPLE)
     # Note: find correct path by `brew --prefix mpfr`
     set(MPFR_INCLUDE_DIR "/usr/local/opt/mpfr/include")
     set(MPFR_LIBRARIES "/usr/local/opt/mpfr/lib")
+
+    # set(CAIRO_INCLUDE_DIRS "/usr/local/Cellar/cairo/1.18.0/include/")
+    # set(CAIRO_LIBRARIES "/usr/local/Cellar/cairo/1.18.0/lib")
+    # set(Cairo_DIR "/usr/local/Cellar/cairo/1.18.0")
 elseif (WIN32)
     add_link_options(-static -static-libgcc -static-libstdc++)
 elseif (UNIX)
@@ -38,9 +43,16 @@ set(executable_sources
 add_subdirectory(modules/cli11)
 add_subdirectory(modules/geos)
 
-# find_package(GMP REQUIRED)
-# include_directories(${GMP_INCLUDE_DIR})
+find_package(PkgConfig REQUIRED)
+pkg_search_module(CAIRO REQUIRED cairo)
+include_directories(${CAIRO_INCLUDE_DIRS})
+# include_directories(${CAIRO_INCLUDE_DIRS})
+# link_directories(${CAIRO_LIBRARIES})
+# add_definitions(${CAIRO_CFLAGS_OTHER})
+# include_directories(${CAIRO_INCLUDE_DIRS})
+
 find_package(CGAL)
+
 foreach(source ${executable_sources})
     # Lấy tên của file mã nguồn mà không có phần mở rộng (.cpp)
     get_filename_component(exec_name ${source} NAME_WE)
@@ -49,7 +61,13 @@ foreach(source ${executable_sources})
     add_executable(${exec_name} ${source} ${SOURCES} ${HEADERS})
     target_include_directories(${exec_name} PRIVATE modules/cli11/include)
     target_include_directories(${exec_name} PRIVATE modules/geos/include)
+
     target_link_libraries(${exec_name} CGAL::CGAL)
+
+    # Liên kết thư viện Cairo với target của bạn
+    target_link_libraries(${exec_name} ${CAIRO_LIBRARIES})
+    target_compile_options(${exec_name} PUBLIC ${CAIRO_CFLAGS_OTHER})
+    # target_include_directories(${exec_name} PRIVATE ${CAIRO_INCLUDE_DIRS})
 endforeach()
 # target_include_directories(${APP_NAME} PRIVATE modules/cli11/include)
 

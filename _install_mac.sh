@@ -4,3 +4,4 @@ brew install boost
 brew install gmp # --> cgal 
 brew install mpfr # --> cgal 
 brew install cgal
+brew install cairo

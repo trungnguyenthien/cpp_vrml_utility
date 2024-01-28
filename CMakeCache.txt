@@ -29,6 +29,40 @@ BUILD_TESTING:BOOL=ON
 //Build website
 BUILD_WEBSITE:BOOL=OFF
 
+//Activate the debug messages of the script FindBoost
+Boost_DEBUG:BOOL=OFF
+
+//The directory containing a CMake configuration file for Boost.
+Boost_DIR:PATH=/usr/local/lib/cmake/Boost-1.84.0
+
+//Path to a file.
+Boost_INCLUDE_DIR:PATH=/usr/local/include
+
+//Link with static Boost libraries
+CGAL_Boost_USE_STATIC_LIBS:BOOL=OFF
+
+//Setting for advanced users that what to change the default number
+// types used in filtered kernels. Some options might not be working
+// depending on how you configured your build.
+CGAL_CMAKE_EXACT_NT_BACKEND:STRING=Default
+
+//Display memory and real time usage at end of CTest test outputs
+CGAL_CTEST_DISPLAY_MEM_AND_TIME:BOOL=OFF
+
+//Activate the CGAL developers mode. See https://github.com/CGAL/cgal/wiki/CGAL_DEV_MODE
+CGAL_DEV_MODE:BOOL=OFF
+
+//The directory containing a CMake configuration file for CGAL.
+CGAL_DIR:PATH=/usr/local/lib/cmake/CGAL
+
+//If set, the ctest command will not skip the tests of the draw
+// functions.
+CGAL_TEST_DRAW_FUNCTIONS:BOOL=OFF
+
+//Use CGAL with GMPXX: use C++ classes of GNU MP instead of CGAL
+// wrappers
+CGAL_WITH_GMPXX:BOOL=ON
+
 //Value Computed by CMake
 CLI11_BINARY_DIR:STATIC=/Users/trung/cpp_vrml_utility/modules/cli11
 
@@ -361,11 +395,23 @@ CPACK_BINARY_TGZ:BOOL=ON
 //Enable to build TXZ packages
 CPACK_BINARY_TXZ:BOOL=OFF
 
+//Value Computed by CMake
+CPP_VRML_UTILITY_BINARY_DIR:STATIC=/Users/trung/cpp_vrml_utility
+
+//Value Computed by CMake
+CPP_VRML_UTILITY_IS_TOP_LEVEL:STATIC=ON
+
+//Value Computed by CMake
+CPP_VRML_UTILITY_SOURCE_DIR:STATIC=/Users/trung/cpp_vrml_utility
+
 //How many times to retry timed-out CTest submissions.
 CTEST_SUBMIT_RETRY_COUNT:STRING=3
 
 //How long to wait between timed-out CTest submissions.
 CTEST_SUBMIT_RETRY_DELAY:STRING=5
+
+//The directory containing a CMake configuration file for Cairo.
+Cairo_DIR:PATH=Cairo_DIR-NOTFOUND
 
 //The directory containing a CMake configuration file for Catch2.
 Catch2_DIR:PATH=Catch2_DIR-NOTFOUND
@@ -401,6 +447,12 @@ GEOS_IS_TOP_LEVEL:STATIC=OFF
 //Value Computed by CMake
 GEOS_SOURCE_DIR:STATIC=/Users/trung/cpp_vrml_utility/modules/geos
 
+//The directory containing the GMPXX include files
+GMPXX_INCLUDE_DIR:PATH=/usr/local/include
+
+//Path to the GMPXX library
+GMPXX_LIBRARIES:FILEPATH=/usr/local/lib/libgmpxx.dylib
+
 //Command to build the project
 MAKECOMMAND:STRING=/usr/local/Cellar/cmake/3.28.1/bin/cmake --build . --config "${CTEST_CONFIGURATION_TYPE}"
 
@@ -410,6 +462,12 @@ MEMORYCHECK_COMMAND:FILEPATH=MEMORYCHECK_COMMAND-NOTFOUND
 //File that contains suppressions for the memory checker
 MEMORYCHECK_SUPPRESSIONS_FILE:FILEPATH=
 
+//Arguments to supply to pkg-config
+PKG_CONFIG_ARGN:STRING=
+
+//pkg-config executable
+PKG_CONFIG_EXECUTABLE:FILEPATH=/usr/local/bin/pkg-config
+
 //Name of the computer/site where compile is being run
 SITE:STRING=Trungs-MacBook-Pro.local
 
@@ -418,6 +476,12 @@ USE_CCACHE:BOOL=OFF
 
 //Add version suffix to MinGW shared libraries
 VERSION_MINGW_SHARED_LIBS:BOOL=OFF
+
+//The directory containing a CMake configuration file for boost_headers.
+boost_headers_DIR:PATH=/usr/local/lib/cmake/boost_headers-1.84.0
+
+//The directory containing a CMake configuration file for cairo.
+cairo_DIR:PATH=cairo_DIR-NOTFOUND
 
 //Value Computed by CMake
 g4_gamoslog_to_cubic_BINARY_DIR:STATIC=/Users/trung/cpp_vrml_utility
@@ -437,6 +501,12 @@ g4_replace_structure_value_IS_TOP_LEVEL:STATIC=ON
 //Value Computed by CMake
 g4_replace_structure_value_SOURCE_DIR:STATIC=/Users/trung/cpp_vrml_utility
 
+//Path to a library.
+pkgcfg_lib_CAIRO_cairo:FILEPATH=/usr/local/Cellar/cairo/1.18.0/lib/libcairo.dylib
+
+//Path to a library.
+pkgcfg_lib_Cairo_cairo:FILEPATH=/usr/local/Cellar/cairo/1.18.0/lib/libcairo.dylib
+
 //Value Computed by CMake
 rand_cube_in_vrml_BINARY_DIR:STATIC=/Users/trung/cpp_vrml_utility
 
@@ -451,6 +521,53 @@ rand_cube_in_vrml_SOURCE_DIR:STATIC=/Users/trung/cpp_vrml_utility
 # INTERNAL cache entries
 ########################
 
+//ADVANCED property for variable: Boost_DEBUG
+Boost_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: Boost_DIR
+Boost_DIR-ADVANCED:INTERNAL=1
+CAIRO_CFLAGS:INTERNAL=-I/usr/local/Cellar/cairo/1.18.0/include/cairo;-I/usr/local/Cellar/fontconfig/2.15.0/include;-I/usr/local/opt/freetype/include/freetype2;-I/usr/local/opt/libpng/include/libpng16;-I/usr/local/Cellar/libxext/1.3.5/include;-I/usr/local/Cellar/libxrender/0.9.11/include;-I/usr/local/Cellar/libx11/1.8.7/include;-I/usr/local/Cellar/libxcb/1.16/include;-I/usr/local/Cellar/libxau/1.0.11/include;-I/usr/local/Cellar/libxdmcp/1.1.4/include;-I/usr/local/Cellar/pixman/0.42.2/include/pixman-1;-I/usr/local/Cellar/xorgproto/2023.2/include
+CAIRO_CFLAGS_I:INTERNAL=
+CAIRO_CFLAGS_OTHER:INTERNAL=
+CAIRO_FOUND:INTERNAL=1
+CAIRO_INCLUDEDIR:INTERNAL=/usr/local/Cellar/cairo/1.18.0/include
+CAIRO_INCLUDE_DIRS:INTERNAL=/usr/local/Cellar/cairo/1.18.0/include/cairo;/usr/local/Cellar/fontconfig/2.15.0/include;/usr/local/opt/freetype/include/freetype2;/usr/local/opt/libpng/include/libpng16;/usr/local/Cellar/libxext/1.3.5/include;/usr/local/Cellar/libxrender/0.9.11/include;/usr/local/Cellar/libx11/1.8.7/include;/usr/local/Cellar/libxcb/1.16/include;/usr/local/Cellar/libxau/1.0.11/include;/usr/local/Cellar/libxdmcp/1.1.4/include;/usr/local/Cellar/pixman/0.42.2/include/pixman-1;/usr/local/Cellar/xorgproto/2023.2/include
+CAIRO_LDFLAGS:INTERNAL=-L/usr/local/Cellar/cairo/1.18.0/lib;-lcairo
+CAIRO_LDFLAGS_OTHER:INTERNAL=
+CAIRO_LIBDIR:INTERNAL=/usr/local/Cellar/cairo/1.18.0/lib
+CAIRO_LIBRARIES:INTERNAL=cairo
+CAIRO_LIBRARY_DIRS:INTERNAL=/usr/local/Cellar/cairo/1.18.0/lib
+CAIRO_LIBS:INTERNAL=
+CAIRO_LIBS_L:INTERNAL=
+CAIRO_LIBS_OTHER:INTERNAL=
+CAIRO_LIBS_PATHS:INTERNAL=
+CAIRO_MODULE_NAME:INTERNAL=cairo
+CAIRO_PREFIX:INTERNAL=/usr/local/Cellar/cairo/1.18.0
+CAIRO_STATIC_CFLAGS:INTERNAL=-I/usr/local/Cellar/cairo/1.18.0/include/cairo;-I/usr/local/Cellar/fontconfig/2.15.0/include;-I/usr/local/opt/freetype/include/freetype2;-I/usr/local/opt/libpng/include/libpng16;-I/usr/local/Cellar/libxext/1.3.5/include;-I/usr/local/Cellar/libxrender/0.9.11/include;-I/usr/local/Cellar/libx11/1.8.7/include;-I/usr/local/Cellar/libxcb/1.16/include;-I/usr/local/Cellar/libxau/1.0.11/include;-I/usr/local/Cellar/libxdmcp/1.1.4/include;-I/usr/local/Cellar/pixman/0.42.2/include/pixman-1;-I/usr/local/Cellar/xorgproto/2023.2/include
+CAIRO_STATIC_CFLAGS_I:INTERNAL=
+CAIRO_STATIC_CFLAGS_OTHER:INTERNAL=
+CAIRO_STATIC_INCLUDE_DIRS:INTERNAL=/usr/local/Cellar/cairo/1.18.0/include/cairo;/usr/local/Cellar/fontconfig/2.15.0/include;/usr/local/opt/freetype/include/freetype2;/usr/local/opt/libpng/include/libpng16;/usr/local/Cellar/libxext/1.3.5/include;/usr/local/Cellar/libxrender/0.9.11/include;/usr/local/Cellar/libx11/1.8.7/include;/usr/local/Cellar/libxcb/1.16/include;/usr/local/Cellar/libxau/1.0.11/include;/usr/local/Cellar/libxdmcp/1.1.4/include;/usr/local/Cellar/pixman/0.42.2/include/pixman-1;/usr/local/Cellar/xorgproto/2023.2/include
+CAIRO_STATIC_LDFLAGS:INTERNAL=-L/usr/local/Cellar/cairo/1.18.0/lib;-L/usr/local/Cellar/fontconfig/2.15.0/lib;-L/usr/local/opt/freetype/lib;-L/usr/local/opt/libpng/lib;-L/usr/local/Cellar/libxext/1.3.5/lib;-L/usr/local/Cellar/libxrender/0.9.11/lib;-L/usr/local/Cellar/libx11/1.8.7/lib;-L/usr/local/Cellar/libxcb/1.16/lib;-L/usr/local/Cellar/libxau/1.0.11/lib;-L/usr/local/Cellar/libxdmcp/1.1.4/lib;-L/usr/local/Cellar/pixman/0.42.2/lib;-L/usr/lib;-lcairo;-lm;-ldl;-framework;CoreFoundation;-framework;ApplicationServices;-lfontconfig;-lexpat;-lfreetype;-lbz2;-lpng16;-lz;-lXext;-lXrender;-lX11;-lxcb-render;-lxcb-shm;-lxcb;-lXau;-lXdmcp;-lpixman-1
+CAIRO_STATIC_LDFLAGS_OTHER:INTERNAL=-framework;CoreFoundation;-framework;ApplicationServices
+CAIRO_STATIC_LIBDIR:INTERNAL=
+CAIRO_STATIC_LIBRARIES:INTERNAL=cairo;m;dl;fontconfig;expat;freetype;bz2;png16;z;Xext;Xrender;X11;xcb-render;xcb-shm;xcb;Xau;Xdmcp;pixman-1
+CAIRO_STATIC_LIBRARY_DIRS:INTERNAL=/usr/local/Cellar/cairo/1.18.0/lib;/usr/local/Cellar/fontconfig/2.15.0/lib;/usr/local/opt/freetype/lib;/usr/local/opt/libpng/lib;/usr/local/Cellar/libxext/1.3.5/lib;/usr/local/Cellar/libxrender/0.9.11/lib;/usr/local/Cellar/libx11/1.8.7/lib;/usr/local/Cellar/libxcb/1.16/lib;/usr/local/Cellar/libxau/1.0.11/lib;/usr/local/Cellar/libxdmcp/1.1.4/lib;/usr/local/Cellar/pixman/0.42.2/lib;/usr/lib
+CAIRO_STATIC_LIBS:INTERNAL=
+CAIRO_STATIC_LIBS_L:INTERNAL=
+CAIRO_STATIC_LIBS_OTHER:INTERNAL=
+CAIRO_STATIC_LIBS_PATHS:INTERNAL=
+CAIRO_VERSION:INTERNAL=1.18.0
+CAIRO_cairo_INCLUDEDIR:INTERNAL=
+CAIRO_cairo_LIBDIR:INTERNAL=
+CAIRO_cairo_PREFIX:INTERNAL=
+CAIRO_cairo_VERSION:INTERNAL=
+//ADVANCED property for variable: CGAL_Boost_USE_STATIC_LIBS
+CGAL_Boost_USE_STATIC_LIBS-ADVANCED:INTERNAL=1
+//STRINGS property for variable: CGAL_CMAKE_EXACT_NT_BACKEND
+CGAL_CMAKE_EXACT_NT_BACKEND-STRINGS:INTERNAL=GMP_BACKEND;GMPXX_BACKEND;BOOST_GMP_BACKEND;BOOST_BACKEND;LEDA_BACKEND;MP_FLOAT_BACKEND;Default
+//CGAL library is configured to use GMP
+CGAL_USE_GMP:INTERNAL=TRUE
+//CGAL library is configured to use MPFR
+CGAL_USE_MPFR:INTERNAL=TRUE
 //Build CLI11 examples
 CLI11_BUILD_EXAMPLES:INTERNAL=ON
 //Build CLI11 json example
@@ -536,6 +653,8 @@ CMAKE_GENERATOR_INSTANCE:INTERNAL=
 CMAKE_GENERATOR_PLATFORM:INTERNAL=
 //Name of generator toolset.
 CMAKE_GENERATOR_TOOLSET:INTERNAL=
+//Test CMAKE_HAVE_LIBC_PTHREAD
+CMAKE_HAVE_LIBC_PTHREAD:INTERNAL=1
 //Source directory with the top level CMakeLists.txt file for this
 // project
 CMAKE_HOME_DIRECTORY:INTERNAL=/Users/trung/cpp_vrml_utility
@@ -667,12 +786,57 @@ CPACK_BINARY_TXZ-ADVANCED:INTERNAL=1
 CTEST_SUBMIT_RETRY_COUNT-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CTEST_SUBMIT_RETRY_DELAY
 CTEST_SUBMIT_RETRY_DELAY-ADVANCED:INTERNAL=1
+Cairo_CFLAGS:INTERNAL=-I/usr/local/Cellar/cairo/1.18.0/include/cairo;-I/usr/local/Cellar/fontconfig/2.15.0/include;-I/usr/local/opt/freetype/include/freetype2;-I/usr/local/opt/libpng/include/libpng16;-I/usr/local/Cellar/libxext/1.3.5/include;-I/usr/local/Cellar/libxrender/0.9.11/include;-I/usr/local/Cellar/libx11/1.8.7/include;-I/usr/local/Cellar/libxcb/1.16/include;-I/usr/local/Cellar/libxau/1.0.11/include;-I/usr/local/Cellar/libxdmcp/1.1.4/include;-I/usr/local/Cellar/pixman/0.42.2/include/pixman-1;-I/usr/local/Cellar/xorgproto/2023.2/include
+Cairo_CFLAGS_I:INTERNAL=
+Cairo_CFLAGS_OTHER:INTERNAL=
+Cairo_FOUND:INTERNAL=1
+Cairo_INCLUDEDIR:INTERNAL=/usr/local/Cellar/cairo/1.18.0/include
+Cairo_INCLUDE_DIRS:INTERNAL=/usr/local/Cellar/cairo/1.18.0/include/cairo;/usr/local/Cellar/fontconfig/2.15.0/include;/usr/local/opt/freetype/include/freetype2;/usr/local/opt/libpng/include/libpng16;/usr/local/Cellar/libxext/1.3.5/include;/usr/local/Cellar/libxrender/0.9.11/include;/usr/local/Cellar/libx11/1.8.7/include;/usr/local/Cellar/libxcb/1.16/include;/usr/local/Cellar/libxau/1.0.11/include;/usr/local/Cellar/libxdmcp/1.1.4/include;/usr/local/Cellar/pixman/0.42.2/include/pixman-1;/usr/local/Cellar/xorgproto/2023.2/include
+Cairo_LDFLAGS:INTERNAL=-L/usr/local/Cellar/cairo/1.18.0/lib;-lcairo
+Cairo_LDFLAGS_OTHER:INTERNAL=
+Cairo_LIBDIR:INTERNAL=/usr/local/Cellar/cairo/1.18.0/lib
+Cairo_LIBRARIES:INTERNAL=cairo
+Cairo_LIBRARY_DIRS:INTERNAL=/usr/local/Cellar/cairo/1.18.0/lib
+Cairo_LIBS:INTERNAL=
+Cairo_LIBS_L:INTERNAL=
+Cairo_LIBS_OTHER:INTERNAL=
+Cairo_LIBS_PATHS:INTERNAL=
+Cairo_MODULE_NAME:INTERNAL=cairo
+Cairo_PREFIX:INTERNAL=/usr/local/Cellar/cairo/1.18.0
+Cairo_STATIC_CFLAGS:INTERNAL=-I/usr/local/Cellar/cairo/1.18.0/include/cairo;-I/usr/local/Cellar/fontconfig/2.15.0/include;-I/usr/local/opt/freetype/include/freetype2;-I/usr/local/opt/libpng/include/libpng16;-I/usr/local/Cellar/libxext/1.3.5/include;-I/usr/local/Cellar/libxrender/0.9.11/include;-I/usr/local/Cellar/libx11/1.8.7/include;-I/usr/local/Cellar/libxcb/1.16/include;-I/usr/local/Cellar/libxau/1.0.11/include;-I/usr/local/Cellar/libxdmcp/1.1.4/include;-I/usr/local/Cellar/pixman/0.42.2/include/pixman-1;-I/usr/local/Cellar/xorgproto/2023.2/include
+Cairo_STATIC_CFLAGS_I:INTERNAL=
+Cairo_STATIC_CFLAGS_OTHER:INTERNAL=
+Cairo_STATIC_INCLUDE_DIRS:INTERNAL=/usr/local/Cellar/cairo/1.18.0/include/cairo;/usr/local/Cellar/fontconfig/2.15.0/include;/usr/local/opt/freetype/include/freetype2;/usr/local/opt/libpng/include/libpng16;/usr/local/Cellar/libxext/1.3.5/include;/usr/local/Cellar/libxrender/0.9.11/include;/usr/local/Cellar/libx11/1.8.7/include;/usr/local/Cellar/libxcb/1.16/include;/usr/local/Cellar/libxau/1.0.11/include;/usr/local/Cellar/libxdmcp/1.1.4/include;/usr/local/Cellar/pixman/0.42.2/include/pixman-1;/usr/local/Cellar/xorgproto/2023.2/include
+Cairo_STATIC_LDFLAGS:INTERNAL=-L/usr/local/Cellar/cairo/1.18.0/lib;-L/usr/local/Cellar/fontconfig/2.15.0/lib;-L/usr/local/opt/freetype/lib;-L/usr/local/opt/libpng/lib;-L/usr/local/Cellar/libxext/1.3.5/lib;-L/usr/local/Cellar/libxrender/0.9.11/lib;-L/usr/local/Cellar/libx11/1.8.7/lib;-L/usr/local/Cellar/libxcb/1.16/lib;-L/usr/local/Cellar/libxau/1.0.11/lib;-L/usr/local/Cellar/libxdmcp/1.1.4/lib;-L/usr/local/Cellar/pixman/0.42.2/lib;-L/usr/lib;-lcairo;-lm;-ldl;-framework;CoreFoundation;-framework;ApplicationServices;-lfontconfig;-lexpat;-lfreetype;-lbz2;-lpng16;-lz;-lXext;-lXrender;-lX11;-lxcb-render;-lxcb-shm;-lxcb;-lXau;-lXdmcp;-lpixman-1
+Cairo_STATIC_LDFLAGS_OTHER:INTERNAL=-framework;CoreFoundation;-framework;ApplicationServices
+Cairo_STATIC_LIBDIR:INTERNAL=
+Cairo_STATIC_LIBRARIES:INTERNAL=cairo;m;dl;fontconfig;expat;freetype;bz2;png16;z;Xext;Xrender;X11;xcb-render;xcb-shm;xcb;Xau;Xdmcp;pixman-1
+Cairo_STATIC_LIBRARY_DIRS:INTERNAL=/usr/local/Cellar/cairo/1.18.0/lib;/usr/local/Cellar/fontconfig/2.15.0/lib;/usr/local/opt/freetype/lib;/usr/local/opt/libpng/lib;/usr/local/Cellar/libxext/1.3.5/lib;/usr/local/Cellar/libxrender/0.9.11/lib;/usr/local/Cellar/libx11/1.8.7/lib;/usr/local/Cellar/libxcb/1.16/lib;/usr/local/Cellar/libxau/1.0.11/lib;/usr/local/Cellar/libxdmcp/1.1.4/lib;/usr/local/Cellar/pixman/0.42.2/lib;/usr/lib
+Cairo_STATIC_LIBS:INTERNAL=
+Cairo_STATIC_LIBS_L:INTERNAL=
+Cairo_STATIC_LIBS_OTHER:INTERNAL=
+Cairo_STATIC_LIBS_PATHS:INTERNAL=
+Cairo_VERSION:INTERNAL=1.18.0
+Cairo_cairo_INCLUDEDIR:INTERNAL=
+Cairo_cairo_LIBDIR:INTERNAL=
+Cairo_cairo_PREFIX:INTERNAL=
+Cairo_cairo_VERSION:INTERNAL=
 //ADVANCED property for variable: DART_TESTING_TIMEOUT
 DART_TESTING_TIMEOUT-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: DOXYGEN_DOT_EXECUTABLE
 DOXYGEN_DOT_EXECUTABLE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: DOXYGEN_EXECUTABLE
 DOXYGEN_EXECUTABLE-ADVANCED:INTERNAL=1
+//Details about finding Boost
+FIND_PACKAGE_MESSAGE_DETAILS_Boost:INTERNAL=[/usr/local/lib/cmake/Boost-1.84.0/BoostConfig.cmake][c ][v1.84.0(1.66)]
+//Details about finding GMP
+FIND_PACKAGE_MESSAGE_DETAILS_GMP:INTERNAL=[/usr/local/opt/gmp/lib][/usr/local/opt/gmp/include][v()]
+//Details about finding MPFR
+FIND_PACKAGE_MESSAGE_DETAILS_MPFR:INTERNAL=[/usr/local/opt/mpfr/lib][/usr/local/opt/mpfr/include][v()]
+//Details about finding PkgConfig
+FIND_PACKAGE_MESSAGE_DETAILS_PkgConfig:INTERNAL=[/usr/local/bin/pkg-config][v0.29.2()]
+//Details about finding Threads
+FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
 //Have library m
 HAVE_LIBM:INTERNAL=1
 //ADVANCED property for variable: MAKECOMMAND
@@ -681,8 +845,22 @@ MAKECOMMAND-ADVANCED:INTERNAL=1
 MEMORYCHECK_COMMAND-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: MEMORYCHECK_SUPPRESSIONS_FILE
 MEMORYCHECK_SUPPRESSIONS_FILE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: PKG_CONFIG_ARGN
+PKG_CONFIG_ARGN-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: PKG_CONFIG_EXECUTABLE
+PKG_CONFIG_EXECUTABLE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: SITE
 SITE-ADVANCED:INTERNAL=1
 //CMAKE_INSTALL_PREFIX during last run
 _GNUInstallDirs_LAST_CMAKE_INSTALL_PREFIX:INTERNAL=/usr/local
+__pkg_config_arguments_Cairo:INTERNAL=REQUIRED;cairo
+__pkg_config_checked_CAIRO:INTERNAL=1
+__pkg_config_checked_Cairo:INTERNAL=1
+//ADVANCED property for variable: boost_headers_DIR
+boost_headers_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: pkgcfg_lib_CAIRO_cairo
+pkgcfg_lib_CAIRO_cairo-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: pkgcfg_lib_Cairo_cairo
+pkgcfg_lib_Cairo_cairo-ADVANCED:INTERNAL=1
+prefix_result:INTERNAL=/usr/local/Cellar/cairo/1.18.0/lib
 
