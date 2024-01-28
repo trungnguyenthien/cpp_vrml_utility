@@ -30,6 +30,10 @@ struct Color {
   int blue;
   int alpha;  // Đối với độ trong suốt, không bắt buộc
 
+  float redF() { return float(red) / 256; }
+  float greenF() { return float(green) / 256; }
+  float blueF() { return float(blue) / 256; }
+
   std::string toString() const {
     std::ostringstream oss;
     oss << "Color(R: " << red << ", G: " << green << ", B: " << blue << ", A: " << alpha << ")";

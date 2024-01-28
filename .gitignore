@@ -17,3 +17,6 @@ CMakeFiles/*
 *.cpp.o
 modules/
 CMakeCache.txt
+cmake_install.cmake
+Makefile
+CMakeFiles/Makefile2

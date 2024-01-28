@@ -2,40 +2,23 @@
 
 #include <CLI/CLI.hpp>
 
+#include "common/Model.h"
 #include "common/StringUtils.h"
 #include "common/VRML.h"
+#include "function/DrawBoard.h"
 #include "function/G4DCM.h"
 
 void test_cairo() {
-  cairo_surface_t *surface;
-  cairo_t *cr;
+  DBBoard db;
+  db.zoom = ZOOM_RATIO::X100;
+  DBPoint point;
 
-  int width = 500, height = 500;
+  point.x = 10;
+  point.y = 30;
+  point.color = Color::parseColorFromHex("#68BB16");
 
-  // Tạo surface để vẽ
-  surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
-  cr = cairo_create(surface);
-
-  // Màu nền trắng
-  cairo_set_source_rgb(cr, 1, 1, 1);
-  cairo_paint(cr);
-
-  // Thiết lập màu và độ dày cho đường vẽ
-  cairo_set_source_rgb(cr, 0, 0, 0);  // Màu đen
-  cairo_set_line_width(cr, 2);
-
-  // Vẽ hình vuông
-  cairo_rectangle(cr, 50, 50, 400, 400);
-  cairo_stroke(cr);
-
-  // Lưu hình ảnh dưới dạng PNG
-  cairo_surface_write_to_png(surface, "square.png");
-
-  // Dọn dẹp
-  cairo_destroy(cr);
-  cairo_surface_destroy(surface);
-
-  std::cout << "Đã vẽ hình vuông và lưu vào 'square.png'" << std::endl;
+  db.addObject(point);
+  db.render();
 }
 
 int main(int argc, char **argv) {
