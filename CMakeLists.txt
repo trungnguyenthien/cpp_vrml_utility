@@ -16,10 +16,6 @@ if (APPLE)
     # Note: find correct path by `brew --prefix mpfr`
     set(MPFR_INCLUDE_DIR "/usr/local/opt/mpfr/include")
     set(MPFR_LIBRARIES "/usr/local/opt/mpfr/lib")
-
-    # set(CAIRO_INCLUDE_DIRS "/usr/local/Cellar/cairo/1.18.0/include/")
-    # set(CAIRO_LIBRARIES "/usr/local/Cellar/cairo/1.18.0/lib")
-    # set(Cairo_DIR "/usr/local/Cellar/cairo/1.18.0")
 elseif (WIN32)
     add_link_options(-static -static-libgcc -static-libstdc++)
 elseif (UNIX)
@@ -46,10 +42,12 @@ add_subdirectory(modules/geos)
 find_package(PkgConfig REQUIRED)
 pkg_search_module(CAIRO REQUIRED cairo)
 include_directories(${CAIRO_INCLUDE_DIRS})
-# include_directories(${CAIRO_INCLUDE_DIRS})
-# link_directories(${CAIRO_LIBRARIES})
-# add_definitions(${CAIRO_CFLAGS_OTHER})
-# include_directories(${CAIRO_INCLUDE_DIRS})
+link_directories(${CAIRO_LIBRARY_DIRS})
+add_definitions(${CAIRO_CFLAGS_OTHER})
+
+message(STATUS "LOG: CAIRO_INCLUDE_DIRS ${CAIRO_INCLUDE_DIRS}")
+message(STATUS "LOG: CAIRO_LIBRARIES ${CAIRO_LIBRARIES}")
+message(STATUS "LOG: CAIRO_CFLAGS_OTHER ${CAIRO_CFLAGS_OTHER}")
 
 find_package(CGAL)
 
@@ -66,8 +64,6 @@ foreach(source ${executable_sources})
 
     # Liên kết thư viện Cairo với target của bạn
     target_link_libraries(${exec_name} ${CAIRO_LIBRARIES})
-    target_compile_options(${exec_name} PUBLIC ${CAIRO_CFLAGS_OTHER})
-    # target_include_directories(${exec_name} PRIVATE ${CAIRO_INCLUDE_DIRS})
 endforeach()
 # target_include_directories(${APP_NAME} PRIVATE modules/cli11/include)
 
