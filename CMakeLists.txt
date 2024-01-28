@@ -1,11 +1,20 @@
 cmake_minimum_required(VERSION 3.0)
-# set(APP_NAME "gtool")
+
+project("CPP_VRML_UTILITY" LANGUAGES CXX) # Fix: FindThreads only works if either C or CXX language is enabled
+
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/dist")
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 if (APPLE)
-    # Điều kiện cho macOS
+    # Fix: Could NOT find GMP (missing: GMP_LIBRARIES GMP_INCLUDE_DIR)
+    # Note: find correct path by `brew --prefix gmp`
+    set(GMP_INCLUDE_DIR "/usr/local/opt/gmp/include")
+    set(GMP_LIBRARIES "/usr/local/opt/gmp/lib")
+    # Fix: Could NOT find MPFR (missing: MPFR_LIBRARIES MPFR_INCLUDE_DIR)
+    # Note: find correct path by `brew --prefix mpfr`
+    set(MPFR_INCLUDE_DIR "/usr/local/opt/mpfr/include")
+    set(MPFR_LIBRARIES "/usr/local/opt/mpfr/lib")
 elseif (WIN32)
     add_link_options(-static -static-libgcc -static-libstdc++)
 elseif (UNIX)
@@ -28,6 +37,10 @@ set(executable_sources
 # Link to cli11
 add_subdirectory(modules/cli11)
 add_subdirectory(modules/geos)
+
+# find_package(GMP REQUIRED)
+# include_directories(${GMP_INCLUDE_DIR})
+find_package(CGAL)
 foreach(source ${executable_sources})
     # Lấy tên của file mã nguồn mà không có phần mở rộng (.cpp)
     get_filename_component(exec_name ${source} NAME_WE)
@@ -36,6 +49,7 @@ foreach(source ${executable_sources})
     add_executable(${exec_name} ${source} ${SOURCES} ${HEADERS})
     target_include_directories(${exec_name} PRIVATE modules/cli11/include)
     target_include_directories(${exec_name} PRIVATE modules/geos/include)
+    target_link_libraries(${exec_name} CGAL::CGAL)
 endforeach()
 # target_include_directories(${APP_NAME} PRIVATE modules/cli11/include)
 
