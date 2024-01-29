@@ -861,7 +861,7 @@ DOXYGEN_EXECUTABLE-ADVANCED:INTERNAL=1
 //Details about finding Boost
 FIND_PACKAGE_MESSAGE_DETAILS_Boost:INTERNAL=[/usr/local/lib/cmake/Boost-1.84.0/BoostConfig.cmake][c ][v1.84.0(1.66)]
 //Details about finding GMP
-FIND_PACKAGE_MESSAGE_DETAILS_GMP:INTERNAL=[gmp][/usr/local/opt/gmp/include][v()]
+FIND_PACKAGE_MESSAGE_DETAILS_GMP:INTERNAL=[/usr/local/opt/gmp/lib][/usr/local/opt/gmp/include][v()]
 //Details about finding MPFR
 FIND_PACKAGE_MESSAGE_DETAILS_MPFR:INTERNAL=[/usr/local/opt/mpfr/lib][/usr/local/opt/mpfr/include][v()]
 //Details about finding PkgConfig

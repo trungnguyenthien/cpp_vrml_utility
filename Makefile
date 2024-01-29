@@ -280,6 +280,30 @@ src/common/FileUtils.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/rand_cube_in_vrml.dir/build.make CMakeFiles/rand_cube_in_vrml.dir/src/common/FileUtils.cpp.s
 .PHONY : src/common/FileUtils.cpp.s
 
+src/common/Model.o: src/common/Model.cpp.o
+.PHONY : src/common/Model.o
+
+# target to build an object file
+src/common/Model.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rand_cube_in_vrml.dir/build.make CMakeFiles/rand_cube_in_vrml.dir/src/common/Model.cpp.o
+.PHONY : src/common/Model.cpp.o
+
+src/common/Model.i: src/common/Model.cpp.i
+.PHONY : src/common/Model.i
+
+# target to preprocess a source file
+src/common/Model.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rand_cube_in_vrml.dir/build.make CMakeFiles/rand_cube_in_vrml.dir/src/common/Model.cpp.i
+.PHONY : src/common/Model.cpp.i
+
+src/common/Model.s: src/common/Model.cpp.s
+.PHONY : src/common/Model.s
+
+# target to generate assembly for a file
+src/common/Model.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rand_cube_in_vrml.dir/build.make CMakeFiles/rand_cube_in_vrml.dir/src/common/Model.cpp.s
+.PHONY : src/common/Model.cpp.s
+
 src/common/StringUtils.o: src/common/StringUtils.cpp.o
 .PHONY : src/common/StringUtils.o
 
@@ -495,6 +519,9 @@ help:
 	@echo "... src/common/FileUtils.o"
 	@echo "... src/common/FileUtils.i"
 	@echo "... src/common/FileUtils.s"
+	@echo "... src/common/Model.o"
+	@echo "... src/common/Model.i"
+	@echo "... src/common/Model.s"
 	@echo "... src/common/StringUtils.o"
 	@echo "... src/common/StringUtils.i"
 	@echo "... src/common/StringUtils.s"

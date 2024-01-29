@@ -12,7 +12,11 @@
 #include "function/G4DCM.h"
 #include "function/Geometry3D.h"
 
-void testGeo3D(vector<Point> &points, vector<vector<int>> &faces, int z) {}
+void testGeo3D(vector<Point> &points, vector<vector<int>> &faces, int z) {
+  void *shape = createShape3D(points, faces);
+  vector<Point> poly = polygonAtZ(shape, z);
+  printVectorPoints(poly);
+}
 
 int main(int argc, char **argv) {
   CLI::App app{"---"};
@@ -45,7 +49,7 @@ int main(int argc, char **argv) {
 
   VrmlFaceSet *faceSet = dynamic_cast<VrmlFaceSet *>(vrmlObjects[0]);
   if (faceSet != NULL) {
-    testGeo3D(faceSet->points, faceSet->faces, 20);
+    testGeo3D(faceSet->points, faceSet->faces, 10);
   }
 
   outputFile.close();

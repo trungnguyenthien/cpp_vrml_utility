@@ -4,7 +4,9 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <vector>
 
+using namespace std;
 struct Point {
   float x, y, z;
 
@@ -17,6 +19,8 @@ struct Point {
     return oss.str();
   }
 };
+
+void printVectorPoints(vector<Point> points);
 
 struct Size3D {
   float width, height, depth;
