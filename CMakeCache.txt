@@ -453,6 +453,9 @@ GMPXX_INCLUDE_DIR:PATH=/usr/local/include
 //Path to the GMPXX library
 GMPXX_LIBRARIES:FILEPATH=/usr/local/lib/libgmpxx.dylib
 
+//The directory containing a CMake configuration file for GMP.
+GMP_DIR:PATH=GMP_DIR-NOTFOUND
+
 //Command to build the project
 MAKECOMMAND:STRING=/usr/local/Cellar/cmake/3.28.1/bin/cmake --build . --config "${CTEST_CONFIGURATION_TYPE}"
 
@@ -506,6 +509,9 @@ pkgcfg_lib_CAIRO_cairo:FILEPATH=/usr/local/Cellar/cairo/1.18.0/lib/libcairo.dyli
 
 //Path to a library.
 pkgcfg_lib_Cairo_cairo:FILEPATH=/usr/local/Cellar/cairo/1.18.0/lib/libcairo.dylib
+
+//Path to a library.
+pkgcfg_lib_GMP_gmp:FILEPATH=/usr/local/Cellar/gmp/6.3.0/lib/libgmp.dylib
 
 //Value Computed by CMake
 rand_cube_in_vrml_BINARY_DIR:STATIC=/Users/trung/cpp_vrml_utility
@@ -562,12 +568,37 @@ CAIRO_cairo_PREFIX:INTERNAL=
 CAIRO_cairo_VERSION:INTERNAL=
 //ADVANCED property for variable: CGAL_Boost_USE_STATIC_LIBS
 CGAL_Boost_USE_STATIC_LIBS-ADVANCED:INTERNAL=1
+CGAL_CFLAGS:INTERNAL=
+CGAL_CFLAGS_I:INTERNAL=
+CGAL_CFLAGS_OTHER:INTERNAL=
+CGAL_CGAL_INCLUDEDIR:INTERNAL=
+CGAL_CGAL_LIBDIR:INTERNAL=
+CGAL_CGAL_PREFIX:INTERNAL=
+CGAL_CGAL_VERSION:INTERNAL=
 //STRINGS property for variable: CGAL_CMAKE_EXACT_NT_BACKEND
 CGAL_CMAKE_EXACT_NT_BACKEND-STRINGS:INTERNAL=GMP_BACKEND;GMPXX_BACKEND;BOOST_GMP_BACKEND;BOOST_BACKEND;LEDA_BACKEND;MP_FLOAT_BACKEND;Default
+CGAL_FOUND:INTERNAL=
+CGAL_INCLUDEDIR:INTERNAL=
+CGAL_LIBDIR:INTERNAL=
+CGAL_LIBS:INTERNAL=
+CGAL_LIBS_L:INTERNAL=
+CGAL_LIBS_OTHER:INTERNAL=
+CGAL_LIBS_PATHS:INTERNAL=
+CGAL_MODULE_NAME:INTERNAL=
+CGAL_PREFIX:INTERNAL=
+CGAL_STATIC_CFLAGS:INTERNAL=
+CGAL_STATIC_CFLAGS_I:INTERNAL=
+CGAL_STATIC_CFLAGS_OTHER:INTERNAL=
+CGAL_STATIC_LIBDIR:INTERNAL=
+CGAL_STATIC_LIBS:INTERNAL=
+CGAL_STATIC_LIBS_L:INTERNAL=
+CGAL_STATIC_LIBS_OTHER:INTERNAL=
+CGAL_STATIC_LIBS_PATHS:INTERNAL=
 //CGAL library is configured to use GMP
 CGAL_USE_GMP:INTERNAL=TRUE
 //CGAL library is configured to use MPFR
 CGAL_USE_MPFR:INTERNAL=TRUE
+CGAL_VERSION:INTERNAL=
 //Build CLI11 examples
 CLI11_BUILD_EXAMPLES:INTERNAL=ON
 //Build CLI11 json example
@@ -830,13 +861,48 @@ DOXYGEN_EXECUTABLE-ADVANCED:INTERNAL=1
 //Details about finding Boost
 FIND_PACKAGE_MESSAGE_DETAILS_Boost:INTERNAL=[/usr/local/lib/cmake/Boost-1.84.0/BoostConfig.cmake][c ][v1.84.0(1.66)]
 //Details about finding GMP
-FIND_PACKAGE_MESSAGE_DETAILS_GMP:INTERNAL=[/usr/local/opt/gmp/lib][/usr/local/opt/gmp/include][v()]
+FIND_PACKAGE_MESSAGE_DETAILS_GMP:INTERNAL=[gmp][/usr/local/opt/gmp/include][v()]
 //Details about finding MPFR
 FIND_PACKAGE_MESSAGE_DETAILS_MPFR:INTERNAL=[/usr/local/opt/mpfr/lib][/usr/local/opt/mpfr/include][v()]
 //Details about finding PkgConfig
 FIND_PACKAGE_MESSAGE_DETAILS_PkgConfig:INTERNAL=[/usr/local/bin/pkg-config][v0.29.2()]
 //Details about finding Threads
 FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
+GMP_CFLAGS:INTERNAL=-I/usr/local/Cellar/gmp/6.3.0/include
+GMP_CFLAGS_I:INTERNAL=
+GMP_CFLAGS_OTHER:INTERNAL=
+GMP_FOUND:INTERNAL=1
+GMP_INCLUDEDIR:INTERNAL=/usr/local/Cellar/gmp/6.3.0/include
+GMP_INCLUDE_DIRS:INTERNAL=/usr/local/Cellar/gmp/6.3.0/include
+GMP_LDFLAGS:INTERNAL=-L/usr/local/Cellar/gmp/6.3.0/lib;-lgmp
+GMP_LDFLAGS_OTHER:INTERNAL=
+GMP_LIBDIR:INTERNAL=/usr/local/Cellar/gmp/6.3.0/lib
+GMP_LIBRARIES:INTERNAL=gmp
+GMP_LIBRARY_DIRS:INTERNAL=/usr/local/Cellar/gmp/6.3.0/lib
+GMP_LIBS:INTERNAL=
+GMP_LIBS_L:INTERNAL=
+GMP_LIBS_OTHER:INTERNAL=
+GMP_LIBS_PATHS:INTERNAL=
+GMP_MODULE_NAME:INTERNAL=gmp
+GMP_PREFIX:INTERNAL=/usr/local/Cellar/gmp/6.3.0
+GMP_STATIC_CFLAGS:INTERNAL=-I/usr/local/Cellar/gmp/6.3.0/include
+GMP_STATIC_CFLAGS_I:INTERNAL=
+GMP_STATIC_CFLAGS_OTHER:INTERNAL=
+GMP_STATIC_INCLUDE_DIRS:INTERNAL=/usr/local/Cellar/gmp/6.3.0/include
+GMP_STATIC_LDFLAGS:INTERNAL=-L/usr/local/Cellar/gmp/6.3.0/lib;-lgmp
+GMP_STATIC_LDFLAGS_OTHER:INTERNAL=
+GMP_STATIC_LIBDIR:INTERNAL=
+GMP_STATIC_LIBRARIES:INTERNAL=gmp
+GMP_STATIC_LIBRARY_DIRS:INTERNAL=/usr/local/Cellar/gmp/6.3.0/lib
+GMP_STATIC_LIBS:INTERNAL=
+GMP_STATIC_LIBS_L:INTERNAL=
+GMP_STATIC_LIBS_OTHER:INTERNAL=
+GMP_STATIC_LIBS_PATHS:INTERNAL=
+GMP_VERSION:INTERNAL=6.3.0
+GMP_gmp_INCLUDEDIR:INTERNAL=
+GMP_gmp_LIBDIR:INTERNAL=
+GMP_gmp_PREFIX:INTERNAL=
+GMP_gmp_VERSION:INTERNAL=
 //Have library m
 HAVE_LIBM:INTERNAL=1
 //ADVANCED property for variable: MAKECOMMAND
@@ -854,13 +920,18 @@ SITE-ADVANCED:INTERNAL=1
 //CMAKE_INSTALL_PREFIX during last run
 _GNUInstallDirs_LAST_CMAKE_INSTALL_PREFIX:INTERNAL=/usr/local
 __pkg_config_arguments_Cairo:INTERNAL=REQUIRED;cairo
+__pkg_config_arguments_GMP:INTERNAL=REQUIRED;gmp
 __pkg_config_checked_CAIRO:INTERNAL=1
+__pkg_config_checked_CGAL:INTERNAL=1
 __pkg_config_checked_Cairo:INTERNAL=1
+__pkg_config_checked_GMP:INTERNAL=1
 //ADVANCED property for variable: boost_headers_DIR
 boost_headers_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: pkgcfg_lib_CAIRO_cairo
 pkgcfg_lib_CAIRO_cairo-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: pkgcfg_lib_Cairo_cairo
 pkgcfg_lib_Cairo_cairo-ADVANCED:INTERNAL=1
-prefix_result:INTERNAL=/usr/local/Cellar/cairo/1.18.0/lib
+//ADVANCED property for variable: pkgcfg_lib_GMP_gmp
+pkgcfg_lib_GMP_gmp-ADVANCED:INTERNAL=1
+prefix_result:INTERNAL=/usr/local/Cellar/gmp/6.3.0/lib
 

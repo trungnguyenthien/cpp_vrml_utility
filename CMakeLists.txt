@@ -35,6 +35,7 @@ add_subdirectory(modules/cli11)
 add_subdirectory(modules/geos)
 
 find_package(PkgConfig REQUIRED)
+
 pkg_search_module(CAIRO REQUIRED cairo)
 include_directories(${CAIRO_INCLUDE_DIRS})
 link_directories(${CAIRO_LIBRARY_DIRS})
@@ -44,7 +45,16 @@ message(STATUS "LOG: CAIRO_INCLUDE_DIRS ${CAIRO_INCLUDE_DIRS}")
 message(STATUS "LOG: CAIRO_LIBRARIES ${CAIRO_LIBRARIES}")
 message(STATUS "LOG: CAIRO_CFLAGS_OTHER ${CAIRO_CFLAGS_OTHER}")
 
-find_package(CGAL)
+pkg_check_modules(GMP REQUIRED gmp)
+include_directories(${GMP_INCLUDE_DIRS})
+link_directories(${GMP_LIBRARY_DIRS})
+add_definitions(${GMP_CFLAGS_OTHER})
+
+find_package(CGAL REQUIRED COMPONENTS Core)
+# pkg_search_module(CGAL REQUIRED CGAL)
+include_directories(${CGAL_INCLUDE_DIRS})
+link_directories(${CGAL_LIBRARY_DIRS})
+add_definitions(${CGAL_CFLAGS_OTHER})
 
 foreach(source ${executable_sources})
     # Lấy tên của file mã nguồn mà không có phần mở rộng (.cpp)
@@ -55,7 +65,9 @@ foreach(source ${executable_sources})
     target_include_directories(${exec_name} PRIVATE modules/cli11/include)
     target_include_directories(${exec_name} PRIVATE modules/geos/include)
 
-    target_link_libraries(${exec_name} CGAL::CGAL)
+    target_link_libraries(${exec_name} ${GMP_LIBRARIES})
+    # target_link_libraries(${exec_name} CGAL::Core)
+    target_link_libraries(${exec_name}  ${CGAL_LIBRARIES})
 
     # Liên kết thư viện Cairo với target của bạn
     target_link_libraries(${exec_name} ${CAIRO_LIBRARIES})

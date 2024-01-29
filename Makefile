@@ -400,6 +400,30 @@ src/function/Gamos_Log.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/rand_cube_in_vrml.dir/build.make CMakeFiles/rand_cube_in_vrml.dir/src/function/Gamos_Log.cpp.s
 .PHONY : src/function/Gamos_Log.cpp.s
 
+src/function/Geometry3D.o: src/function/Geometry3D.cpp.o
+.PHONY : src/function/Geometry3D.o
+
+# target to build an object file
+src/function/Geometry3D.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rand_cube_in_vrml.dir/build.make CMakeFiles/rand_cube_in_vrml.dir/src/function/Geometry3D.cpp.o
+.PHONY : src/function/Geometry3D.cpp.o
+
+src/function/Geometry3D.i: src/function/Geometry3D.cpp.i
+.PHONY : src/function/Geometry3D.i
+
+# target to preprocess a source file
+src/function/Geometry3D.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rand_cube_in_vrml.dir/build.make CMakeFiles/rand_cube_in_vrml.dir/src/function/Geometry3D.cpp.i
+.PHONY : src/function/Geometry3D.cpp.i
+
+src/function/Geometry3D.s: src/function/Geometry3D.cpp.s
+.PHONY : src/function/Geometry3D.s
+
+# target to generate assembly for a file
+src/function/Geometry3D.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rand_cube_in_vrml.dir/build.make CMakeFiles/rand_cube_in_vrml.dir/src/function/Geometry3D.cpp.s
+.PHONY : src/function/Geometry3D.cpp.s
+
 src/function/WRLHelper.o: src/function/WRLHelper.cpp.o
 .PHONY : src/function/WRLHelper.o
 
@@ -486,6 +510,9 @@ help:
 	@echo "... src/function/Gamos_Log.o"
 	@echo "... src/function/Gamos_Log.i"
 	@echo "... src/function/Gamos_Log.s"
+	@echo "... src/function/Geometry3D.o"
+	@echo "... src/function/Geometry3D.i"
+	@echo "... src/function/Geometry3D.s"
 	@echo "... src/function/WRLHelper.o"
 	@echo "... src/function/WRLHelper.i"
 	@echo "... src/function/WRLHelper.s"

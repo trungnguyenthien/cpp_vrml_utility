@@ -10,6 +10,9 @@
 #include "common/VRML.h"
 #include "function/DrawBoard.h"
 #include "function/G4DCM.h"
+#include "function/Geometry3D.h"
+
+void testGeo3D(vector<Point> &points, vector<vector<int>> &faces, int z) {}
 
 int main(int argc, char **argv) {
   CLI::App app{"---"};
@@ -39,6 +42,11 @@ int main(int argc, char **argv) {
   }
 
   vector<VrmlObject *> vrmlObjects = read_vrml_file(filename);
+
+  VrmlFaceSet *faceSet = dynamic_cast<VrmlFaceSet *>(vrmlObjects[0]);
+  if (faceSet != NULL) {
+    testGeo3D(faceSet->points, faceSet->faces, 20);
+  }
 
   outputFile.close();
   return 1;

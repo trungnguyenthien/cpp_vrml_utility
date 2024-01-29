@@ -46,6 +46,7 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT
     "/Users/trung/cpp_vrml_utility/src/function/DrawBoard.h"
     "/Users/trung/cpp_vrml_utility/src/function/G4DCM.h"
     "/Users/trung/cpp_vrml_utility/src/function/Gamos_Log.h"
+    "/Users/trung/cpp_vrml_utility/src/function/Geometry3D.h"
     "/Users/trung/cpp_vrml_utility/src/function/WRLHelper.h"
     )
 endif()
