@@ -10,14 +10,20 @@
 
 void test_cairo() {
   DBBoard db;
-  db.zoom = ZOOM_RATIO::X100;
+  db.size = BOARD_SIZE::_5_000;
+  db.zoom = ZOOM_RATIO::X10;
   DBPoint point;
-
   point.x = 10;
   point.y = 30;
-  point.color = Color::parseColorFromHex("#68BB16");
-
+  point.color = Color::parseColorFromHex("#FF4433");
   db.addObject(point);
+
+  DBShape shape;
+  shape.xyList = {20, 30, 40, 20, 50, 50};
+  shape.color = Color::parseColorFromHex("#3366FF");
+  shape.fillColor = Color::parseColorFromHex("#E5E968");
+  db.addObject(shape);
+
   db.render();
 }
 
