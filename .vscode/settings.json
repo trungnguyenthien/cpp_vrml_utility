@@ -60,6 +60,7 @@
     "memory_resource": "cpp",
     "random": "cpp",
     "utility": "cpp",
-    "ratio": "cpp"
+    "ratio": "cpp",
+    "regex": "cpp"
   }
 }

@@ -328,6 +328,30 @@ src/common/VRML.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/rand_cube_in_vrml.dir/build.make CMakeFiles/rand_cube_in_vrml.dir/src/common/VRML.cpp.s
 .PHONY : src/common/VRML.cpp.s
 
+src/function/DrawBoard.o: src/function/DrawBoard.cpp.o
+.PHONY : src/function/DrawBoard.o
+
+# target to build an object file
+src/function/DrawBoard.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rand_cube_in_vrml.dir/build.make CMakeFiles/rand_cube_in_vrml.dir/src/function/DrawBoard.cpp.o
+.PHONY : src/function/DrawBoard.cpp.o
+
+src/function/DrawBoard.i: src/function/DrawBoard.cpp.i
+.PHONY : src/function/DrawBoard.i
+
+# target to preprocess a source file
+src/function/DrawBoard.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rand_cube_in_vrml.dir/build.make CMakeFiles/rand_cube_in_vrml.dir/src/function/DrawBoard.cpp.i
+.PHONY : src/function/DrawBoard.cpp.i
+
+src/function/DrawBoard.s: src/function/DrawBoard.cpp.s
+.PHONY : src/function/DrawBoard.s
+
+# target to generate assembly for a file
+src/function/DrawBoard.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rand_cube_in_vrml.dir/build.make CMakeFiles/rand_cube_in_vrml.dir/src/function/DrawBoard.cpp.s
+.PHONY : src/function/DrawBoard.cpp.s
+
 src/function/G4DCM.o: src/function/G4DCM.cpp.o
 .PHONY : src/function/G4DCM.o
 
@@ -453,6 +477,9 @@ help:
 	@echo "... src/common/VRML.o"
 	@echo "... src/common/VRML.i"
 	@echo "... src/common/VRML.s"
+	@echo "... src/function/DrawBoard.o"
+	@echo "... src/function/DrawBoard.i"
+	@echo "... src/function/DrawBoard.s"
 	@echo "... src/function/G4DCM.o"
 	@echo "... src/function/G4DCM.i"
 	@echo "... src/function/G4DCM.s"

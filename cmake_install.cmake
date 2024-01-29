@@ -43,6 +43,7 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT
     "/Users/trung/cpp_vrml_utility/src/common/Model.h"
     "/Users/trung/cpp_vrml_utility/src/common/StringUtils.h"
     "/Users/trung/cpp_vrml_utility/src/common/VRML.h"
+    "/Users/trung/cpp_vrml_utility/src/function/DrawBoard.h"
     "/Users/trung/cpp_vrml_utility/src/function/G4DCM.h"
     "/Users/trung/cpp_vrml_utility/src/function/Gamos_Log.h"
     "/Users/trung/cpp_vrml_utility/src/function/WRLHelper.h"
