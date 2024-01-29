@@ -83,23 +83,9 @@ void DBBoard::addObject(DBObject &obj) {
 }
 
 void DBBoard::render() {
-  // int xmin = INT_MAX, ymin = INT_MAX, xmax = INT_MIN, ymax = INT_MIN;
   int bSize = boardSizeValue(size);
-
-  // for (DBObject *obj : dbObjects) {
-  //   xmin = min_value(xmin, obj->xmin);
-  //   xmax = max_value(xmax, obj->xmax);
-  //   ymin = min_value(ymin, obj->ymin);
-  //   ymax = max_value(ymax, obj->ymax);
-  // }
-  // cout << "XY MINMAX " << xmin << " " << xmax << " " << ymin << " " << ymax << endl;
   int tx = bSize / 2;
   int ty = bSize / 2;
-
-  // xmin -= margin;
-  // xmax += margin;
-  // ymin -= margin;
-  // ymax += margin;
 
   cairo_surface_t *surface;
   cairo_t *cr;
@@ -116,18 +102,6 @@ void DBBoard::render() {
 
   for (DBObject *obj : dbObjects) {
     obj->self_render(cr, tx, ty);
-
-    // DBPoint *point = dynamic_cast<DBPoint *>(obj);
-    // DBPolyline *pline = dynamic_cast<DBPolyline *>(obj);
-    // DBShape *shape = dynamic_cast<DBShape *>(obj);
-
-    // if (point != NULL) {
-    //   point->self_render(cr, tx, ty);
-    // } else if (pline != NULL) {
-    //   pline->self_render(cr, tx, ty);
-    // } else if (shape != NULL) {
-    //   shape->self_render(cr, tx, ty);
-    // }
   }
 
   // Lưu file ảnh PNG
@@ -152,24 +126,6 @@ int boardSizeValue(BOARD_SIZE value) {
   }
 }
 
-// float min_value(vector<float> values) {
-//   if (values.empty()) {
-//     return INT_MIN;
-//   }
-//   return *std::min_element(values.begin(), values.end());
-// }
-
-// float max_value(vector<float> values) {
-//   if (values.empty()) {
-//     return INT_MAX;
-//   }
-//   return *std::max_element(values.begin(), values.end());
-// }
-
-// float min_value(float value1, float value2) { return (value1 < value2) ? value1 : value2; }
-
-// float max_value(float value1, float value2) { return (value1 > value2) ? value1 : value2; }
-
 int zoomValue(ZOOM_RATIO zoom, float value) {
   switch (zoom) {
     case ZOOM_RATIO::X1:
@@ -186,48 +142,18 @@ void DBPoint::calculateMinMax(ZOOM_RATIO zoom) {
   x = zoomValue(zoom, x);
   y = zoomValue(zoom, y);
   cout << "Point.calculateMinMax " << x << " " << y << endl;
-  // xmin = x;
-  // xmax = x;
-  // ymin = y;
-  // ymax = y;
 }
 
 void DBShape::calculateMinMax(ZOOM_RATIO zoom) {
-  // vector<float> xPoints, yPoints;
-
   for (int i = 0; i < xyList.size(); i++) {
     xyList[i] = zoomValue(zoom, xyList[i]);
-
-    // if (i % 2 == 0) {
-    //   xPoints.push_back(xyList[i]);
-    // } else {
-    //   yPoints.push_back(xyList[i]);
-    // }
   }
-
-  // xmin = min_value(xPoints);
-  // xmax = max_value(xPoints);
-  // ymin = min_value(yPoints);
-  // ymax = max_value(yPoints);
 }
 
 void DBPolyline::calculateMinMax(ZOOM_RATIO zoom) {
-  // vector<float> xPoints, yPoints;
-
   for (int i = 0; i < xyList.size(); i++) {
     xyList[i] = zoomValue(zoom, xyList[i]);
-
-    // if (i % 2 == 0) {
-    //   xPoints.push_back(xyList[i]);
-    // } else {
-    //   yPoints.push_back(xyList[i]);
-    // }
   }
-
-  // xmin = min_value(xPoints);
-  // xmax = max_value(xPoints);
-  // ymin = min_value(yPoints);
-  // ymax = max_value(yPoints);
 }
 
 void DBPoint::self_render(cairo_t *cr, int tx, int ty) {
@@ -291,4 +217,23 @@ void DBShape::self_render(cairo_t *cr, int tx, int ty) {
   cairo_set_source_rgb(cr, color.redF(), color.greenF(), color.blueF());
   cairo_set_line_width(cr, 10);  // Line thickness
   cairo_stroke(cr);
+}
+
+void test_cairo() {
+  DBBoard db;
+  db.size = BOARD_SIZE::_5_000;
+  db.zoom = ZOOM_RATIO::X10;
+  DBPoint point;
+  point.x = 10;
+  point.y = 30;
+  point.color = Color::parseColorFromHex("#FF4433");
+  db.addObject(point);
+
+  DBShape shape;
+  shape.xyList = {20, 30, 40, 20, 50, 50};
+  shape.color = Color::parseColorFromHex("#3366FF");
+  shape.fillColor = Color::parseColorFromHex("#E5E968");
+  db.addObject(shape);
+
+  db.render();
 }

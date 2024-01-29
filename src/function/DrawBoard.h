@@ -17,11 +17,6 @@ enum class ZOOM_RATIO { X1, X10, X100 };
 int zoomValue(int zoomValue, float value);
 int boardSizeValue(BOARD_SIZE value);
 
-// float min_value(vector<float> values);
-// float max_value(vector<float> values);
-// float min_value(float value1, float value2);
-// float max_value(float value1, float value2);
-
 // source là vector gồm số chẵn các float.
 // Nếu source không chẵn thì loại bỏ số cuối cùng.
 // Nếu source empty thì return vector empty
