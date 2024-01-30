@@ -61,6 +61,26 @@
     "random": "cpp",
     "utility": "cpp",
     "ratio": "cpp",
-    "regex": "cpp"
+    "regex": "cpp",
+    "__hash_table": "cpp",
+    "__mutex_base": "cpp",
+    "__node_handle": "cpp",
+    "__tree": "cpp",
+    "cfenv": "cpp",
+    "charconv": "cpp",
+    "clocale": "cpp",
+    "cmath": "cpp",
+    "codecvt": "cpp",
+    "complex": "cpp",
+    "fstream": "cpp",
+    "list": "cpp",
+    "map": "cpp",
+    "optional": "cpp",
+    "set": "cpp",
+    "strstream": "cpp",
+    "thread": "cpp",
+    "typeindex": "cpp",
+    "unordered_set": "cpp",
+    "variant": "cpp"
   }
 }

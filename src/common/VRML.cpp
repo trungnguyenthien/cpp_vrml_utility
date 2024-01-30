@@ -44,20 +44,29 @@ bool isNumberArray(string str) {
 // Chuỗi có thể có 2 hoặc 3 số. Nếu chuỗi chỉ có 2 số thì mặc định số thứ 3 là 0
 // Tạo vector point bằng các giá trị đọc được trong token
 Point parsePoint(string token) {
+  // cout << "Point parsePoint TOKEN " << token << endl;
   std::istringstream iss(token);
-  float x, y, z = 0;  // Mặc định z là 0
-  char delim;
+  std::vector<float> values;
+  std::string number;
 
-  iss >> x;
-  if (iss.peek() == ',' || iss.peek() == ' ') {
-    iss >> delim;  // Đọc dấu phẩy hoặc khoảng trắng
+  while (std::getline(iss, number, ' ')) {
+    if (!number.empty() && number.find(',') != std::string::npos) {
+      number.erase(number.find(','), 1);
+    }
+    if (!number.empty()) {
+      values.push_back(std::stof(number));
+    }
   }
-  iss >> y;
-  if (iss.peek() == ',' || iss.peek() == ' ') {
-    iss >> delim;  // Đọc dấu phẩy hoặc khoảng trắng
-  }
-  iss >> z;  // Nếu không thể đọc thêm số, z sẽ giữ nguyên giá trị 0
 
+  float x = 0, y = 0, z = 0;
+
+  if (values.size() >= 1)
+    x = values[0];
+  if (values.size() >= 2)
+    y = values[1];
+  if (values.size() >= 3)
+    z = values[2];
+  // cout << "Point parsePoint XYZ " << x << " " << y << " " << z << endl;
   return Point(x, y, z);
 }
 

@@ -3,83 +3,86 @@
 #include <climits>
 #include <stdexcept>  // For std::invalid_argument
 
-void test_cairo2() {
-  cairo_surface_t *surface;
-  cairo_t *cr;
-
-  int width = 500, height = 500;
-
-  // Tạo surface để vẽ
-  surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
-  cr = cairo_create(surface);
-
-  // Màu nền trắng
-  cairo_set_source_rgb(cr, 1, 1, 1);
-  cairo_paint(cr);
-
-  // Thiết lập màu và độ dày cho đường vẽ
-  cairo_set_source_rgb(cr, 0, 0, 0);  // Màu đen
-  cairo_set_line_width(cr, 2);
-
-  // Vẽ hình vuông
-  cairo_rectangle(cr, 50, 50, 400, 400);
-  cairo_stroke(cr);
-
-  // Lưu hình ảnh dưới dạng PNG
-  cairo_surface_write_to_png(surface, "square.png");
-
-  // Dọn dẹp
-  cairo_destroy(cr);
-  cairo_surface_destroy(surface);
-
-  std::cout << "Đã vẽ hình vuông và lưu vào 'square.png'" << std::endl;
-}
-
-std::vector<std::pair<double, double>> makePair(std::vector<float> source) {
+std::vector<std::pair<double, double>> makePair(std::vector<float> &source) {
   std::vector<std::pair<double, double>> result;
-
+  cout << "makePair 1 " << source.size() << endl;
   // Nếu source không chẵn, loại bỏ số cuối cùng
   if (source.size() % 2 != 0) {
     source.pop_back();
   }
+  cout << "makePair 2" << endl;
 
   // Nếu source rỗng, trả về vector rỗng
   if (source.empty()) {
     return result;
   }
+  cout << "makePair 3" << endl;
 
   // Tạo các cặp từ các phần tử liên tiếp trong source
   for (size_t i = 0; i < source.size(); i += 2) {
     result.emplace_back(source[i], source[i + 1]);
   }
-
+  cout << "makePair 4" << endl;
+  cout << "END makePair" << endl;
   return result;
 }
 
-void printPairDouble(vector<pair<double, double>> pair) {
+void printPairDouble(vector<pair<double, double>> &pair) {
   for (const auto &p : pair) {
     std::cout << "(" << p.first << ", " << p.second << ")\n";
   }
 }
 
-void DBBoard::addObject(DBObject &obj) {
+// void DBBoard::addObject(DBObject &obj) {
+//   cout << typeid(obj).name() << endl;
+//   DBPoint *point = dynamic_cast<DBPoint *>(&obj);
+//   DBPolyline *pline = dynamic_cast<DBPolyline *>(&obj);
+//   DBShape *shape = dynamic_cast<DBShape *>(&obj);
+//   dbObjects.push_back(&obj);
+
+//   if (shape != NULL) {
+//     cout << "shape != NULL" << endl;
+//     shape->calculateMinMax(zoom);
+//     return;
+//   }
+
+//   if (pline != NULL) {
+//     cout << "pline != NULL" << endl;
+//     pline->calculateMinMax(zoom);
+//     return;
+//   }
+
+//   if (point != NULL) {
+//     cout << "point != NULL" << endl;
+//     point->calculateMinMax(zoom);
+//     return;
+//   }
+// }
+
+void DBBoard::addObject(DBObject *obj) {
   cout << typeid(obj).name() << endl;
-  DBPoint *point = dynamic_cast<DBPoint *>(&obj);
-  DBPolyline *pline = dynamic_cast<DBPolyline *>(&obj);
-  DBShape *shape = dynamic_cast<DBShape *>(&obj);
+  DBPoint *point = dynamic_cast<DBPoint *>(obj);
+  DBPolyline *pline = dynamic_cast<DBPolyline *>(obj);
+  DBShape *shape = dynamic_cast<DBShape *>(obj);
+  dbObjects.push_back(obj);
+
+  if (shape != NULL) {
+    cout << "shape != NULL" << endl;
+    shape->calculateMinMax(zoom);
+    return;
+  }
+
+  if (pline != NULL) {
+    cout << "pline != NULL" << endl;
+    pline->calculateMinMax(zoom);
+    return;
+  }
 
   if (point != NULL) {
     cout << "point != NULL" << endl;
     point->calculateMinMax(zoom);
-  } else if (pline != NULL) {
-    cout << "pline != NULL" << endl;
-    pline->calculateMinMax(zoom);
-  } else if (shape != NULL) {
-    cout << "shape != NULL" << endl;
-    shape->calculateMinMax(zoom);
+    return;
   }
-
-  dbObjects.push_back(&obj);
 }
 
 void DBBoard::render() {
@@ -94,27 +97,38 @@ void DBBoard::render() {
   cout << "Board Size " << width << "x" << height << endl;
   surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
   cr = cairo_create(surface);
-
+  cout << "Step 1" << endl;
   // Màu nền backgroundColor
   cairo_set_source_rgb(cr, backgroundColor.redF(), backgroundColor.greenF(),
                        backgroundColor.blueF());
+  cout << "Step 2" << endl;
   cairo_paint(cr);
-
+  cout << "Step 3" << endl;
   for (DBObject *obj : dbObjects) {
+    cout << "Step 3.1" << endl;
     obj->self_render(cr, tx, ty);
+    cout << "Step 3.2" << endl;
   }
+
+  cout << "Step 4" << endl;
 
   // Lưu file ảnh PNG
   string outputFilePNG = this->outFile + ".png";
+  cout << "Step 5" << endl;
   cairo_surface_write_to_png(surface, outputFilePNG.c_str());
+  cout << "Step 6" << endl;
 
   // Dọn dẹp
   cairo_destroy(cr);
+  cout << "Step 7" << endl;
   cairo_surface_destroy(surface);
+  cout << "Step 8" << endl;
 }
 
 int boardSizeValue(BOARD_SIZE value) {
   switch (value) {
+    case BOARD_SIZE::_1_000:
+      return 1000;
     case BOARD_SIZE::_5_000:
       return 5000;
     case BOARD_SIZE::_10_000:
@@ -194,9 +208,18 @@ void DBPolyline::self_render(cairo_t *cr, int tx, int ty) {
   cairo_stroke(cr);
 }
 
+void DBPolyline::appendPoints(vector<Point> points) {
+  for (const Point &point : points) {
+    xyList.push_back(point.x);
+    xyList.push_back(point.y);
+  }
+}
+
 void DBShape::self_render(cairo_t *cr, int tx, int ty) {
+  cout << " DBShape::self_render " << tx << " " << ty << endl;
   // Định nghĩa các điểm của polygon
   std::vector<std::pair<double, double>> points = makePair(this->xyList);
+
   printPairDouble(points);
   // Bắt đầu vẽ từ điểm đầu tiên
   cairo_move_to(cr, points[0].first + tx, points[0].second + ty);
@@ -219,21 +242,28 @@ void DBShape::self_render(cairo_t *cr, int tx, int ty) {
   cairo_stroke(cr);
 }
 
-void test_cairo() {
-  DBBoard db;
-  db.size = BOARD_SIZE::_5_000;
-  db.zoom = ZOOM_RATIO::X10;
-  DBPoint point;
-  point.x = 10;
-  point.y = 30;
-  point.color = Color::parseColorFromHex("#FF4433");
-  db.addObject(point);
-
-  DBShape shape;
-  shape.xyList = {20, 30, 40, 20, 50, 50};
-  shape.color = Color::parseColorFromHex("#3366FF");
-  shape.fillColor = Color::parseColorFromHex("#E5E968");
-  db.addObject(shape);
-
-  db.render();
+void DBShape::appendPoints(vector<Point> points) {
+  for (const Point &point : points) {
+    xyList.push_back(point.x);
+    xyList.push_back(point.y);
+  }
 }
+
+// void test_cairo() {
+//   DBBoard db;
+//   db.size = BOARD_SIZE::_5_000;
+//   db.zoom = ZOOM_RATIO::X10;
+//   DBPoint point;
+//   point.x = 10;
+//   point.y = 30;
+//   point.color = Color::parseColorFromHex("#FF4433");
+//   db.addObject(point);
+
+//   DBShape shape;
+//   shape.xyList = {20, 30, 40, 20, 50, 50};
+//   shape.color = Color::parseColorFromHex("#3366FF");
+//   shape.fillColor = Color::parseColorFromHex("#E5E968");
+//   db.addObject(shape);
+
+//   db.render();
+// }

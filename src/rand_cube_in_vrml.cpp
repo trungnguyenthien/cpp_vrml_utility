@@ -13,9 +13,27 @@
 #include "function/Geometry3D.h"
 
 void testGeo3D(vector<Point> &points, vector<vector<int>> &faces, int z) {
+  cout << "Testing Geo3D " << points.size() << endl;
   void *shape = createShape3D(points, faces);
   vector<Point> poly = polygonAtZ(shape, z);
   printVectorPoints(poly);
+
+  DBBoard db;
+  db.size = BOARD_SIZE::_1_000;
+  db.zoom = ZOOM_RATIO::X10;
+  // DBPoint point;
+  // point.x = 10;
+  // point.y = 30;
+  // point.color = Color::parseColorFromHex("#FF4433");
+  // db.addObject(point);
+
+  DBShape *shapePoly = new DBShape();
+  shapePoly->appendPoints(poly);
+  shapePoly->color = Color::parseColorFromHex("#3366FF");
+  shapePoly->fillColor = Color::parseColorFromHex("#E5E968");
+  db.addObject(shapePoly);
+
+  db.render();
 }
 
 int main(int argc, char **argv) {
@@ -48,7 +66,9 @@ int main(int argc, char **argv) {
   vector<VrmlObject *> vrmlObjects = read_vrml_file(filename);
 
   VrmlFaceSet *faceSet = dynamic_cast<VrmlFaceSet *>(vrmlObjects[0]);
+
   if (faceSet != NULL) {
+    cout << "faceSet != NULL " << faceSet << endl;
     testGeo3D(faceSet->points, faceSet->faces, 10);
   }
 

@@ -60,12 +60,14 @@ typedef Kernel::Plane_3 Plane_3;
 
 std::vector<Point> polygonAtZ(void *shape, int z) {
   std::vector<Point> points;
+  cout << "polygonAtZ 1" << endl;
   Polyhedron *P = static_cast<Polyhedron *>(shape);
-
+  cout << "polygonAtZ 2" << endl;
   // Tạo mặt phẳng cắt tại tọa độ z
   Plane_3 plane(0, 0, 1, -z);
-
+  cout << "polygonAtZ 3" << endl;
   for (Polyhedron::Facet_iterator fi = P->facets_begin(); fi != P->facets_end(); ++fi) {
+    cout << "polygonAtZ 3.1" << endl;
     Halfedge_facet_circulator hec = fi->facet_begin();
     do {
       Segment_3 segment(hec->vertex()->point(), hec->next()->vertex()->point());
@@ -77,6 +79,7 @@ std::vector<Point> polygonAtZ(void *shape, int z) {
       }
     } while (++hec != fi->facet_begin());
   }
-
+  cout << "polygonAtZ 4 " << points.size() << endl;
+  printVectorPoints(points);
   return points;
 }

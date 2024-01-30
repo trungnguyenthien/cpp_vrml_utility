@@ -12,7 +12,7 @@
 
 using namespace std;
 
-enum class BOARD_SIZE { _5_000, _10_000, _20_000 };
+enum class BOARD_SIZE { _1_000, _5_000, _10_000, _20_000 };
 enum class ZOOM_RATIO { X1, X10, X100 };
 int zoomValue(int zoomValue, float value);
 int boardSizeValue(BOARD_SIZE value);
@@ -22,10 +22,10 @@ int boardSizeValue(BOARD_SIZE value);
 // Nếu source empty thì return vector empty
 // Cứ 2 float liên tiếp nhau thì nhóm thành 1 cặp (pair)
 // Trả về vector<pair<double, double>>
-vector<pair<double, double>> makePair(vector<float> source);
+vector<pair<double, double>> makePair(vector<float> &source);
 
 // In từng cặp double theo thứ tự để debug
-void printPairDouble(vector<pair<double, double>> pair);
+void printPairDouble(vector<pair<double, double>> &pair);
 
 struct DBObject {
   Color color = Color(0, 0, 0);
@@ -49,6 +49,7 @@ struct DBShape : public DBPoint {
   DBShape() = default;
   void calculateMinMax(ZOOM_RATIO zoom) override;
   void self_render(cairo_t *cr, int tx, int ty) override;
+  void appendPoints(vector<Point> points);
 };
 
 struct DBPolyline : public DBPoint {
@@ -56,6 +57,7 @@ struct DBPolyline : public DBPoint {
   DBPolyline() = default;
   void calculateMinMax(ZOOM_RATIO zoom) override;
   void self_render(cairo_t *cr, int tx, int ty) override;
+  void appendPoints(vector<Point> points);
 };
 
 struct DBBoard {
@@ -65,11 +67,8 @@ struct DBBoard {
   ZOOM_RATIO zoom = ZOOM_RATIO::X10;
   Color backgroundColor = Color(256, 256, 256);
   string outFile = "DBBoard";
-
   vector<DBObject *> dbObjects;
-
-  void addObject(DBObject &obj);
-
+  void addObject(DBObject *obj);
   void render();
 };
 

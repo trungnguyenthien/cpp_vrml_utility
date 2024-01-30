@@ -474,6 +474,9 @@ MEMORYCHECK_COMMAND:FILEPATH=MEMORYCHECK_COMMAND-NOTFOUND
 //File that contains suppressions for the memory checker
 MEMORYCHECK_SUPPRESSIONS_FILE:FILEPATH=
 
+//The directory containing the MPFR header files
+MPFR_INCLUDE_DIR:PATH=/usr/local/include
+
 //Arguments to supply to pkg-config
 PKG_CONFIG_ARGN:STRING=
 
@@ -521,6 +524,12 @@ pkgcfg_lib_Cairo_cairo:FILEPATH=/usr/local/Cellar/cairo/1.18.0/lib/libcairo.dyli
 
 //Path to a library.
 pkgcfg_lib_GMP_gmp:FILEPATH=/usr/local/Cellar/gmp/6.3.0/lib/libgmp.dylib
+
+//Path to a library.
+pkgcfg_lib_MPFR_gmp:FILEPATH=/usr/local/lib/libgmp.dylib
+
+//Path to a library.
+pkgcfg_lib_MPFR_mpfr:FILEPATH=/usr/local/Cellar/mpfr/4.2.1/lib/libmpfr.dylib
 
 //Value Computed by CMake
 rand_cube_in_vrml_BINARY_DIR:STATIC=/Users/trung/cpp_vrml_utility
@@ -870,7 +879,7 @@ DOXYGEN_EXECUTABLE-ADVANCED:INTERNAL=1
 //Details about finding Boost
 FIND_PACKAGE_MESSAGE_DETAILS_Boost:INTERNAL=[/usr/local/lib/cmake/Boost-1.84.0/BoostConfig.cmake][c ][v1.84.0(1.66)]
 //Details about finding GMP
-FIND_PACKAGE_MESSAGE_DETAILS_GMP:INTERNAL=[/usr/local/lib/libgmp.dylib][/usr/local/include][v()]
+FIND_PACKAGE_MESSAGE_DETAILS_GMP:INTERNAL=[gmp][/usr/local/include][v()]
 //Details about finding MPFR
 FIND_PACKAGE_MESSAGE_DETAILS_MPFR:INTERNAL=[/usr/local/opt/mpfr/lib][/usr/local/opt/mpfr/include][v()]
 //Details about finding PkgConfig
@@ -920,6 +929,41 @@ MAKECOMMAND-ADVANCED:INTERNAL=1
 MEMORYCHECK_COMMAND-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: MEMORYCHECK_SUPPRESSIONS_FILE
 MEMORYCHECK_SUPPRESSIONS_FILE-ADVANCED:INTERNAL=1
+MPFR_CFLAGS:INTERNAL=-I/usr/local/Cellar/mpfr/4.2.1/include
+MPFR_CFLAGS_I:INTERNAL=
+MPFR_CFLAGS_OTHER:INTERNAL=
+MPFR_FOUND:INTERNAL=1
+MPFR_INCLUDEDIR:INTERNAL=/usr/local/Cellar/mpfr/4.2.1/include
+MPFR_INCLUDE_DIRS:INTERNAL=/usr/local/Cellar/mpfr/4.2.1/include
+MPFR_LDFLAGS:INTERNAL=-L/usr/local/Cellar/mpfr/4.2.1/lib;-lmpfr;-lgmp
+MPFR_LDFLAGS_OTHER:INTERNAL=
+MPFR_LIBDIR:INTERNAL=/usr/local/Cellar/mpfr/4.2.1/lib
+MPFR_LIBRARIES:INTERNAL=mpfr;gmp
+MPFR_LIBRARY_DIRS:INTERNAL=/usr/local/Cellar/mpfr/4.2.1/lib
+MPFR_LIBS:INTERNAL=
+MPFR_LIBS_L:INTERNAL=
+MPFR_LIBS_OTHER:INTERNAL=
+MPFR_LIBS_PATHS:INTERNAL=
+MPFR_MODULE_NAME:INTERNAL=mpfr
+MPFR_PREFIX:INTERNAL=/usr/local/Cellar/mpfr/4.2.1
+MPFR_STATIC_CFLAGS:INTERNAL=-I/usr/local/Cellar/mpfr/4.2.1/include
+MPFR_STATIC_CFLAGS_I:INTERNAL=
+MPFR_STATIC_CFLAGS_OTHER:INTERNAL=
+MPFR_STATIC_INCLUDE_DIRS:INTERNAL=/usr/local/Cellar/mpfr/4.2.1/include
+MPFR_STATIC_LDFLAGS:INTERNAL=-L/usr/local/Cellar/mpfr/4.2.1/lib;-lmpfr;-lgmp
+MPFR_STATIC_LDFLAGS_OTHER:INTERNAL=
+MPFR_STATIC_LIBDIR:INTERNAL=
+MPFR_STATIC_LIBRARIES:INTERNAL=mpfr;gmp
+MPFR_STATIC_LIBRARY_DIRS:INTERNAL=/usr/local/Cellar/mpfr/4.2.1/lib
+MPFR_STATIC_LIBS:INTERNAL=
+MPFR_STATIC_LIBS_L:INTERNAL=
+MPFR_STATIC_LIBS_OTHER:INTERNAL=
+MPFR_STATIC_LIBS_PATHS:INTERNAL=
+MPFR_VERSION:INTERNAL=4.2.1
+MPFR_mpfr_INCLUDEDIR:INTERNAL=
+MPFR_mpfr_LIBDIR:INTERNAL=
+MPFR_mpfr_PREFIX:INTERNAL=
+MPFR_mpfr_VERSION:INTERNAL=
 //ADVANCED property for variable: PKG_CONFIG_ARGN
 PKG_CONFIG_ARGN-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: PKG_CONFIG_EXECUTABLE
@@ -930,10 +974,12 @@ SITE-ADVANCED:INTERNAL=1
 _GNUInstallDirs_LAST_CMAKE_INSTALL_PREFIX:INTERNAL=/usr/local
 __pkg_config_arguments_Cairo:INTERNAL=REQUIRED;cairo
 __pkg_config_arguments_GMP:INTERNAL=REQUIRED;gmp
+__pkg_config_arguments_MPFR:INTERNAL=REQUIRED;mpfr
 __pkg_config_checked_CAIRO:INTERNAL=1
 __pkg_config_checked_CGAL:INTERNAL=1
 __pkg_config_checked_Cairo:INTERNAL=1
 __pkg_config_checked_GMP:INTERNAL=1
+__pkg_config_checked_MPFR:INTERNAL=1
 //ADVANCED property for variable: boost_headers_DIR
 boost_headers_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: pkgcfg_lib_CAIRO_cairo
@@ -942,5 +988,9 @@ pkgcfg_lib_CAIRO_cairo-ADVANCED:INTERNAL=1
 pkgcfg_lib_Cairo_cairo-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: pkgcfg_lib_GMP_gmp
 pkgcfg_lib_GMP_gmp-ADVANCED:INTERNAL=1
-prefix_result:INTERNAL=/usr/local/Cellar/gmp/6.3.0/lib
+//ADVANCED property for variable: pkgcfg_lib_MPFR_gmp
+pkgcfg_lib_MPFR_gmp-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: pkgcfg_lib_MPFR_mpfr
+pkgcfg_lib_MPFR_mpfr-ADVANCED:INTERNAL=1
+prefix_result:INTERNAL=/usr/local/Cellar/mpfr/4.2.1/lib
 

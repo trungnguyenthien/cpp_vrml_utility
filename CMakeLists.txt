@@ -47,7 +47,6 @@ link_directories(${GMP_LIBRARY_DIRS})
 add_definitions(${GMP_CFLAGS_OTHER})
 
 find_package(CGAL REQUIRED COMPONENTS Core)
-# pkg_search_module(CGAL REQUIRED CGAL)
 include_directories(${CGAL_INCLUDE_DIRS})
 link_directories(${CGAL_LIBRARY_DIRS})
 add_definitions(${CGAL_CFLAGS_OTHER})
