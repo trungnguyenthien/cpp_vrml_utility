@@ -8,10 +8,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 
 if (APPLE)
-    # Fix: Could NOT find GMP (missing: GMP_LIBRARIES GMP_INCLUDE_DIR)
-    # Note: find correct path by `brew --prefix gmp`
-    # set(GMP_INCLUDE_DIR "/usr/local/opt/gmp/include")
-    # set(GMP_LIBRARIES "/usr/local/opt/gmp/lib")
     # Fix: Could NOT find MPFR (missing: MPFR_LIBRARIES MPFR_INCLUDE_DIR)
     # Note: find correct path by `brew --prefix mpfr`
     set(MPFR_INCLUDE_DIR "/usr/local/opt/mpfr/include")
