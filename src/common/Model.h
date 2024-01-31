@@ -18,6 +18,19 @@ struct Point {
     oss << "XYZ: (" << x << ", " << y << ", " << z << ")";
     return oss.str();
   }
+
+  bool operator==(const Point &other) const {
+    return std::fabs(x - other.x) < 1e-6 && std::fabs(y - other.y) < 1e-6 &&
+           std::fabs(z - other.z) < 1e-6;
+  }
+};
+
+struct Segment {
+  Point p1;
+  Point p2;
+
+  Segment(float p1x, float p1y, float p1z, float p2x, float p2y, float p2z)
+      : p1(p1x, p1y, p1z), p2(p2x, p2y, p2z) {}
 };
 
 void printVectorPoints(vector<Point> points);

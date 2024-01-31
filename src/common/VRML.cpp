@@ -1,5 +1,10 @@
 #include "VRML.h"
 
+#include <algorithm>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
+
 #include "FileUtils.h"
 #include "StringUtils.h"
 
@@ -328,6 +333,7 @@ vector<VrmlObject *> read_vrml_file(string file) {
     VrmlFaceSet *faceSet = dynamic_cast<VrmlFaceSet *>(vrml);
     if (faceSet != NULL) {
       cout << faceSet->debug_description() << endl;
+      faceSet->faces = sortFaceByEdge(faceSet->faces);
     }
   }
 
@@ -335,3 +341,65 @@ vector<VrmlObject *> read_vrml_file(string file) {
 }
 
 VrmlObject::VrmlObject() : diffuseColor(0, 0, 0), emissiveColor(0, 0, 0) {}
+
+// Với mỗi FaceDef có {n} vertex sẽ có cạnh đầu được tạo bởi FaceDef[0] và FaceDef[1]
+// Và cạnh cuối FaceDef được tạo bởi FaceDef[n - 2] và FaceDef[n-1]
+// Tôi muốn sort lại thứ tự f2 sao cho cạnh cuối f1 trùng với cạnh đầu f2.
+// Ví dụ: f1[1,2,3] và f2[7,6,2,3] --> sort f2[2,3,7, 6]
+void sortVertex(FaceDef &f1, FaceDef &f2) {
+  if (f1.size() < 2 || f2.size() < 2) {
+    // Không đủ đỉnh để tạo cạnh
+    return;
+  }
+
+  // Tìm cạnh cuối cùng của f1
+  int lastVertex1 = f1[f1.size() - 2];
+  int lastVertex2 = f1[f1.size() - 1];
+
+  // Tìm vị trí của cạnh này trong f2
+  auto it = std::find(f2.begin(), f2.end(), lastVertex1);
+  if (it != f2.end() && it + 1 != f2.end() && *(it + 1) == lastVertex2) {
+    // Xoay f2 để cạnh cuối của f1 trở thành cạnh đầu của f2
+    std::rotate(f2.begin(), it, f2.end());
+  }
+}
+
+// Kiểm tra xem hai FaceDef có cạnh chung hay không
+bool haveCommonEdge(FaceDef &f1, FaceDef &f2) {
+  std::unordered_set<int> edges(f1.begin(), f1.end());
+  for (int v : f2) {
+    if (edges.find(v) != edges.end()) {
+      sortVertex(f1, f2);
+      return true;
+    }
+  }
+  return false;
+}
+
+// Sắp xếp các FaceDef theo cạnh chung
+std::vector<FaceDef> sortFaceByEdge(std::vector<FaceDef> faces) {
+  std::vector<FaceDef> sorted;
+  std::unordered_map<int, bool> visited;
+
+  // Đánh dấu tất cả các mặt phẳng là chưa được thăm
+  for (size_t i = 0; i < faces.size(); ++i) {
+    visited[i] = false;
+  }
+
+  // Bắt đầu từ mặt phẳng đầu tiên
+  sorted.push_back(faces[0]);
+  visited[0] = true;
+
+  while (sorted.size() < faces.size()) {
+    FaceDef &last = sorted.back();
+    for (size_t i = 0; i < faces.size(); ++i) {
+      if (!visited[i] && haveCommonEdge(last, faces[i])) {
+        sorted.push_back(faces[i]);
+        visited[i] = true;
+        break;
+      }
+    }
+  }
+
+  return sorted;
+}

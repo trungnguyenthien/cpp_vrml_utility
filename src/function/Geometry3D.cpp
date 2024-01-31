@@ -7,6 +7,27 @@
 #include <iostream>
 #include <vector>
 
+// Trả về true nếu trong segment có đoạn AB hoặc BA
+bool hasExistedSegment(vector<Segment> &segments, Point &pA, Point &pB) {
+  for (const Segment &segment : segments) {
+    if ((segment.p1 == pA && segment.p2 == pB) || (segment.p1 == pB && segment.p2 == pA)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+// Trả về true nếu {points} có chứa point tạo bỏi px, py, pz
+bool hasExistedPoint(const std::vector<Point> &points, float px, float py, float pz) {
+  for (const Point &point : points) {
+    if (std::fabs(point.x - px) < 1e-6 && std::fabs(point.y - py) < 1e-6 &&
+        std::fabs(point.z - pz) < 1e-6) {
+      return true;
+    }
+  }
+  return false;
+}
+
 typedef CGAL::Exact_predicates_inexact_constructions_kernel Kernel;
 typedef Kernel::Point_3 CGALPoint;
 typedef CGAL::Polyhedron_3<Kernel> Polyhedron;
@@ -60,28 +81,37 @@ typedef Kernel::Plane_3 Plane_3;
 
 std::vector<Point> polygonAtZ(void *shape, int z) {
   std::vector<Point> points;
-  cout << "polygonAtZ 1" << endl;
+  vector<Segment> segments;
   Polyhedron *P = static_cast<Polyhedron *>(shape);
-  cout << "polygonAtZ 2" << endl;
   // Tạo mặt phẳng cắt tại tọa độ z
   Plane_3 plane(0, 0, 1, -z);
-  cout << "polygonAtZ 3 " << endl;
   for (Polyhedron::Facet_iterator fi = P->facets_begin(); fi != P->facets_end(); ++fi) {
-    cout << "polygonAtZ 3.1 " << endl;
     Halfedge_facet_circulator hec = fi->facet_begin();
     do {
-      cout << "polygonAtZ 3.2 " << endl;
-      Segment_3 segment(hec->vertex()->point(), hec->next()->vertex()->point());
+      auto sourcePoint = hec->vertex()->point();
+      auto targetPoint = hec->next()->vertex()->point();
+      Segment mySegment(sourcePoint.x(), sourcePoint.y(), sourcePoint.z(), targetPoint.x(),
+                        targetPoint.y(), targetPoint.z());
+      Point pA(sourcePoint.x(), sourcePoint.y(), sourcePoint.z()),
+          pB(targetPoint.x(), targetPoint.y(), targetPoint.z());
+      // if (hasExistedSegment(segments, pA, pB)) {
+      //   continue;
+      // }
+      segments.push_back(mySegment);
+      Segment_3 segment(sourcePoint, targetPoint);
       CGAL::Object result = CGAL::intersection(segment, plane);
 
       if (const CGALPoint *p = CGAL::object_cast<CGALPoint>(&result)) {
-        cout << "polygonAtZ 3.3 " << endl;
-        points.push_back(
-            {static_cast<float>(p->x()), static_cast<float>(p->y()), static_cast<float>(p->z())});
+        float px = static_cast<float>(p->x());
+        float py = static_cast<float>(p->y());
+        float pz = static_cast<float>(p->z());
+        if (hasExistedPoint(points, px, py, pz)) {
+          continue;
+        }
+        points.push_back({px, py, pz});
       }
     } while (++hec != fi->facet_begin());
   }
-  cout << "polygonAtZ 4 " << points.size() << endl;
   printVectorPoints(points);
   return points;
 }

@@ -41,13 +41,11 @@ vector<float> splitFloats(const string &input, const string &separator) {
 
   while ((end = input.find(separator, start)) != string::npos) {
     string str = input.substr(start, end - start);
-    // cout << "str1-" << str << endl;
     result.push_back(stof(str));
     start = end + separator.length();
   }
   string str = input.substr(start);
   if (!str.empty()) {
-    // cout << "str2-" << str << endl;
     result.push_back(stof(str));
   }
 

@@ -15,12 +15,6 @@ int forEachLine(string file, function<void(long, string)> func) {
   string line;
   long line_index = 0;
   while (std::getline(inputFile, line)) {
-    // if (0 == line_index % 1000)
-    // {
-    //     cout << "line_index "
-    //          << " - " << line_index << endl;
-    //     cout << line << endl;
-    // }
     func(line_index, line);
     line_index++;
   }
@@ -28,7 +22,8 @@ int forEachLine(string file, function<void(long, string)> func) {
   return 1;
 }
 
-void appendAfterLine(const std::string &filePath, const std::string &outFilePath, const std::string &searchLine, const std::string &appendText) {
+void appendAfterLine(const std::string &filePath, const std::string &outFilePath,
+                     const std::string &searchLine, const std::string &appendText) {
   std::ifstream inputFile(filePath);
   std::ofstream outputFile(outFilePath);
   std::string line;
