@@ -65,15 +65,17 @@ std::vector<Point> polygonAtZ(void *shape, int z) {
   cout << "polygonAtZ 2" << endl;
   // Tạo mặt phẳng cắt tại tọa độ z
   Plane_3 plane(0, 0, 1, -z);
-  cout << "polygonAtZ 3" << endl;
+  cout << "polygonAtZ 3 " << endl;
   for (Polyhedron::Facet_iterator fi = P->facets_begin(); fi != P->facets_end(); ++fi) {
-    cout << "polygonAtZ 3.1" << endl;
+    cout << "polygonAtZ 3.1 " << endl;
     Halfedge_facet_circulator hec = fi->facet_begin();
     do {
+      cout << "polygonAtZ 3.2 " << endl;
       Segment_3 segment(hec->vertex()->point(), hec->next()->vertex()->point());
       CGAL::Object result = CGAL::intersection(segment, plane);
 
       if (const CGALPoint *p = CGAL::object_cast<CGALPoint>(&result)) {
+        cout << "polygonAtZ 3.3 " << endl;
         points.push_back(
             {static_cast<float>(p->x()), static_cast<float>(p->y()), static_cast<float>(p->z())});
       }

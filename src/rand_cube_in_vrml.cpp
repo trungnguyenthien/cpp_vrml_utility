@@ -13,7 +13,7 @@
 #include "function/Geometry3D.h"
 
 void testGeo3D(vector<Point> &points, vector<vector<int>> &faces, int z) {
-  cout << "Testing Geo3D " << points.size() << endl;
+  cout << "Testing Geo3D " << points.size() << " faces " << faces.size() << endl;
   void *shape = createShape3D(points, faces);
   vector<Point> poly = polygonAtZ(shape, z);
   printVectorPoints(poly);
@@ -69,7 +69,7 @@ int main(int argc, char **argv) {
 
   if (faceSet != NULL) {
     cout << "faceSet != NULL " << faceSet << endl;
-    testGeo3D(faceSet->points, faceSet->faces, 10);
+    testGeo3D(faceSet->points, faceSet->faces, -20);
   }
 
   outputFile.close();
