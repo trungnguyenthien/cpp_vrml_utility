@@ -1,11 +1,13 @@
 #include "Geometry3D.h"
-#include "../common/Debug.h"
+
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <CGAL/Polyhedron_3.h>
 #include <CGAL/Polyhedron_incremental_builder_3.h>
 
 #include <iostream>
 #include <vector>
+
+#include "../common/Debug.h"
 
 // Trả về true nếu trong segment có đoạn AB hoặc BA
 bool hasExistedSegment(vector<Segment> &segments, Point &pA, Point &pB) {
@@ -105,9 +107,12 @@ std::vector<Point> polygonAtZ(void *shape, int z) {
         float px = static_cast<float>(p->x());
         float py = static_cast<float>(p->y());
         float pz = static_cast<float>(p->z());
-        // if (hasExistedPoint(points, px, py, pz)) {
-        //   continue;
-        // }
+        if (hasExistedPoint(points, px, py, pz)) {
+          cout << "hasExistedPoint << " << px << "," << py << "," << pz << endl;
+          continue;
+        }
+
+        cout << "Cut Point << " << px << "," << py << "," << pz << endl;
         points.push_back({px, py, pz});
       }
     } while (++hec != fi->facet_begin());

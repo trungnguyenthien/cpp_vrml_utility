@@ -143,7 +143,11 @@ vector<vector<int>> makeFaces(vector<vector<int>> points) {
       currentFace.push_back(num);
     } else {
       if (!currentFace.empty()) {
-        faces.push_back(currentFace);
+        auto multiFaces = splitFace3P(currentFace);
+        for (auto f : multiFaces) {
+          faces.push_back(f);
+        }
+        // faces.push_back(currentFace);
         currentFace.clear();
       }
     }
@@ -151,9 +155,23 @@ vector<vector<int>> makeFaces(vector<vector<int>> points) {
 
   // Add the last face if there was no -1 at the end
   if (!currentFace.empty()) {
-    faces.push_back(currentFace);
+    auto multiFaces = splitFace3P(currentFace);
+    for (auto f : multiFaces) {
+      faces.push_back(f);
+    }
   }
   return faces;
+}
+
+vector<vector<int>> splitFace3P(vector<int> points) {
+  vector<vector<int>> output;
+  for (int i = 1; i < points.size() - 1; i++) {
+    int p0 = points[0];
+    int p1 = points[i];
+    int p2 = points[i + 1];
+    output.push_back({p0, p1, p2});
+  }
+  return output;
 }
 
 // Nếu token có định dạng sau
