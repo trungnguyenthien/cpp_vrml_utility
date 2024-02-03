@@ -1,5 +1,5 @@
 #include "DrawBoard.h"
-
+#include "../common/Debug.h"
 #include <climits>
 #include <stdexcept>  // For std::invalid_argument
 
