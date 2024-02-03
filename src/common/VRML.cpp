@@ -1,12 +1,25 @@
 #include "VRML.h"
 
 #include <algorithm>
+#include <set>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
 
+#include "Debug.h"
 #include "FileUtils.h"
 #include "StringUtils.h"
+
+// Nếu {vertices1} và {vertices2} có 1 set<int> giống nhau thì return true
+bool hasCommonEdge(set<set<int>> vertices1, set<set<int>> vertices2) {
+  for (set<int> set1 : vertices1) {
+    for (set<int> set2 : vertices2) {
+      if (set1 == set2)
+        return true;
+    }
+  }
+  return false;
+}
 
 #define PRINT_DEBUG_INFO(token, number_set, flag_read) \
   std::cout << "Token:" << token << "-- "              \
@@ -102,24 +115,6 @@ FaceDef parseFace(string token) {
   }
 
   return face;
-}
-
-void printVector2Int(string message, vector<vector<int>> contents) {
-  std::cout << message << std::endl;
-  for (const auto &subVec : contents) {
-    for (int num : subVec) {
-      std::cout << num << " ";
-    }
-    std::cout << std::endl;
-  }
-}
-
-void printVectorInt(const std::string &message, const std::vector<int> &contents) {
-  std::cout << message << std::endl;
-  for (int num : contents) {
-    std::cout << num << " ";
-  }
-  std::cout << std::endl;
 }
 
 /**
@@ -333,7 +328,7 @@ vector<VrmlObject *> read_vrml_file(string file) {
     VrmlFaceSet *faceSet = dynamic_cast<VrmlFaceSet *>(vrml);
     if (faceSet != NULL) {
       cout << faceSet->debug_description() << endl;
-      faceSet->faces = sortFaceByEdge(faceSet->faces);
+      // faceSet->faces = sortFaceByEdge(faceSet->faces);
     }
   }
 
@@ -360,20 +355,37 @@ void sortVertex(FaceDef &f1, FaceDef &f2) {
   auto it = std::find(f2.begin(), f2.end(), lastVertex1);
   if (it != f2.end() && it + 1 != f2.end() && *(it + 1) == lastVertex2) {
     // Xoay f2 để cạnh cuối của f1 trở thành cạnh đầu của f2
+    cout << "std::rotate(f2.begin(), it, f2.end());" << endl;
     std::rotate(f2.begin(), it, f2.end());
   }
 }
 
+// Hãy gom các cặp vertex cạnh nhau thành 1 set.
+// Ví dụ: [0,3,2,1] ==> [0,3], [3,2], [2,1], [1,0]
+set<set<int>> makeSet2Verties(std::vector<int> vertices) {
+  set<set<int>> edgeSet;
+  for (size_t i = 0; i < vertices.size(); ++i) {
+    set<int> edge;
+    edge.insert(vertices[i]);
+    edge.insert(vertices[(i + 1) % vertices.size()]);
+    edgeSet.insert(edge);
+  }
+  // printSetOfSets(edgeSet);
+  return edgeSet;
+}
+
 // Kiểm tra xem hai FaceDef có cạnh chung hay không
 bool haveCommonEdge(FaceDef &f1, FaceDef &f2) {
-  std::unordered_set<int> edges(f1.begin(), f1.end());
-  for (int v : f2) {
-    if (edges.find(v) != edges.end()) {
-      sortVertex(f1, f2);
-      return true;
-    }
-  }
-  return false;
+  auto edges1 = makeSet2Verties(f1);
+  auto edges2 = makeSet2Verties(f2);
+  auto result = hasCommonEdge(edges1, edges2);
+
+  cout << "COMPARE SET" << endl;
+  printSetOfSets(edges1);
+  printSetOfSets(edges2);
+  cout << "RESULT = " << result << endl;
+
+  return result;
 }
 
 // Sắp xếp các FaceDef theo cạnh chung
@@ -401,5 +413,16 @@ std::vector<FaceDef> sortFaceByEdge(std::vector<FaceDef> faces) {
     }
   }
 
+  // printVector2Int("sortFaceByEdge ORIGIN ", faces);
+  // printVector2Int("sortFaceByEdge SORT ", sorted);
+
+  for (int i = 0; i < faces.size() - 1; i++) {
+    FaceDef &f1 = faces[i];
+    FaceDef &f2 = faces[i - 1];
+    // printVectorInt("F2 ORIGIN ", f2);
+    sortVertex(f1, f2);
+    // printVectorInt("F2 SORTED ", f2);
+  }
+  // printVector2Int("sortFaceByEdge SORT2 ", sorted);
   return sorted;
 }

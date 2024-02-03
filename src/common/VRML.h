@@ -2,6 +2,7 @@
 #define COMMON_VRML_H_
 
 #include <initializer_list>
+#include <unordered_set>
 #include <vector>
 
 #include "Model.h"
@@ -38,8 +39,7 @@ public:
 bool isNumberArray(string str);
 Point parsePoint(string token);
 FaceDef parseFace(string token);
-void printVector2Int(string message, vector<vector<int>> contents);
-void printVectorInt(const std::string &message, const std::vector<int> &contents);
+
 vector<float> parseColor(string token);
 vector<string> vrml2tokenStrings(string line);
 vector<VrmlObject *> read_vrml_file(string file);
@@ -58,4 +58,5 @@ vector<FaceDef> sortFaceByEdge(vector<FaceDef> faces);
 bool haveCommonEdge(FaceDef &f1, FaceDef &f2);
 
 // void sortVertex(const FaceDef &f1, const FaceDef &f2);
+
 #endif  // COMMON_VRML_H_

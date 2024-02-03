@@ -39,6 +39,7 @@ endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE FILE FILES
+    "/Users/trung/cpp_vrml_utility/src/common/Debug.h"
     "/Users/trung/cpp_vrml_utility/src/common/FileUtils.h"
     "/Users/trung/cpp_vrml_utility/src/common/Model.h"
     "/Users/trung/cpp_vrml_utility/src/common/StringUtils.h"

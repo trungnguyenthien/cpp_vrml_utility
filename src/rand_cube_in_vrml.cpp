@@ -16,7 +16,6 @@ void testGeo3D(vector<Point> &points, vector<vector<int>> &faces, int z) {
   cout << "Testing Geo3D " << points.size() << " faces " << faces.size() << endl;
   void *shape = createShape3D(points, faces);
   vector<Point> poly = polygonAtZ(shape, z);
-  printVectorPoints(poly);
 
   DBBoard db;
   db.size = BOARD_SIZE::_1_000;
@@ -49,10 +48,6 @@ int main(int argc, char **argv) {
 
   CLI11_PARSE(app, argc, argv);
 
-  cout << "filename:" << filename << endl;
-  cout << "number:" << numberCube << endl;
-  cout << "size:" << sizeCube << endl;
-
   if (filename.empty()) {
     return 0;
   }
@@ -68,7 +63,6 @@ int main(int argc, char **argv) {
   VrmlFaceSet *faceSet = dynamic_cast<VrmlFaceSet *>(vrmlObjects[0]);
 
   if (faceSet != NULL) {
-    cout << "faceSet != NULL " << faceSet << endl;
     testGeo3D(faceSet->points, faceSet->faces, -20);
   }
 

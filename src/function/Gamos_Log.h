@@ -33,23 +33,28 @@ struct G4TrackRow {
   int ParentID;
 
   void printDebugInfo() {
-    std::cout << "Step: " << Step << ", Xmm: " << Xmm << ", Ymm: " << Ymm << ", Zmm: " << Zmm << ", KinE: " << KinE << ", dE: " << dE
-              << ", StepLeng: " << StepLeng << ", TrackLeng: " << TrackLeng << ", NextVolume: " << NextVolume << ", ProcName: " << ProcName
-              << ", Table_Particle: " << Particle << ", Table_TrackID: " << TrackID << ", Table_ParentID: " << ParentID << std::endl;
+    std::cout << "Step: " << Step << ", Xmm: " << Xmm << ", Ymm: " << Ymm << ", Zmm: " << Zmm
+              << ", KinE: " << KinE << ", dE: " << dE << ", StepLeng: " << StepLeng
+              << ", TrackLeng: " << TrackLeng << ", NextVolume: " << NextVolume
+              << ", ProcName: " << ProcName << ", Table_Particle: " << Particle
+              << ", Table_TrackID: " << TrackID << ", Table_ParentID: " << ParentID << std::endl;
   }
 
   string name() {
     ostringstream stream;
-    stream << "* G4Track Information:   Particle = " << Particle << ",   Track ID = " << TrackID << ",   Parent ID = " << ParentID << " {Step: " << Step << "}";
+    stream << "* G4Track Information:   Particle = " << Particle << ",   Track ID = " << TrackID
+           << ",   Parent ID = " << ParentID << " {Step: " << Step << "}";
     return stream.str();
   }
 };
 
 class G4TrackTable {
 private:
-  void parseG4TrackInformation(std::string text, std::string &Particle, int &TrackID, int &ParentID) {
+  void parseG4TrackInformation(std::string text, std::string &Particle, int &TrackID,
+                               int &ParentID) {
     // Biểu thức chính quy để trích xuất thông tin
-    std::regex pattern(R"(\* G4Track Information:\s+Particle = ([^,]+),\s+Track ID = (\d+),\s+Parent ID = (\d+))");
+    std::regex pattern(
+        R"(\* G4Track Information:\s+Particle = ([^,]+),\s+Track ID = (\d+),\s+Parent ID = (\d+))");
 
     // Tìm sự khớp trong chuỗi văn bản
     std::smatch matches;
@@ -68,7 +73,8 @@ public:
 
   static bool isG4TrackHeader(string line) {
     // Biểu thức chính quy để kiểm tra định dạng
-    regex pattern(R"(\* G4Track Information:\s+Particle = ([^,]+),\s+Track ID = (\d+),\s+Parent ID = (\d+))");
+    regex pattern(
+        R"(\* G4Track Information:\s+Particle = ([^,]+),\s+Track ID = (\d+),\s+Parent ID = (\d+))");
 
     // Kiểm tra xem chuỗi line có khớp với biểu thức chính quy không
     return regex_match(line, pattern);

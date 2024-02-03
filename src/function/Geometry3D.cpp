@@ -105,9 +105,9 @@ std::vector<Point> polygonAtZ(void *shape, int z) {
         float px = static_cast<float>(p->x());
         float py = static_cast<float>(p->y());
         float pz = static_cast<float>(p->z());
-        if (hasExistedPoint(points, px, py, pz)) {
-          continue;
-        }
+        // if (hasExistedPoint(points, px, py, pz)) {
+        //   continue;
+        // }
         points.push_back({px, py, pz});
       }
     } while (++hec != fi->facet_begin());

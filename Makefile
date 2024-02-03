@@ -256,6 +256,30 @@ ryu/fast:
 	$(MAKE) $(MAKESILENT) -f modules/geos/src/deps/CMakeFiles/ryu.dir/build.make modules/geos/src/deps/CMakeFiles/ryu.dir/build
 .PHONY : ryu/fast
 
+src/common/Debug.o: src/common/Debug.cpp.o
+.PHONY : src/common/Debug.o
+
+# target to build an object file
+src/common/Debug.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rand_cube_in_vrml.dir/build.make CMakeFiles/rand_cube_in_vrml.dir/src/common/Debug.cpp.o
+.PHONY : src/common/Debug.cpp.o
+
+src/common/Debug.i: src/common/Debug.cpp.i
+.PHONY : src/common/Debug.i
+
+# target to preprocess a source file
+src/common/Debug.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rand_cube_in_vrml.dir/build.make CMakeFiles/rand_cube_in_vrml.dir/src/common/Debug.cpp.i
+.PHONY : src/common/Debug.cpp.i
+
+src/common/Debug.s: src/common/Debug.cpp.s
+.PHONY : src/common/Debug.s
+
+# target to generate assembly for a file
+src/common/Debug.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rand_cube_in_vrml.dir/build.make CMakeFiles/rand_cube_in_vrml.dir/src/common/Debug.cpp.s
+.PHONY : src/common/Debug.cpp.s
+
 src/common/FileUtils.o: src/common/FileUtils.cpp.o
 .PHONY : src/common/FileUtils.o
 
@@ -516,6 +540,9 @@ help:
 	@echo "... geos_c"
 	@echo "... rand_cube_in_vrml"
 	@echo "... ryu"
+	@echo "... src/common/Debug.o"
+	@echo "... src/common/Debug.i"
+	@echo "... src/common/Debug.s"
 	@echo "... src/common/FileUtils.o"
 	@echo "... src/common/FileUtils.i"
 	@echo "... src/common/FileUtils.s"

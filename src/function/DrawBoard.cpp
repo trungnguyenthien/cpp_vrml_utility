@@ -22,12 +22,6 @@ std::vector<std::pair<double, double>> makePair(std::vector<float> &source) {
   return result;
 }
 
-void printPairDouble(vector<pair<double, double>> &pair) {
-  for (const auto &p : pair) {
-    std::cout << "(" << p.first << ", " << p.second << ")\n";
-  }
-}
-
 void DBBoard::addObject(DBObject *obj) {
   DBPoint *point = dynamic_cast<DBPoint *>(obj);
   DBPolyline *pline = dynamic_cast<DBPolyline *>(obj);
