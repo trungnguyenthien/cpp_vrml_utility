@@ -67,14 +67,10 @@ Plane_3 createPlane3Z(int z) {
 Segment_3 intersection2Plane(Point p0, Point p1, Point p2, Plane_3 plane2) {
   Triangle_3 triangle =
       Triangle_3(convertToPoint_3(p0), convertToPoint_3(p1), convertToPoint_3(p2));
-  cout << " intersection2Plane 1" << endl;
   // Thực hiện phép giao cắt giữa hai mặt phẳng
   Object result = CGAL::intersection(triangle, plane2);
-
-  cout << " intersection2Plane 2" << endl;
   // Kiểm tra kết quả và trả về Segment_3 nếu phép giao cắt là một đoạn thẳng
   if (const Segment_3 *s = CGAL::object_cast<Segment_3>(&result)) {
-    cout << " intersection2Plane 3" << endl;
     return *s;
   } else {
     // Giao điểm không phải là một đoạn thẳng hoặc không tồn tại
@@ -96,22 +92,15 @@ Point convertFromPoint_3(Point_3 p3) { return Point(p3.x(), p3.y(), p3.z()); }
 Point_3 convertToPoint_3(Point p) { return Point_3(p.x, p.y, p.z); }
 
 pair<Point, Point> intersectionZ(vector<Point> plane, int z) {
-  cout << "Intersection Z 1" << endl;
   // Plane_3 plane1 = createPlane3(plane[0], plane[1], plane[2]);
-  cout << "Intersection Z 2" << endl;
   Plane_3 planez = createPlane3Z(z);
-  cout << "Intersection Z 3" << endl;
   try {
     auto intersectionSegment = intersection2Plane(plane[0], plane[1], plane[2], planez);
-    cout << "Intersection Z 4" << endl;
     auto pointSource = convertFromPoint_3(intersectionSegment.source());
-    cout << "Intersection Z 5" << endl;
     auto pointTarget = convertFromPoint_3(intersectionSegment.target());
-    cout << "Intersection Z 6" << endl;
     return pair<Point, Point>(pointSource, pointTarget);
   } catch (const std::runtime_error &e) {
     throw runtime_error("intersectionZ: An error occurred: " + std::string(e.what()));
-    // std::cerr << "intersectionZ: An error occurred: " << e.what() << std::endl;
   }
   return pair<Point, Point>(Point(0, 0, 0), Point(0, 0, 0));
 }
@@ -136,11 +125,17 @@ vector<Point> polygonAtZ(vector<Point> shapePoints, vector<vector<int>> faceSet,
       segments.push_back(mySegment);
 
       if (!hasExistedPoint(output, sourcePoint)) {
+        cout << "Add point " << sourcePoint.x << " " << sourcePoint.y << endl;
         output.push_back(sourcePoint);
+      } else {
+        cout << "\tExisted point " << sourcePoint.x << " " << sourcePoint.y << endl;
       }
 
       if (!hasExistedPoint(output, targetPoint)) {
+        cout << "Add point " << targetPoint.x << " " << targetPoint.y << endl;
         output.push_back(targetPoint);
+      } else {
+        cout << "\tExisted point " << targetPoint.x << " " << targetPoint.y << endl;
       }
 
     } catch (const std::runtime_error &e) {
