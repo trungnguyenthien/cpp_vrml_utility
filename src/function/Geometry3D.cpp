@@ -107,8 +107,6 @@ pair<Point, Point> intersectionZ(vector<Point> plane, int z) {
   return pair<Point, Point>(Point(0, 0, 0), Point(0, 0, 0));
 }
 
-// Return TRUE nếu: Điểm X nằm trên đoạn thẳng AB
-// Các trường hợp return FALSE: X không nằm trên đoạn AB, X trùng với A hoặc B
 bool isPointsInSegment(Point x, Point a, Point b) {
   // Kiểm tra xem X có trùng với A hoặc B không
   if ((x.x == a.x && x.y == a.y && x.z == a.z) || (x.x == b.x && x.y == b.y && x.z == b.z)) {
@@ -134,7 +132,6 @@ bool isPointsInSegment(Point x, Point a, Point b) {
   return false;
 }
 
-// Trả về danh sách Points sau khi {sourcePoints} đã excude các point trong {removePoints}
 vector<Point> excludePoints(vector<Point> sourcePoints, vector<Point> removePoints) {
   std::vector<Point> result;
 
@@ -168,6 +165,78 @@ vector<Point> findPointsInSegment(vector<Point> segmentPoints) {
   }
 
   return output;
+}
+
+// Return thành nhiều đa giác con đơn giản
+// {sourcePolygon} đa giác phức tạp, có thể có các cạnh giao nhau
+std::vector<std::vector<Point>> partitionPolygon(std::vector<Point> sourcePolygon) {
+  // Chuyển đổi sourcePolygon sang CGAL Polygon_2
+  cout << "partitionPolygon 1" << endl;
+  Trait_Polygon_2 poly;
+  for (const auto &p : sourcePolygon) {
+    poly.push_back(Trait_Point_2(p.x, p.y));
+  }
+  cout << "partitionPolygon 2" << endl;
+
+  list<Trait_Polygon_2> partition_polys;
+  CGAL::approx_convex_partition_2(poly.vertices_begin(), poly.vertices_end(),
+                                  std::back_inserter(partition_polys), Traits());
+  cout << "partitionPolygon 3" << endl;
+  std::vector<std::vector<Point>> result;
+  for (auto p : partition_polys) {
+    std::vector<Point> simplePoly;
+    cout << "partitionPolygon 4" << endl;
+
+    for (auto vit = p.vertices_begin(); vit != p.vertices_end(); ++vit) {
+      simplePoly.push_back(Point{static_cast<float>(CGAL::to_double(vit->x())),
+                                 static_cast<float>(CGAL::to_double(vit->y())), 0.0f});
+    }
+    result.push_back(simplePoly);
+  }
+
+  return result;
+}
+
+// Return true nếu {point} nằm trong polygon định nghĩa bỏi {polygonPoints}
+// Sử dụng thư viên CGAL
+bool __checkPointInSidePolygon(Point point, vector<Point> polygonPoints) {
+  // Chuyển đổi danh sách điểm từ Point sang Point_2 của CGAL
+  Polygon_2 poly;
+  for (const auto &p : polygonPoints) {
+    poly.push_back(Point_2(p.x, p.y));
+  }
+
+  // Chuyển đổi điểm kiểm tra
+  Point_2 checkPoint(point.x, point.y);
+
+  // Sử dụng CGAL để kiểm tra xem điểm có nằm bên trong đa giác không
+  auto isInside = poly.bounded_side(checkPoint) == CGAL::ON_BOUNDED_SIDE;
+
+  return isInside;
+}
+
+bool checkPointInSidePolygon(Point point, vector<Point> polygonPoints) {
+  cout << "checkPointInSidePolygon 1" << endl;
+  auto multiPolygons = partitionPolygon(polygonPoints);
+  cout << "checkPointInSidePolygon 2" << endl;
+  bool isInside = false;
+
+  for (auto polygon : multiPolygons) {
+    printVectorPoints(polygon);
+    if (__checkPointInSidePolygon(point, polygon)) {
+      isInside = true;
+      break;
+    }
+  }
+
+  cout << "POINT: (" << point.x << ", " << point.y << ")" << endl;
+  if (isInside) {
+    cout << "isInside" << endl;
+  } else {
+    cout << "Outside" << endl;
+  }
+
+  return isInside;
 }
 
 vector<Point> polygonAtZ(vector<Point> shapePoints, vector<vector<int>> faceSet, int z) {
@@ -211,5 +280,9 @@ vector<Point> polygonAtZ(vector<Point> shapePoints, vector<vector<int>> faceSet,
   auto removePoint = findPointsInSegment(output);
   output = excludePoints(output, removePoint);
 
+  // In (100, 0), (150, -25), (250, 0), (200, 25),
+  // Out: (150, 75), (150, -75)
+
+  checkPointInSidePolygon(Point(100, 0), output);
   return output;
 }
