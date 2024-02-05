@@ -24,6 +24,7 @@ typedef Kernel::Point_3 Point_3;
 typedef CGAL::Object Object;
 // typedef CGAL::Line_3 Line_3;
 typedef CGAL::Triangle_3<Kernel> Triangle_3;
+typedef Kernel::Vector_3 Vector_3;
 
 using namespace std;
 vector<Point> polygonAtZ(vector<Point> shapePoints, vector<vector<int>> faceSet, int z);

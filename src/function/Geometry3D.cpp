@@ -50,7 +50,7 @@ Plane_3 createPlane3(Point p0, Point p1, Point p2) {
   Plane_3 plane(point0, point1, point2);
   return plane;
 }
-typedef Kernel::Vector_3 Vector_3;
+
 Plane_3 createPlane3Z(int z) {
   Point_3 point_on_plane(0, 0, z);
 
@@ -65,8 +65,10 @@ Plane_3 createPlane3Z(int z) {
 }
 
 Segment_3 intersection2Plane(Point p0, Point p1, Point p2, Plane_3 plane2) {
-  Triangle_3 triangle =
-      Triangle_3(convertToPoint_3(p0), convertToPoint_3(p1), convertToPoint_3(p2));
+  Point_3 p3_0 = convertToPoint_3(p0);
+  Point_3 p3_1 = convertToPoint_3(p1);
+  Point_3 p3_2 = convertToPoint_3(p2);
+  Triangle_3 triangle = Triangle_3(p3_0, p3_1, p3_2);
   // Thực hiện phép giao cắt giữa hai mặt phẳng
   Object result = CGAL::intersection(triangle, plane2);
   // Kiểm tra kết quả và trả về Segment_3 nếu phép giao cắt là một đoạn thẳng
@@ -100,9 +102,72 @@ pair<Point, Point> intersectionZ(vector<Point> plane, int z) {
     auto pointTarget = convertFromPoint_3(intersectionSegment.target());
     return pair<Point, Point>(pointSource, pointTarget);
   } catch (const std::runtime_error &e) {
-    throw runtime_error("intersectionZ: An error occurred: " + std::string(e.what()));
+    throw runtime_error("intersectionZ: An error occurred: { " + std::string(e.what()) + " }");
   }
   return pair<Point, Point>(Point(0, 0, 0), Point(0, 0, 0));
+}
+
+// Return TRUE nếu: Điểm X nằm trên đoạn thẳng AB
+// Các trường hợp return FALSE: X không nằm trên đoạn AB, X trùng với A hoặc B
+bool isPointsInSegment(Point x, Point a, Point b) {
+  // Kiểm tra xem X có trùng với A hoặc B không
+  if ((x.x == a.x && x.y == a.y && x.z == a.z) || (x.x == b.x && x.y == b.y && x.z == b.z)) {
+    return false;  // X trùng với A hoặc B
+  }
+
+  // Tính vectơ AX và AB
+  Point ax = {x.x - a.x, x.y - a.y, x.z - a.z};
+  Point ab = {b.x - a.x, b.y - a.y, b.z - a.z};
+
+  // Tính tích vô hướng (dot product) và tích chéo (cross product) để kiểm tra cùng phương
+  float dotProduct = ax.x * ab.x + ax.y * ab.y + ax.z * ab.z;
+  Point crossProduct = {ax.y * ab.z - ax.z * ab.y, ax.z * ab.x - ax.x * ab.z,
+                        ax.x * ab.y - ax.y * ab.x};
+
+  // Kiểm tra tích chéo bằng 0 (cùng phương) và dot product dương (cùng hướng)
+  if (crossProduct.x == 0 && crossProduct.y == 0 && crossProduct.z == 0 && dotProduct > 0) {
+    // Kiểm tra X có nằm giữa A và B không
+    float abLengthSquared = ab.x * ab.x + ab.y * ab.y + ab.z * ab.z;
+    return dotProduct < abLengthSquared;
+  }
+
+  return false;
+}
+
+// Trả về danh sách Points sau khi {sourcePoints} đã excude các point trong {removePoints}
+vector<Point> excludePoints(vector<Point> sourcePoints, vector<Point> removePoints) {
+  std::vector<Point> result;
+
+  // Duyệt qua từng điểm trong sourcePoints
+  for (const auto &sourcePoint : sourcePoints) {
+    // Sử dụng std::find và toán tử == đã định nghĩa để kiểm tra xem sourcePoint có trong
+    // removePoints không
+    if (std::find(removePoints.begin(), removePoints.end(), sourcePoint) == removePoints.end()) {
+      // Nếu không tìm thấy điểm trong removePoints, thêm vào kết quả
+      result.push_back(sourcePoint);
+    }
+  }
+
+  return result;
+}
+
+vector<Point> findPointsInSegment(vector<Point> segmentPoints) {
+  vector<Point> output;
+  for (int ix = 0; ix < segmentPoints.size(); ix++) {
+    for (int ia = 0; ia < segmentPoints.size(); ia++) {
+      for (int ib = 0; ib < segmentPoints.size(); ib++) {
+        if (ix == ia || ix == ib || ia == ib) {
+          continue;
+        }
+
+        if (isPointsInSegment(segmentPoints[ix], segmentPoints[ia], segmentPoints[ib])) {
+          output.push_back(segmentPoints[ix]);
+        }
+      }
+    }
+  }
+
+  return output;
 }
 
 vector<Point> polygonAtZ(vector<Point> shapePoints, vector<vector<int>> faceSet, int z) {
@@ -112,8 +177,6 @@ vector<Point> polygonAtZ(vector<Point> shapePoints, vector<vector<int>> faceSet,
   for (auto face : faceSet) {
     try {
       auto facePoint = getFacePoint(shapePoints, face);
-      // cout << "facePoint ";
-      // printVectorPoints(facePoint);
       auto segmentPairPoint = intersectionZ(facePoint, z);
       auto sourcePoint = segmentPairPoint.first;
       auto targetPoint = segmentPairPoint.second;
@@ -129,6 +192,7 @@ vector<Point> polygonAtZ(vector<Point> shapePoints, vector<vector<int>> faceSet,
         output.push_back(sourcePoint);
       } else {
         cout << "\tExisted point " << sourcePoint.x << " " << sourcePoint.y << endl;
+        output.push_back(sourcePoint);
       }
 
       if (!hasExistedPoint(output, targetPoint)) {
@@ -136,11 +200,16 @@ vector<Point> polygonAtZ(vector<Point> shapePoints, vector<vector<int>> faceSet,
         output.push_back(targetPoint);
       } else {
         cout << "\tExisted point " << targetPoint.x << " " << targetPoint.y << endl;
+        output.push_back(targetPoint);
       }
 
     } catch (const std::runtime_error &e) {
       std::cerr << "polygonAtZ: An error occurred: " << e.what() << std::endl;
     }
   }
+
+  auto removePoint = findPointsInSegment(output);
+  output = excludePoints(output, removePoint);
+
   return output;
 }
