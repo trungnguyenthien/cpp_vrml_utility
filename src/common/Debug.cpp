@@ -20,7 +20,7 @@ void printPairDouble(vector<pair<double, double>> &pair) {
 void printVectorPoints(vector<Point> points) {
   cout << "printVectorPoints { " << endl;
   for (const Point &point : points) {
-    std::cout << "\t" << point.toString() << std::endl;
+    std::cout << "  " << point.toString() << std::endl;
   }
   cout << " }" << endl;
 }

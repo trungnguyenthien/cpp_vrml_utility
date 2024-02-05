@@ -1,7 +1,9 @@
 #include "DrawBoard.h"
-#include "../common/Debug.h"
+
 #include <climits>
 #include <stdexcept>  // For std::invalid_argument
+
+#include "../common/Debug.h"
 
 std::vector<std::pair<double, double>> makePair(std::vector<float> &source) {
   std::vector<std::pair<double, double>> result;
@@ -131,7 +133,7 @@ void DBPoint::self_render(cairo_t *cr, int tx, int ty) {
 void DBPolyline::self_render(cairo_t *cr, int tx, int ty) {
   // Vẽ polyline
   std::vector<std::pair<double, double>> points = makePair(this->xyList);
-  printPairDouble(points);
+  // printPairDouble(points);
   bool firstPoint = true;
   for (const auto &point : points) {
     if (firstPoint) {
@@ -162,7 +164,7 @@ void DBShape::self_render(cairo_t *cr, int tx, int ty) {
   // Định nghĩa các điểm của polygon
   std::vector<std::pair<double, double>> points = makePair(this->xyList);
 
-  printPairDouble(points);
+  // printPairDouble(points);
   // Bắt đầu vẽ từ điểm đầu tiên
   cairo_move_to(cr, points[0].first + tx, points[0].second + ty);
 

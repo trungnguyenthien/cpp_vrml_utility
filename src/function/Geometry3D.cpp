@@ -167,31 +167,76 @@ vector<Point> findPointsInSegment(vector<Point> segmentPoints) {
   return output;
 }
 
+float direction(const Point &pi, const Point &pj, const Point &pk) {
+  return (pk.x - pi.x) * (pj.y - pi.y) - (pj.x - pi.x) * (pk.y - pi.y);
+}
+
+bool onSegment(const Point &pi, const Point &pj, const Point &pk) {
+  if (std::min(pi.x, pj.x) <= pk.x && pk.x <= std::max(pi.x, pj.x) &&
+      std::min(pi.y, pj.y) <= pk.y && pk.y <= std::max(pi.y, pj.y)) {
+    return true;
+  }
+  return false;
+}
+
+// Đoạn AB tạo thàn từ điểm A và B, đoạn CD tạo thành từ điểm C và D
+// Return TRUE nếu:
+// - AB cắt CD
+// - AB trùng CD
+bool isCrossSegment(const Point &A, const Point &B, const Point &C, const Point &D) {
+  float d1 = direction(C, D, A);
+  float d2 = direction(C, D, B);
+  float d3 = direction(A, B, C);
+  float d4 = direction(A, B, D);
+
+  if (((d1 > 0 && d2 < 0) || (d1 < 0 && d2 > 0)) && ((d3 > 0 && d4 < 0) || (d3 < 0 && d4 > 0))) {
+    return true;
+  }
+
+  // if (d1 == 0 && onSegment(C, D, A))
+  //   return true;
+  // if (d2 == 0 && onSegment(C, D, B))
+  //   return true;
+  // if (d3 == 0 && onSegment(A, B, C))
+  //   return true;
+  // if (d4 == 0 && onSegment(A, B, D))
+  //   return true;
+
+  return false;
+}
+
 // Return thành nhiều đa giác con đơn giản
 // {sourcePolygon} đa giác phức tạp, có thể có các cạnh giao nhau
 std::vector<std::vector<Point>> partitionPolygon(std::vector<Point> sourcePolygon) {
-  // Chuyển đổi sourcePolygon sang CGAL Polygon_2
-  cout << "partitionPolygon 1" << endl;
-  Trait_Polygon_2 poly;
-  for (const auto &p : sourcePolygon) {
-    poly.push_back(Trait_Point_2(p.x, p.y));
-  }
-  cout << "partitionPolygon 2" << endl;
-
-  list<Trait_Polygon_2> partition_polys;
-  CGAL::approx_convex_partition_2(poly.vertices_begin(), poly.vertices_end(),
-                                  std::back_inserter(partition_polys), Traits());
-  cout << "partitionPolygon 3" << endl;
-  std::vector<std::vector<Point>> result;
-  for (auto p : partition_polys) {
-    std::vector<Point> simplePoly;
-    cout << "partitionPolygon 4" << endl;
-
-    for (auto vit = p.vertices_begin(); vit != p.vertices_end(); ++vit) {
-      simplePoly.push_back(Point{static_cast<float>(CGAL::to_double(vit->x())),
-                                 static_cast<float>(CGAL::to_double(vit->y())), 0.0f});
+  vector<vector<Point>> result;
+  vector<Segment> footprintSegment;
+  vector<Point> polygon;
+  polygon.push_back(sourcePolygon[0]);
+  for (int i = 1; i < sourcePolygon.size(); i++) {
+    Point A = sourcePolygon[i - 1];
+    Point B = sourcePolygon[i];
+    Segment AB(A, B);
+    bool isCrossLastSegment = false;
+    for (auto ls : footprintSegment) {
+      if (isCrossSegment(ls.p1, ls.p2, A, B)) {
+        isCrossLastSegment = true;
+        break;
+      }
     }
-    result.push_back(simplePoly);
+
+    if (!isCrossLastSegment) {
+      footprintSegment.push_back(AB);
+      if (!hasExistedPoint(polygon, B.x, B.y, B.z)) {
+        polygon.push_back(B);
+      }
+    } else if (polygon.size() > 2) {
+      result.push_back(polygon);
+      polygon.clear();
+    }
+  }
+
+  if (polygon.size() > 2) {
+    result.push_back(polygon);
   }
 
   return result;
@@ -216,9 +261,7 @@ bool __checkPointInSidePolygon(Point point, vector<Point> polygonPoints) {
 }
 
 bool checkPointInSidePolygon(Point point, vector<Point> polygonPoints) {
-  cout << "checkPointInSidePolygon 1" << endl;
   auto multiPolygons = partitionPolygon(polygonPoints);
-  cout << "checkPointInSidePolygon 2" << endl;
   bool isInside = false;
 
   for (auto polygon : multiPolygons) {
@@ -229,7 +272,7 @@ bool checkPointInSidePolygon(Point point, vector<Point> polygonPoints) {
     }
   }
 
-  cout << "POINT: (" << point.x << ", " << point.y << ")" << endl;
+  cout << "POINT: (" << point.x << ", " << point.y << ") ";
   if (isInside) {
     cout << "isInside" << endl;
   } else {
@@ -257,32 +300,33 @@ vector<Point> polygonAtZ(vector<Point> shapePoints, vector<vector<int>> faceSet,
       segments.push_back(mySegment);
 
       if (!hasExistedPoint(output, sourcePoint)) {
-        cout << "Add point " << sourcePoint.x << " " << sourcePoint.y << endl;
+        // cout << "Add point " << sourcePoint.x << " " << sourcePoint.y << endl;
         output.push_back(sourcePoint);
       } else {
-        cout << "\tExisted point " << sourcePoint.x << " " << sourcePoint.y << endl;
+        // cout << "\tExisted point " << sourcePoint.x << " " << sourcePoint.y << endl;
         output.push_back(sourcePoint);
       }
 
       if (!hasExistedPoint(output, targetPoint)) {
-        cout << "Add point " << targetPoint.x << " " << targetPoint.y << endl;
+        // cout << "Add point " << targetPoint.x << " " << targetPoint.y << endl;
         output.push_back(targetPoint);
       } else {
-        cout << "\tExisted point " << targetPoint.x << " " << targetPoint.y << endl;
+        // cout << "\tExisted point " << targetPoint.x << " " << targetPoint.y << endl;
         output.push_back(targetPoint);
       }
 
     } catch (const std::runtime_error &e) {
-      std::cerr << "polygonAtZ: An error occurred: " << e.what() << std::endl;
+      // throw runtime_error("polygonAtZ: An error occurred: " + string(e.what()));
+      // std::cerr << "polygonAtZ: An error occurred: " << e.what() << std::endl;
     }
   }
 
   auto removePoint = findPointsInSegment(output);
   output = excludePoints(output, removePoint);
 
-  // In (100, 0), (150, -25), (250, 0), (200, 25),
-  // Out: (150, 75), (150, -75)
+  // In (10, 0), (15, -2.5), (2.5, 0), (20, 2.5),
+  // Out: (15, 7.5), (15, -7.5)
 
-  checkPointInSidePolygon(Point(100, 0), output);
+  checkPointInSidePolygon(Point(20, 2.5), output);
   return output;
 }

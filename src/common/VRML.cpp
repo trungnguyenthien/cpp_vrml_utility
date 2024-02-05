@@ -295,7 +295,7 @@ vector<VrmlObject *> read_vrml_file(string file) {
       flag_read = FLG_READ_START;
       number_set = NUMBERSET_UNKNOWN;
 
-      PRINT_DEBUG_INFO(token, number_set, flag_read);
+      // PRINT_DEBUG_INFO(token, number_set, flag_read);
       continue;
     }
 
@@ -309,7 +309,7 @@ vector<VrmlObject *> read_vrml_file(string file) {
       number_set = NUMBERSET_COORINDEX;
     }
 
-    PRINT_DEBUG_INFO(token, number_set, flag_read);
+    // PRINT_DEBUG_INFO(token, number_set, flag_read);
 
     if (number_set == NUMBERSET_UNKNOWN) {
       continue;
@@ -339,14 +339,13 @@ vector<VrmlObject *> read_vrml_file(string file) {
       number_set = NUMBERSET_UNKNOWN;
     }
 
-    PRINT_DEBUG_INFO(token, number_set, flag_read);
+    // PRINT_DEBUG_INFO(token, number_set, flag_read);
   }
 
   for (VrmlObject *vrml : vrmlObjects) {
     VrmlFaceSet *faceSet = dynamic_cast<VrmlFaceSet *>(vrml);
     if (faceSet != NULL) {
       cout << faceSet->debug_description() << endl;
-      // faceSet->faces = sortFaceByEdge(faceSet->faces);
     }
   }
 

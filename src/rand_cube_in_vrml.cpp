@@ -13,7 +13,7 @@
 #include "function/Geometry3D.h"
 
 void testGeo3D(vector<Point> &points, vector<vector<int>> &faces, int z) {
-  cout << "Testing Geo3D " << points.size() << " faces " << faces.size() << endl;
+  // cout << "Testing Geo3D " << points.size() << " faces " << faces.size() << endl;
   // void *shape = createShape3D(points, faces);
   vector<Point> poly = polygonAtZ(points, faces, z);
 
@@ -65,7 +65,6 @@ int main(int argc, char **argv) {
   return 1;
 }
 
-
 // typedef CGAL::Exact_predicates_inexact_constructions_kernel Kernel;
 // typedef Kernel::Point_3 Point_3;
 // typedef CGAL::Polyhedron_3<Kernel> Polyhedron;
@@ -106,7 +105,6 @@ int main(int argc, char **argv) {
 //   P->delegate(builder);
 //   return (void *)P;
 // }
-
 
 // std::vector<Point> polygonAtZ(void *shape, int z) {
 //   std::vector<Point> points;

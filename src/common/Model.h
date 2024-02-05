@@ -29,11 +29,11 @@ struct Segment {
   Point p1;
   Point p2;
 
+  Segment(Point p1, Point p2) : p1(p1), p2(p2) {}
+
   Segment(float p1x, float p1y, float p1z, float p2x, float p2y, float p2z)
       : p1(p1x, p1y, p1z), p2(p2x, p2y, p2z) {}
 };
-
-void printVectorPoints(vector<Point> points);
 
 struct Size3D {
   float width, height, depth;
