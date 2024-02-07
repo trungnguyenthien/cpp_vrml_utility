@@ -18,4 +18,7 @@ void printVectorPoints(vector<Point> points);
 void printSetOfSets(const std::set<std::set<int>> &setOfSets);
 void printPairDouble(vector<pair<double, double>> &pair);
 
+// In Xmin, Xmax, Ymin, Ymax, Zmin, Zmax của {points}
+void printMinMaxPoint(vector<Point> points);
+
 #endif  // COMMON_DEBUG_H_

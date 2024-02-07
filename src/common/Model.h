@@ -1,7 +1,10 @@
 #ifndef COMMON_MODEL_H_
 #define COMMON_MODEL_H_
+#include <algorithm>
 #include <iomanip>  // Cho std::setprecision
 #include <iostream>
+#include <map>
+#include <set>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -15,7 +18,7 @@ struct Point {
 
   std::string toString() const {
     std::ostringstream oss;
-    oss << "XYZ: (" << x << ", " << y << ", " << z << ")";
+    oss << "(" << x << " " << y << " " << z << ")";
     return oss.str();
   }
 
@@ -23,6 +26,8 @@ struct Point {
     return std::fabs(x - other.x) < 1e-6 && std::fabs(y - other.y) < 1e-6 &&
            std::fabs(z - other.z) < 1e-6;
   }
+
+  bool operator<(const Point &other) const { return tie(x, y, z) < tie(other.x, other.y, other.z); }
 };
 
 struct Segment {
@@ -33,6 +38,8 @@ struct Segment {
 
   Segment(float p1x, float p1y, float p1z, float p2x, float p2y, float p2z)
       : p1(p1x, p1y, p1z), p2(p2x, p2y, p2z) {}
+
+  bool operator<(const Segment &other) const { return tie(p1, p2) < tie(other.p1, other.p2); }
 };
 
 struct Size3D {

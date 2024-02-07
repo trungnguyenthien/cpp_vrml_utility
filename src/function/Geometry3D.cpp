@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "../common/Debug.h"
+#include "../common/VRML.h"
 
 // Trả về true nếu trong segment có đoạn AB hoặc BA
 bool hasExistedSegment(vector<Segment> &segments, Point &pA, Point &pB) {
@@ -68,13 +69,20 @@ Segment_3 intersection2Plane(Point p0, Point p1, Point p2, Plane_3 plane2) {
   Point_3 p3_0 = convertToPoint_3(p0);
   Point_3 p3_1 = convertToPoint_3(p1);
   Point_3 p3_2 = convertToPoint_3(p2);
+  // cout << "intersection2Plane 1" << endl;
   Triangle_3 triangle = Triangle_3(p3_0, p3_1, p3_2);
+  // cout << "intersection2Plane 2" << endl;
   // Thực hiện phép giao cắt giữa hai mặt phẳng
   Object result = CGAL::intersection(triangle, plane2);
+  // cout << "intersection2Plane 3" << endl;
   // Kiểm tra kết quả và trả về Segment_3 nếu phép giao cắt là một đoạn thẳng
   if (const Segment_3 *s = CGAL::object_cast<Segment_3>(&result)) {
+    // cout << "intersection2Plane 4" << endl;
     return *s;
   } else {
+    // cout << "intersection2Plane intersection2Plane: Giao điểm không phải là một đoạn thẳng hoặc "
+    //         "không tồn tại."
+    // << endl;
     // Giao điểm không phải là một đoạn thẳng hoặc không tồn tại
     // Xử lý trường hợp này theo yêu cầu cụ thể của bạn
     throw std::runtime_error(
@@ -94,12 +102,18 @@ Point convertFromPoint_3(Point_3 p3) { return Point(p3.x(), p3.y(), p3.z()); }
 Point_3 convertToPoint_3(Point p) { return Point_3(p.x, p.y, p.z); }
 
 pair<Point, Point> intersectionZ(vector<Point> plane, int z) {
+  // cout << "intersectionZ 1" << endl;
   // Plane_3 plane1 = createPlane3(plane[0], plane[1], plane[2]);
   Plane_3 planez = createPlane3Z(z);
+  // cout << "intersectionZ 2" << endl;
   try {
+    // cout << "intersectionZ 3" << endl;
     auto intersectionSegment = intersection2Plane(plane[0], plane[1], plane[2], planez);
+    // cout << "intersectionZ 4" << endl;
     auto pointSource = convertFromPoint_3(intersectionSegment.source());
+    // cout << "intersectionZ 5" << endl;
     auto pointTarget = convertFromPoint_3(intersectionSegment.target());
+    // cout << "intersectionZ 6" << endl;
     return pair<Point, Point>(pointSource, pointTarget);
   } catch (const std::runtime_error &e) {
     throw runtime_error("intersectionZ: An error occurred: { " + std::string(e.what()) + " }");
@@ -264,7 +278,7 @@ bool checkPointInSidePolygon(Point point, vector<Point> polygonPoints) {
   auto multiPolygons = partitionPolygon(polygonPoints);
   bool isInside = false;
 
-  for (auto polygon : multiPolygons) {
+  for (auto &polygon : multiPolygons) {
     printVectorPoints(polygon);
     if (__checkPointInSidePolygon(point, polygon)) {
       isInside = true;
@@ -285,11 +299,14 @@ bool checkPointInSidePolygon(Point point, vector<Point> polygonPoints) {
 vector<Point> polygonAtZ(vector<Point> shapePoints, vector<vector<int>> faceSet, int z) {
   vector<Point> output;
   vector<Segment> segments;
-
+  // cout << "polygonAtZ 1" << endl;
   for (auto face : faceSet) {
     try {
+      // cout << "polygonAtZ 2" << endl;
       auto facePoint = getFacePoint(shapePoints, face);
+      // cout << "polygonAtZ 3" << endl;
       auto segmentPairPoint = intersectionZ(facePoint, z);
+      // cout << "polygonAtZ 4" << endl;
       auto sourcePoint = segmentPairPoint.first;
       auto targetPoint = segmentPairPoint.second;
       Segment mySegment(sourcePoint.x, sourcePoint.y, sourcePoint.z, targetPoint.x, targetPoint.y,

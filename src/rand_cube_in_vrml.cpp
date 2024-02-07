@@ -5,6 +5,7 @@
 
 #include <CLI/CLI.hpp>
 
+#include "common/Debug.h"
 #include "common/Model.h"
 #include "common/StringUtils.h"
 #include "common/VRML.h"
@@ -15,6 +16,7 @@
 void testGeo3D(vector<Point> &points, vector<vector<int>> &faces, int z) {
   // cout << "Testing Geo3D " << points.size() << " faces " << faces.size() << endl;
   // void *shape = createShape3D(points, faces);
+  printMinMaxPoint(points);
   vector<Point> poly = polygonAtZ(points, faces, z);
 
   DBBoard db;
@@ -58,7 +60,7 @@ int main(int argc, char **argv) {
   VrmlFaceSet *faceSet = dynamic_cast<VrmlFaceSet *>(vrmlObjects[0]);
 
   if (faceSet != NULL) {
-    testGeo3D(faceSet->points, faceSet->faces, -20);
+    testGeo3D(faceSet->points, faceSet->faces, 0);
   }
 
   outputFile.close();

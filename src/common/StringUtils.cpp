@@ -3,8 +3,40 @@
 #include <algorithm>
 #include <cctype>
 #include <iostream>
+#include <regex>
 #include <sstream>
 #include <string>
+#include <vector>
+
+bool isMatch(string test, const vector<std::string> matchs) {
+  // Bước 1: Trim khoảng trắng đầu và cuối chuỗi
+  test.erase(test.begin(), std::find_if(test.begin(), test.end(),
+                                        [](unsigned char ch) { return !std::isspace(ch); }));
+  test.erase(
+      std::find_if(test.rbegin(), test.rend(), [](unsigned char ch) { return !std::isspace(ch); })
+          .base(),
+      test.end());
+
+  // Bước 2: Chia chuỗi {test} thành các thành phần dựa trên khoảng trắng
+  std::vector<std::string> components;
+  std::stringstream ss(test);
+  std::string component;
+  while (ss >> component) {
+    components.push_back(component);
+  }
+
+  // Bước 3: Kiểm tra xem các thành phần có chứa và theo đúng thứ tự trong {matchs} hay không
+  auto it = components.begin();
+  for (const auto &match : matchs) {
+    it = std::find(it, components.end(), match);
+    if (it == components.end()) {
+      return false;  // Nếu không tìm thấy chuỗi match hoặc thứ tự không đúng
+    }
+    ++it;  // Tiếp tục tìm từ vị trí tiếp theo
+  }
+
+  return true;  // Tất cả các chuỗi trong {matchs} đều được tìm thấy theo đúng thứ tự
+}
 
 vector<string> splitString(const string &input, const string &separator) {
   vector<string> result;

@@ -247,19 +247,38 @@ string VrmlFaceSet::debug_description() {
   oss << "\nSTART--------- VrmlFaceSet -------------------------------------------------------\n";
   // Mô tả các điểm
   oss << "Points: " << points.size() << endl;
+  int pointIndex = 0;
   for (const auto &point : points) {
-    oss << point.toString() << "\n";
+    oss << pointIndex << "_" << point.toString();
+    pointIndex++;
+    if (pointIndex % 4 == 0) {
+      oss << "\n";
+    } else {
+      oss << "\t\t";
+    }
   }
 
   // Mô tả các mặt
   oss << "Faces: " << faces.size() << "\n";
+  int fIndex = 0;
   for (const auto &face : faces) {
-    for (int index : face) {
-      oss << index << "\t";
+    oss << "(";
+    for (int fi = 0; fi < face.size(); fi++) {
+      oss << face[fi];
+      if (fi != face.size() - 1) {
+        oss << " ";
+      }
     }
-    oss << "\n";
+
+    oss << ")";
+    fIndex++;
+    if (fIndex % 4 == 0) {
+      oss << "\n";
+    } else {
+      oss << "\t\t";
+    }
   }
-  oss << "END --------- VrmlFaceSet -------------------------------------------------------\n";
+  oss << "\nEND --------- VrmlFaceSet -------------------------------------------------------\n";
   return oss.str();
 }
 
@@ -291,11 +310,12 @@ vector<VrmlObject *> read_vrml_file(string file) {
   vector<FaceDef> faces = {};
 
   for (string token : tokens) {
-    if (token == "geometry IndexedFaceSet") {
+    // PRINT_DEBUG_INFO(token, number_set, flag_read);
+    if (isMatch(token, {"geometry", "IndexedFaceSet"})) {
       flag_read = FLG_READ_START;
       number_set = NUMBERSET_UNKNOWN;
 
-      // PRINT_DEBUG_INFO(token, number_set, flag_read);
+      PRINT_DEBUG_INFO(token, number_set, flag_read);
       continue;
     }
 
