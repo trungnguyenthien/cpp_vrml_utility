@@ -37,10 +37,27 @@ typedef Traits::Point_2 Trait_Point_2;
 typedef Traits::Polygon_2 Trait_Polygon_2;
 
 using namespace std;
-vector<Point> polygonAtZ(vector<Point> shapePoints, vector<vector<int>> faceSet, int z);
+set<vector<Point>> polygonAtZ(vector<Point> shapePoints, vector<vector<int>> faceSet, int z);
 
 Point_3 convertToPoint_3(Point p);
 Point convertFromPoint_3(Point_3 p3);
+
+// Cấu trúc Point(float x, float y, float z)
+
+// Return deltaPoint là sai số chấp nhận được xác định từ mảng {points}
+// deltaPoint.x = 0.001 * (xMax - xMin)
+// deltaPoint.y = 0.001 * (yMax - yMin)
+// deltaPoint.z = 0.001 * (zMax - zMin)
+Point findDeltaPoint(const vector<Point> &points);
+
+// Mỗi group (vector<int>) là một group các index các Point gần nhau (các point này cách nhau một
+// khoảng nhỏ hơn {deltaPoint}) Trả về tất cả group
+vector<vector<int>> findGroupClosetIndices(const vector<Point> &points, const Point &deltaPoint);
+
+// Mỗi point trong {points} đều thuộc một group con trong {groupClosetIndices}
+// Update lại tất cả các point trong vector {points} sao cho:
+// - toạ độ point mới là toạ độ trung bình trong mỗi group con của chính nó.
+void mergeClosetPoints(vector<Point> &points, const vector<vector<int>> &groupClosetIndices);
 
 // Return TRUE nếu: Điểm X nằm trên đoạn thẳng AB
 // Các trường hợp return FALSE: X không nằm trên đoạn AB, X trùng với A hoặc B

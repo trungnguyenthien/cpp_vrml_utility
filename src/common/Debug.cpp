@@ -4,6 +4,48 @@
 #include <limits>
 #include <vector>
 
+void printVectorVectorInt(std::vector<std::vector<int>> ints) {
+  int groupIndex = 0;
+  for (const auto &vec : ints) {  // Duyệt qua từng vector<int>
+    cout << "------ GROUP " << groupIndex << ": ";
+    groupIndex++;
+    for (const auto &val : vec) {  // Duyệt qua từng int trong vector
+      std::cout << val << " ";
+    }
+    std::cout << std::endl;  // In dấu xuống dòng sau mỗi vector<int>
+  }
+}
+
+void printVectorVectorPoint(vector<vector<Point>> points) {
+  for (const auto &vec : points) {   // Duyệt qua từng vector<Point>
+    for (const auto &point : vec) {  // Duyệt qua từng Point trong vector
+      std::cout << "\t(" << point.x << ", " << point.y << ", " << point.z << ") ";
+    }
+    std::cout << std::endl;  // In dấu xuống dòng sau mỗi vector<Point>
+  }
+}
+
+void printSetSegment(set<Segment> segments) {
+  for (auto &segment : segments) {
+    std::cout << "Segment: "
+              << "(" << segment.p1.x << ", " << segment.p1.y << ", " << segment.p1.z << ") "
+              << "to "
+              << "(" << segment.p2.x << ", " << segment.p2.y << ", " << segment.p2.z << ")"
+              << std::endl;
+  }
+}
+
+// Hàm để in các điểm trong các polygon
+void printSetVectorPoint(set<vector<Point>> setPolygons) {
+  for (const auto &polygon : setPolygons) {  // Duyệt qua mỗi polygon trong set
+    std::cout << "Polygon: ";
+    for (const auto &point : polygon) {  // Duyệt qua mỗi điểm trong polygon
+      std::cout << "(" << point.x << ", " << point.y << ", " << point.z << ") ";
+    }
+    std::cout << std::endl;
+  }
+}
+
 void printMinMaxPoint(const std::vector<Point> points) {
   if (points.empty()) {
     std::cout << "Vector is empty." << std::endl;

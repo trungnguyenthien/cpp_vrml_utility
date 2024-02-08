@@ -1,13 +1,97 @@
 #include "Geometry3D.h"
 
 #include <iostream>
+#include <set>
 #include <vector>
 
 #include "../common/Debug.h"
 #include "../common/VRML.h"
 
+void mergeClosetPoints(vector<Point> &points, const vector<vector<int>> &groupClosetIndices) {
+  // Tạo một vector mới để lưu trữ các điểm sau khi cập nhật
+  vector<Point> updatedPoints(points.size());
+
+  // Duyệt qua từng nhóm
+  for (const auto &group : groupClosetIndices) {
+    if (group.empty())
+      continue;  // Bỏ qua nhóm rỗng
+
+    // Tính toạ độ trung bình của nhóm
+    float sumX = 0, sumY = 0, sumZ = 0;
+    for (int index : group) {
+      sumX += points[index].x;
+      sumY += points[index].y;
+      sumZ += points[index].z;
+    }
+    float avgX = sumX / group.size();
+    float avgY = sumY / group.size();
+    float avgZ = sumZ / group.size();
+
+    // Cập nhật toạ độ của các điểm trong nhóm
+    for (int index : group) {
+      updatedPoints[index] = Point(avgX, avgY, avgZ);
+    }
+  }
+
+  // Sao chép các điểm đã cập nhật vào vector ban đầu
+  points = std::move(updatedPoints);
+}
+
+bool isClose(const Point &p1, const Point &p2, const Point &delta) {
+  return std::abs(p1.x - p2.x) <= delta.x && std::abs(p1.y - p2.y) <= delta.y &&
+         std::abs(p1.z - p2.z) <= delta.z;
+}
+
+vector<vector<int>> findGroupClosetIndices(const vector<Point> &points, const Point &deltaPoint) {
+  vector<vector<int>> groups;
+  vector<bool> grouped(points.size(), false);  // Keep track of points that have been grouped
+
+  for (int i = 0; i < points.size(); ++i) {
+    if (grouped[i])
+      continue;  // Skip if already grouped
+
+    vector<int> group;
+    group.push_back(i);
+    grouped[i] = true;
+
+    // Compare with remaining points to find close ones
+    for (int j = i + 1; j < points.size(); ++j) {
+      if (isClose(points[i], points[j], deltaPoint)) {
+        group.push_back(j);
+        grouped[j] = true;  // Mark as grouped
+      }
+    }
+
+    groups.push_back(group);
+  }
+
+  return groups;
+}
+
+Point findDeltaPoint(const vector<Point> &points) {
+  if (points.empty())
+    return Point(0, 0, 0);  // Trả về 0 nếu không có điểm nào
+
+  float xMin = points[0].x, xMax = points[0].x;
+  float yMin = points[0].y, yMax = points[0].y;
+  float zMin = points[0].z, zMax = points[0].z;
+
+  for (const auto &point : points) {
+    xMin = min(xMin, point.x);
+    xMax = max(xMax, point.x);
+    yMin = min(yMin, point.y);
+    yMax = max(yMax, point.y);
+    zMin = min(zMin, point.z);
+    zMax = max(zMax, point.z);
+  }
+
+  const float CLOSET = 0.002;
+
+  return Point(CLOSET * (xMax - xMin), CLOSET * (yMax - yMin), CLOSET * (zMax - zMin));
+}
+
 // Trả về true nếu trong segment có đoạn AB hoặc BA
-bool hasExistedSegment(vector<Segment> &segments, Point &pA, Point &pB) {
+bool hasExistedSegment(set<Segment> &segments, Point &pA, Point &pB) {
   for (const Segment &segment : segments) {
     if ((segment.p1 == pA && segment.p2 == pB) || (segment.p1 == pB && segment.p2 == pA)) {
       return true;
@@ -296,9 +380,9 @@ bool checkPointInSidePolygon(Point point, vector<Point> polygonPoints) {
   return isInside;
 }
 
-vector<Point> polygonAtZ(vector<Point> shapePoints, vector<vector<int>> faceSet, int z) {
+set<vector<Point>> polygonAtZ(vector<Point> shapePoints, vector<vector<int>> faceSet, int z) {
   vector<Point> output;
-  vector<Segment> segments;
+  set<Segment> segments;
   // cout << "polygonAtZ 1" << endl;
   for (auto face : faceSet) {
     try {
@@ -314,7 +398,9 @@ vector<Point> polygonAtZ(vector<Point> shapePoints, vector<vector<int>> faceSet,
       if (hasExistedSegment(segments, sourcePoint, targetPoint)) {
         continue;
       }
-      segments.push_back(mySegment);
+
+      segments.insert(mySegment);
+      // segments.push_back(mySegment);
 
       if (!hasExistedPoint(output, sourcePoint)) {
         // cout << "Add point " << sourcePoint.x << " " << sourcePoint.y << endl;
@@ -337,13 +423,30 @@ vector<Point> polygonAtZ(vector<Point> shapePoints, vector<vector<int>> faceSet,
       // std::cerr << "polygonAtZ: An error occurred: " << e.what() << std::endl;
     }
   }
+  cout << "CUT POINTS --- \n\n";
+  printVectorPoints(output);
+  cout << "\n\n\n END CUT POINTS --- \n";
 
-  auto removePoint = findPointsInSegment(output);
-  output = excludePoints(output, removePoint);
+  auto groupClosetIndices = findGroupClosetIndices(output, findDeltaPoint(output));
+  printVectorVectorInt(groupClosetIndices);
 
-  // In (10, 0), (15, -2.5), (2.5, 0), (20, 2.5),
-  // Out: (15, 7.5), (15, -7.5)
+  mergeClosetPoints(output, groupClosetIndices);
 
-  checkPointInSidePolygon(Point(20, 2.5), output);
-  return output;
+  cout << "AFTER MERGE POINT --- \n\n";
+  printVectorPoints(output);
+  cout << "\n\n\n END AFTER MERGE POINT --- \n";
+
+  FindPolygonFunction findPolygonFunction;
+  findPolygonFunction.inputSegments = segments;
+  auto result = findPolygonFunction.find();
+
+  // auto removePoint = findPointsInSegment(output);
+  // output = excludePoints(output, removePoint);
+
+  // // In (10, 0), (15, -2.5), (2.5, 0), (20, 2.5),
+  // // Out: (15, 7.5), (15, -7.5)
+
+  // checkPointInSidePolygon(Point(20, 2.5), output);
+
+  return *result.begin();
 }

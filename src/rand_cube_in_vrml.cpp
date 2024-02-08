@@ -17,7 +17,7 @@ void testGeo3D(vector<Point> &points, vector<vector<int>> &faces, int z) {
   // cout << "Testing Geo3D " << points.size() << " faces " << faces.size() << endl;
   // void *shape = createShape3D(points, faces);
   printMinMaxPoint(points);
-  vector<Point> poly = polygonAtZ(points, faces, z);
+  vector<Point> poly = *(polygonAtZ(points, faces, z).begin());
 
   DBBoard db;
   db.size = BOARD_SIZE::_1_000;

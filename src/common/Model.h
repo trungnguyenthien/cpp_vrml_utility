@@ -15,6 +15,7 @@ struct Point {
 
   Point(float x, float y, float z) : x(x), y(y), z(z) {}
   Point(float x, float y) : x(x), y(y), z(0) {}
+  Point() : x(0), y(0), z(0) {}
 
   std::string toString() const {
     std::ostringstream oss;
