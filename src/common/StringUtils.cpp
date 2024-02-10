@@ -121,11 +121,12 @@ std::string toLowerCase(const std::string &str) {
 
 // Return chuỗi sau khi cắt các ký tự khoảng trắng ở đầu và cuối chuỗi {str}
 std::string trim(const std::string &str) {
-  // std::string result = str;
-  boost::trim(str);
-
-  // cout << "TRIM RESULT:" << str << endl;
-  return str;
+  std::string result;
+  std::for_each(str.begin(), str.end(), [&result](char c) {
+    if (!std::isspace(c))
+      result += c;
+  });
+  return result;
 }
 
 bool isNumber(const std::string &s) {
