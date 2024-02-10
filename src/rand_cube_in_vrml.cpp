@@ -48,6 +48,7 @@ int main(int argc, char **argv) {
   if (filename.empty()) {
     return 0;
   }
+
   string outputFilePath = filename + "_" + to_string(int(numberCube)) + "_OUTPUT.wrl";
   std::ofstream outputFile(outputFilePath, std::ios::out);
   if (!outputFile.is_open()) {

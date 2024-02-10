@@ -305,7 +305,9 @@ vector<float> parseColor(string token) {
 // Step 6: return vector các chuỗi đã qua xử lý
 vector<string> vrml2tokenStrings(string &line) {
   // Step 1
-  trim(line);
+  cout << "line1:" << line << endl;
+  line = trim(line);
+  cout << "line2:" << line << endl;
 
   // Steps 2 and 3
   replaceAll(line, "}", "} _END_OBJECT");

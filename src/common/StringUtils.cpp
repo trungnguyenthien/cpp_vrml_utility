@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <boost/algorithm/string/trim.hpp>
 #include <cctype>
+#include <initializer_list>
 #include <iostream>
 #include <locale>
 #include <regex>
@@ -119,13 +120,44 @@ std::string toLowerCase(const std::string &str) {
   return lowerCaseStr;  // Trả về chuỗi mới đã được chuyển đổi
 }
 
+bool isSpace(char test) {
+  vector<int> whitespaces = {9, 10, 11, 13, 32};
+  int testInt = static_cast<int>(test);
+  for (auto c : whitespaces) {
+    if (c == testInt) {
+      return true;
+    }
+  }
+  return false;
+}
+
 // Return chuỗi sau khi cắt các ký tự khoảng trắng ở đầu và cuối chuỗi {str}
-std::string trim(const std::string &str) {
-  std::string result;
-  std::for_each(str.begin(), str.end(), [&result](char c) {
-    if (!std::isspace(c))
-      result += c;
-  });
+std::string trim(const std::string str) {
+  string result;
+
+  int start = 0;
+  int end = str.size() - 1;
+
+  for (; start < str.size() - 1; start++) {
+    if (!isSpace(str[start])) {
+      break;
+    }
+  }
+
+  for (; end >= 0 && end != start; end--) {
+    if (!isSpace(str[end])) {
+      break;
+    }
+  }
+
+  if (end <= start) {
+    return "";
+  }
+
+  for (int i = start; i < end; i++) {
+    result.push_back(str[i]);
+  }
+
   return result;
 }
 
