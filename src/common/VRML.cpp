@@ -303,7 +303,7 @@ vector<float> parseColor(string token) {
 // Step 4: chia line thành nhiều phần bởi các ký tự: {,}, [,]
 // Step 5: Loại bỏ các phần tử empty,  {,}, [,]
 // Step 6: return vector các chuỗi đã qua xử lý
-vector<string> vrml2tokenStrings(string line) {
+vector<string> vrml2tokenStrings(string &line) {
   // Step 1
   trim(line);
 
@@ -406,10 +406,13 @@ vector<VrmlObject *> read_vrml_file(string file) {
   vector<VrmlObject *> vrmlObjects;
   vector<Point> points = {};
   vector<FaceDef> faces = {};
-
+  cout << " tokens.size() = " << tokens.size() << endl;
   for (string token : tokens) {
+    // cout << "token: " << token << endl;
     // PRINT_DEBUG_INFO(token, number_set, flag_read);
-    if (isMatch(token, {"geometry", "IndexedFaceSet"})) {
+    // geometry PointSet
+    if (isMatch(token, {"geometry", "IndexedFaceSet"}) ||
+        isMatch(token, {"geometry", "PointSet"})) {
       flag_read = FLG_READ_START;
       number_set = NUMBERSET_UNKNOWN;
 

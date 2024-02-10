@@ -12,26 +12,28 @@
 
 using namespace std;
 
-void printVector2Int(string message, vector<vector<int>> contents);
+void printVector2Int(const string &message, const vector<vector<int>> &contents);
 void printVectorInt(const std::string &message, const std::vector<int> &contents);
-void printVectorPoints(vector<Point> points);
+void printVectorPoints(const vector<Point> &points);
 void printSetOfSets(const std::set<std::set<int>> &setOfSets);
-void printPairDouble(vector<pair<double, double>> &pair);
+void printPairDouble(const vector<pair<double, double>> &pair);
 
 // In Xmin, Xmax, Ymin, Ymax, Zmin, Zmax của {points}
-void printMinMaxPoint(vector<Point> points);
+void printMinMaxPoint(const vector<Point> &points);
 
 // Mỗi vector<Point> là tập điểm có thứ tự trong Polygon
 // In các điểm trong các polygon.
-void printSetVectorPoint(set<vector<Point>> setPolygons);
+void printSetVectorPoint(const set<vector<Point>> &setPolygons);
 
 // Cấu trúc Point(float x,y,z)
 // Cấu trúc Segment(Point p1, p2)
 // In tất cả Segment trong set<Segment>
-void printSetSegment(set<Segment> segments);
+void printSetSegment(const set<Segment> &segments);
 
-void printVectorVectorPoint(vector<vector<Point>> points);
+void printVectorVectorPoint(const vector<vector<Point>> &points);
 
-void printVectorVectorInt(vector<vector<int>> ints);
+void printVectorVectorInt(const vector<vector<int>> &ints);
+
+void printVectorString(const vector<string> &strings);
 
 #endif  // COMMON_DEBUG_H_

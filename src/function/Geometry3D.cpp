@@ -85,7 +85,7 @@ Point findDeltaPoint(const vector<Point> &points) {
     zMax = max(zMax, point.z);
   }
 
-  const float CLOSET = 0.002;
+  const float CLOSET = 0.00;
 
   return Point(CLOSET * (xMax - xMin), CLOSET * (yMax - yMin), CLOSET * (zMax - zMin));
 }
@@ -395,9 +395,9 @@ set<vector<Point>> polygonAtZ(vector<Point> shapePoints, vector<vector<int>> fac
       auto targetPoint = segmentPairPoint.second;
       Segment mySegment(sourcePoint.x, sourcePoint.y, sourcePoint.z, targetPoint.x, targetPoint.y,
                         targetPoint.z);
-      if (hasExistedSegment(segments, sourcePoint, targetPoint)) {
-        continue;
-      }
+      // if (hasExistedSegment(segments, sourcePoint, targetPoint)) {
+      //   continue;
+      // }
 
       segments.insert(mySegment);
       // segments.push_back(mySegment);
@@ -430,7 +430,7 @@ set<vector<Point>> polygonAtZ(vector<Point> shapePoints, vector<vector<int>> fac
   auto groupClosetIndices = findGroupClosetIndices(output, findDeltaPoint(output));
   printVectorVectorInt(groupClosetIndices);
 
-  mergeClosetPoints(output, groupClosetIndices);
+  // mergeClosetPoints(output, groupClosetIndices);
 
   cout << "AFTER MERGE POINT --- \n\n";
   printVectorPoints(output);

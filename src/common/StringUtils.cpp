@@ -1,8 +1,10 @@
 #include "StringUtils.h"
 
 #include <algorithm>
+#include <boost/algorithm/string/trim.hpp>
 #include <cctype>
 #include <iostream>
+#include <locale>
 #include <regex>
 #include <sstream>
 #include <string>
@@ -10,12 +12,7 @@
 
 bool isMatch(string test, const vector<std::string> matchs) {
   // Bước 1: Trim khoảng trắng đầu và cuối chuỗi
-  test.erase(test.begin(), std::find_if(test.begin(), test.end(),
-                                        [](unsigned char ch) { return !std::isspace(ch); }));
-  test.erase(
-      std::find_if(test.rbegin(), test.rend(), [](unsigned char ch) { return !std::isspace(ch); })
-          .base(),
-      test.end());
+  test = trim(test);
 
   // Bước 2: Chia chuỗi {test} thành các thành phần dựa trên khoảng trắng
   std::vector<std::string> components;
@@ -122,16 +119,13 @@ std::string toLowerCase(const std::string &str) {
   return lowerCaseStr;  // Trả về chuỗi mới đã được chuyển đổi
 }
 
+// Return chuỗi sau khi cắt các ký tự khoảng trắng ở đầu và cuối chuỗi {str}
 std::string trim(const std::string &str) {
-  auto is_not_space = [](unsigned char ch) { return !std::isspace(ch); };
+  // std::string result = str;
+  boost::trim(str);
 
-  size_t first = std::find_if(str.begin(), str.end(), is_not_space) - str.begin();
-  size_t last = std::find_if(str.rbegin(), str.rend(), is_not_space).base() - str.begin();
-
-  if (first == str.size() || last == 0)
-    return "";
-
-  return str.substr(first, last - first);
+  // cout << "TRIM RESULT:" << str << endl;
+  return str;
 }
 
 bool isNumber(const std::string &s) {
