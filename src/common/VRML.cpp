@@ -305,23 +305,23 @@ vector<float> parseColor(string token) {
 // Step 6: return vector các chuỗi đã qua xử lý
 vector<string> vrml2tokenStrings(string &line) {
   // Step 1
-  cout << "line1:" << line << endl;
-  line = trim(line);
-  cout << "line2:" << line << endl;
+  // cout << "line1:" << line << endl;
+  auto line2 = trim(line);
+  // cout << "line2:" << line2 << endl;
 
   // Steps 2 and 3
-  replaceAll(line, "}", "} _END_OBJECT");
-  replaceAll(line, "]", "] _END_ARRAY");
+  replaceAll(line2, "}", "} _END_OBJECT");
+  replaceAll(line2, "]", "] _END_ARRAY");
 
   // Step 4: Split
   std::vector<std::string> tokens;
-  std::istringstream iss(line);
+  std::istringstream iss(line2);
   std::string token;
   const std::string delimiters = "{}[]";
   size_t prev = 0, next = 0;
-  while ((next = line.find_first_of(delimiters, prev)) != std::string::npos) {
+  while ((next = line2.find_first_of(delimiters, prev)) != std::string::npos) {
     if (next - prev != 0) {
-      token = line.substr(prev, next - prev);
+      token = line2.substr(prev, next - prev);
       token = trim(token);  // Trim each token
       if (!token.empty()) {
         tokens.push_back(token);
@@ -329,8 +329,8 @@ vector<string> vrml2tokenStrings(string &line) {
     }
     prev = next + 1;
   }
-  if (prev < line.size()) {
-    token = line.substr(prev);
+  if (prev < line2.size()) {
+    token = line2.substr(prev);
     token = trim(token);  // Trim last token
     if (!token.empty()) {
       tokens.push_back(token);

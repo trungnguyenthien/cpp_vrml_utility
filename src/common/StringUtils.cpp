@@ -121,13 +121,15 @@ std::string toLowerCase(const std::string &str) {
 }
 
 bool isSpace(char test) {
-  vector<int> whitespaces = {9, 10, 11, 13, 32};
+  vector<int> whitespaces = {9, 10, 11, 13, 32, 0};
   int testInt = static_cast<int>(test);
   for (auto c : whitespaces) {
     if (c == testInt) {
       return true;
     }
   }
+
+  // cout << "Not Space:" << test << "...ascii=" << testInt << endl;
   return false;
 }
 
@@ -154,10 +156,11 @@ std::string trim(const std::string str) {
     return "";
   }
 
-  for (int i = start; i < end; i++) {
+  for (int i = start; i <= end; i++) {
     result.push_back(str[i]);
   }
-
+  // cout << "StartEnd:" << start << "->" << end << endl;
+  // cout << "TRIMRESULT:" << result << endl;
   return result;
 }
 
