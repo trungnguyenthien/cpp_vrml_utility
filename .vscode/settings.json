@@ -87,6 +87,7 @@
     "valarray": "cpp",
     "forward_list": "cpp",
     "queue": "cpp",
-    "stack": "cpp"
+    "stack": "cpp",
+    "filesystem": "cpp"
   }
 }

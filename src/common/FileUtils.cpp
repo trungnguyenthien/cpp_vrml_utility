@@ -5,6 +5,8 @@
 #include <sstream>
 #include <string>
 
+#include "StringUtils.h"
+
 int forEachLine(string file, function<void(long, string)> func) {
   ifstream inputFile(file);
 
@@ -15,6 +17,7 @@ int forEachLine(string file, function<void(long, string)> func) {
   string line;
   long line_index = 0;
   while (std::getline(inputFile, line)) {
+    removeNullCharacter(line);
     func(line_index, line);
     line_index++;
   }

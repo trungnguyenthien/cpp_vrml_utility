@@ -2,7 +2,28 @@
 
 #include <iostream>
 #include <limits>
+#include <sstream>  // Để sử dụng stringstream
+#include <string>
 #include <vector>
+
+std::string all_ascii(const std::string &text) {
+  std::stringstream ss;  // Tạo một stringstream để dễ dàng xây dựng chuỗi kết quả
+  for (size_t i = 0; i < text.length(); ++i) {
+    if (i > 0) {
+      ss << '.';  // Thêm dấu chấm giữa các mã ASCII, trừ trước mã đầu tiên
+    }
+    ss << static_cast<int>(text[i]);  // Thêm mã ASCII của ký tự hiện tại
+  }
+  return ss.str();  // Trả về chuỗi kết quả
+}
+
+int sumAscii(const std::string &text) {
+  int sum = 0;
+  for (char c : text) {
+    sum += static_cast<int>(c);  // Chuyển đổi ký tự sang mã ASCII và cộng dồn vào sum
+  }
+  return sum;
+}
 
 void printVectorString(const std::vector<std::string> &strings) {
   for (const std::string &str : strings) {

@@ -160,7 +160,6 @@ bool isNumberArray(string str) {
 // Chuỗi có thể có 2 hoặc 3 số. Nếu chuỗi chỉ có 2 số thì mặc định số thứ 3 là 0
 // Tạo vector point bằng các giá trị đọc được trong token
 Point parsePoint(string token) {
-  // cout << "Point parsePoint TOKEN " << token << endl;
   std::istringstream iss(token);
   std::vector<float> values;
   std::string number;
@@ -182,7 +181,7 @@ Point parsePoint(string token) {
     y = values[1];
   if (values.size() >= 3)
     z = values[2];
-  // cout << "Point parsePoint XYZ " << x << " " << y << " " << z << endl;
+  cout << "Point parsePoint XYZ " << x << " " << y << " " << z << endl;
   return Point(x, y, z);
 }
 
@@ -199,18 +198,21 @@ Point parsePoint(string token) {
 // Các token có thể phân cách bằng khoảng trắng hoặc dấu phẩy (,)
 // Trả về đối tượng FaceDef chứa các chữ số còn lại (theo đúng thứ tự)
 FaceDef parseFace(string token) {
-  FaceDef face;
-  std::istringstream iss(token);
-  int num;
-  char delim;
+  FaceDef face = splitInts(token);
+  // std::istringstream iss(token);
+  // int num;
+  // char delim;
 
-  while (iss >> num) {
-    face.push_back(num);
-    // Đọc qua dấu phẩy hoặc khoảng trắng
-    if (iss.peek() == ',' || iss.peek() == ' ') {
-      iss >> delim;
-    }
-  }
+  // while (iss >> num) {
+  //   face.push_back(num);
+  //   // Đọc qua dấu phẩy hoặc khoảng trắng
+  //   if (iss.peek() == ',' || iss.peek() == ' ') {
+  //     iss >> delim;
+  //   }
+  // }
+  cout << "parseFace Token:" << token << endl;
+  // cout << "Face Parse Face: ";
+  printVectorInt("Face: ", face);
 
   return face;
 }
@@ -408,10 +410,7 @@ vector<VrmlObject *> read_vrml_file(string file) {
   vector<VrmlObject *> vrmlObjects;
   vector<Point> points = {};
   vector<FaceDef> faces = {};
-  cout << " tokens.size() = " << tokens.size() << endl;
   for (string token : tokens) {
-    // cout << "token: " << token << endl;
-    // PRINT_DEBUG_INFO(token, number_set, flag_read);
     // geometry PointSet
     if (isMatch(token, {"geometry", "IndexedFaceSet"}) ||
         isMatch(token, {"geometry", "PointSet"})) {
@@ -465,6 +464,7 @@ vector<VrmlObject *> read_vrml_file(string file) {
     // PRINT_DEBUG_INFO(token, number_set, flag_read);
   }
 
+  cout << "vrmlObjects.size()=" << vrmlObjects.size() << endl;
   for (VrmlObject *vrml : vrmlObjects) {
     VrmlFaceSet *faceSet = dynamic_cast<VrmlFaceSet *>(vrml);
     if (faceSet != NULL) {

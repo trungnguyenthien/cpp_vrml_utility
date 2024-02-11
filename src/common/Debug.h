@@ -36,4 +36,10 @@ void printVectorVectorInt(const vector<vector<int>> &ints);
 
 void printVectorString(const vector<string> &strings);
 
+// Trả về tổng của các mã ascii của các ký tự trên chuỗi {text}
+int sumAscii(const std::string &text);
+
+// Return chuỗi mã ascii của text được cách nhau bằng dấu chấm `.`
+string all_ascii(const std::string &text);
+
 #endif  // COMMON_DEBUG_H_
