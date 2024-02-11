@@ -29,6 +29,13 @@ struct Point {
   }
 
   bool operator<(const Point &other) const { return tie(x, y, z) < tie(other.x, other.y, other.z); }
+
+  // Cần định nghĩa hàm hash cho Point để sử dụng làm key trong std::unordered_map
+  struct Hash {
+    size_t operator()(const Point &p) const {
+      return hash<float>()(p.x) ^ hash<float>()(p.y) ^ hash<float>()(p.z);
+    }
+  };
 };
 
 struct Segment {

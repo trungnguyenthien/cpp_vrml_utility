@@ -1,94 +1,13 @@
 #include "Geometry3D.h"
 
 #include <iostream>
+#include <map>
 #include <set>
+#include <utility>
 #include <vector>
 
 #include "../common/Debug.h"
 #include "../common/VRML.h"
-
-void mergeClosetPoints(vector<Point> &points, const vector<vector<int>> &groupClosetIndices) {
-  // Tạo một vector mới để lưu trữ các điểm sau khi cập nhật
-  vector<Point> updatedPoints(points.size());
-
-  // Duyệt qua từng nhóm
-  for (const auto &group : groupClosetIndices) {
-    if (group.empty())
-      continue;  // Bỏ qua nhóm rỗng
-
-    // Tính toạ độ trung bình của nhóm
-    float sumX = 0, sumY = 0, sumZ = 0;
-    for (int index : group) {
-      sumX += points[index].x;
-      sumY += points[index].y;
-      sumZ += points[index].z;
-    }
-    float avgX = sumX / group.size();
-    float avgY = sumY / group.size();
-    float avgZ = sumZ / group.size();
-
-    // Cập nhật toạ độ của các điểm trong nhóm
-    for (int index : group) {
-      updatedPoints[index] = Point(avgX, avgY, avgZ);
-    }
-  }
-
-  // Sao chép các điểm đã cập nhật vào vector ban đầu
-  points = std::move(updatedPoints);
-}
-
-bool isClose(const Point &p1, const Point &p2, const Point &delta) {
-  return std::abs(p1.x - p2.x) <= delta.x && std::abs(p1.y - p2.y) <= delta.y &&
-         std::abs(p1.z - p2.z) <= delta.z;
-}
-
-vector<vector<int>> findGroupClosetIndices(const vector<Point> &points, const Point &deltaPoint) {
-  vector<vector<int>> groups;
-  vector<bool> grouped(points.size(), false);  // Keep track of points that have been grouped
-
-  for (int i = 0; i < points.size(); ++i) {
-    if (grouped[i])
-      continue;  // Skip if already grouped
-
-    vector<int> group;
-    group.push_back(i);
-    grouped[i] = true;
-
-    // Compare with remaining points to find close ones
-    for (int j = i + 1; j < points.size(); ++j) {
-      if (isClose(points[i], points[j], deltaPoint)) {
-        group.push_back(j);
-        grouped[j] = true;  // Mark as grouped
-      }
-    }
-
-    groups.push_back(group);
-  }
-
-  return groups;
-}
-
-Point findDeltaPoint(const vector<Point> &points) {
-  if (points.empty())
-    return Point(0, 0, 0);  // Trả về 0 nếu không có điểm nào
-
-  float xMin = points[0].x, xMax = points[0].x;
-  float yMin = points[0].y, yMax = points[0].y;
-  float zMin = points[0].z, zMax = points[0].z;
-
-  for (const auto &point : points) {
-    xMin = min(xMin, point.x);
-    xMax = max(xMax, point.x);
-    yMin = min(yMin, point.y);
-    yMax = max(yMax, point.y);
-    zMin = min(zMin, point.z);
-    zMax = max(zMax, point.z);
-  }
-
-  const float CLOSET = 0.00;
-
-  return Point(CLOSET * (xMax - xMin), CLOSET * (yMax - yMin), CLOSET * (zMax - zMin));
-}
 
 // Trả về true nếu trong segment có đoạn AB hoặc BA
 bool hasExistedSegment(set<Segment> &segments, Point &pA, Point &pB) {
@@ -119,21 +38,6 @@ bool hasExistedPoint(const std::vector<Point> &points, Point p) {
     }
   }
   return false;
-}
-
-// Hàm để giải phóng bộ nhớ của polyhedron
-// void deleteShape3D(void *shape) { delete static_cast<Polyhedron *>(shape); }
-
-// Tạo Plane_3 bởi 3 điểm p0, p1, p2
-Plane_3 createPlane3(Point p0, Point p1, Point p2) {
-  // Chuyển đổi Point sang Point_3 của CGAL
-  Point_3 point0(p0.x, p0.y, p0.z);
-  Point_3 point1(p1.x, p1.y, p1.z);
-  Point_3 point2(p2.x, p2.y, p2.z);
-
-  // Tạo Plane_3 từ ba điểm
-  Plane_3 plane(point0, point1, point2);
-  return plane;
 }
 
 Plane_3 createPlane3Z(int z) {
@@ -186,8 +90,6 @@ Point convertFromPoint_3(Point_3 p3) { return Point(p3.x(), p3.y(), p3.z()); }
 Point_3 convertToPoint_3(Point p) { return Point_3(p.x, p.y, p.z); }
 
 pair<Point, Point> intersectionZ(vector<Point> plane, int z) {
-  // cout << "intersectionZ 1" << endl;
-  // Plane_3 plane1 = createPlane3(plane[0], plane[1], plane[2]);
   Plane_3 planez = createPlane3Z(z);
   // cout << "intersectionZ 2" << endl;
   try {
@@ -426,15 +328,6 @@ set<vector<Point>> polygonAtZ(vector<Point> shapePoints, vector<vector<int>> fac
   cout << "CUT POINTS --- \n\n";
   printVectorPoints(output);
   cout << "\n\n\n END CUT POINTS --- \n";
-
-  auto groupClosetIndices = findGroupClosetIndices(output, findDeltaPoint(output));
-  printVectorVectorInt(groupClosetIndices);
-
-  // mergeClosetPoints(output, groupClosetIndices);
-
-  cout << "AFTER MERGE POINT --- \n\n";
-  printVectorPoints(output);
-  cout << "\n\n\n END AFTER MERGE POINT --- \n";
 
   FindPolygonFunction findPolygonFunction;
   findPolygonFunction.inputSegments = segments;
