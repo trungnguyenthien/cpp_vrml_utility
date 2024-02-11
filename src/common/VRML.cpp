@@ -210,9 +210,9 @@ FaceDef parseFace(string token) {
   //     iss >> delim;
   //   }
   // }
-  cout << "parseFace Token:" << token << endl;
+  // cout << "parseFace Token:" << token << endl;
   // cout << "Face Parse Face: ";
-  printVectorInt("Face: ", face);
+  // printVectorInt("Face: ", face);
 
   return face;
 }
@@ -464,13 +464,24 @@ vector<VrmlObject *> read_vrml_file(string file) {
     // PRINT_DEBUG_INFO(token, number_set, flag_read);
   }
 
-  cout << "vrmlObjects.size()=" << vrmlObjects.size() << endl;
-  for (VrmlObject *vrml : vrmlObjects) {
-    VrmlFaceSet *faceSet = dynamic_cast<VrmlFaceSet *>(vrml);
-    if (faceSet != NULL) {
-      cout << faceSet->debug_description() << endl;
-    }
+  if (!faces.empty() && !points.empty()) {
+    VrmlFaceSet *faceSet = new VrmlFaceSet();
+    faceSet->points = points;
+    faceSet->faces = makeFaces(faces);
+    vrmlObjects.push_back(faceSet);
+
+    points = {};
+    faces = {};
   }
+
+  cout << "faces points" << faces.size() << "," << points.size() << endl;
+  cout << "vrmlObjects.size()=" << vrmlObjects.size() << endl;
+  // for (VrmlObject *vrml : vrmlObjects) {
+  //   VrmlFaceSet *faceSet = dynamic_cast<VrmlFaceSet *>(vrml);
+  //   if (faceSet != NULL) {
+  //     cout << faceSet->debug_description() << endl;
+  //   }
+  // }
 
   return vrmlObjects;
 }
