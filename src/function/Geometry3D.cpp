@@ -3,11 +3,120 @@
 #include <iostream>
 #include <map>
 #include <set>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
 #include "../common/Debug.h"
 #include "../common/VRML.h"
+
+// Cấu trúc Point(float x, float y, float z)
+void printDebug(const Point &currentPoint, vector<Point> &polygonPath, vector<bool> &visited) {
+  return;
+  cout << "===========================================================" << endl;
+  cout << "All Vertex: " << visited.size() << endl;
+  std::cout << "Current Point: ";
+  std::cout << currentPoint.toStringXY();
+  std::cout << std::endl;
+
+  std::cout << "Polygon Path: [";
+  for (size_t i = 0; i < polygonPath.size(); ++i) {
+    std::cout << polygonPath[i].toStringXY();
+    if (i < polygonPath.size() - 1) {
+      std::cout << ", ";
+    }
+  }
+
+  std::cout << "]" << std::endl;
+
+  cout << "polygonPath Size: " << polygonPath.size() << endl;
+
+  std::cout << "Visited: [";
+  for (size_t i = 0; i < visited.size(); ++i) {
+    std::cout << (visited[i] ? "x" : "o");
+    if (i < visited.size() - 1) {
+      std::cout << ", ";
+    }
+  }
+  std::cout << "]" << std::endl;
+}
+
+bool findNextPoint(const Point &currentPoint,
+                   const unordered_map<Point, set<Point>, hash<Point>> &graphEdge,
+                   vector<Point> &polygonPath, vector<bool> &visited,
+                   const vector<Point> &allPoints) {
+  polygonPath.push_back(currentPoint);
+
+  printDebug(currentPoint, polygonPath, visited);
+
+  // Không tồn tại cạnh có điểm đầu là startPoint
+  if (graphEdge.find(currentPoint) == graphEdge.end())
+    return false;
+
+  for (const auto &nextPoint : graphEdge.at(currentPoint)) {
+    // Kiểm tra xem đã trở về điểm bắt đầu để tạo thành đa giác đóng
+    if (nextPoint == polygonPath.front() && polygonPath.size() > 2) {
+      polygonPath.push_back(
+          nextPoint);  // Đóng đa giác khi nextPoint trùng với startPoint (path.front())
+      return true;
+    }
+    // Tìm điểm tiếp theo chưa được thăm
+    auto nextPointIndex = find(allPoints.begin(), allPoints.end(), nextPoint) - allPoints.begin();
+    if (!visited[nextPointIndex]) {
+      visited[nextPointIndex] = true;
+      if (findNextPoint(nextPoint, graphEdge, polygonPath, visited, allPoints))
+        return true;
+    }
+  }
+  return false;
+}
+
+vector<vector<Point>> findPolygonPath(vector<pair<Point, Point>> connections) {
+  // Tập edge ứng mỗi từng đỉnh, mỗi đỉnh là key của map. Dùng để kiểm tra khả năng đi từ mỗi đỉnh.
+  unordered_map<Point, set<Point>, hash<Point>> graphEdge;
+  // Danh sách các đỉnh của polygon
+  vector<Point> allPoints;
+  for (const auto &conn : connections) {
+    graphEdge[conn.first].insert(conn.second);
+    graphEdge[conn.second].insert(conn.first);
+    // conn.first chưa tồn tại trong allPoints
+    if (find(allPoints.begin(), allPoints.end(), conn.first) == allPoints.end())
+      allPoints.push_back(conn.first);
+    // conn.second chưa tồn tại trong allPoints
+    if (find(allPoints.begin(), allPoints.end(), conn.second) == allPoints.end())
+      allPoints.push_back(conn.second);
+  }
+
+  vector<vector<Point>> polygons;
+  vector<bool> visited(allPoints.size(), false);
+  for (int i = 0; i < allPoints.size(); ++i) {
+    // Tìm đỉnh chưa xuất hiện trọng polygon nào
+    if (!visited[i]) {
+      // Chuẩn bị path cho polygon đó
+      vector<Point> path;
+      // Đánh dấu đỉnh này đã duyệt, đây là đỉnh đầu tiên của polygon
+      visited[i] = true;
+      // Xác định path
+      if (findNextPoint(allPoints[i], graphEdge, path, visited, allPoints)) {
+        cout << "Found path" << endl;
+        polygons.push_back(path);
+      }
+    }
+  }
+
+  return polygons;
+}
+
+// Convert vector<Segment> thành vector<pair<Point, Point>>
+// Cấu trúc Segment(Point p1, Point p2)
+// Cấu trúc Point(float x, float y, float z)
+vector<pair<Point, Point>> createConnections(const vector<Segment> &segments) {
+  vector<pair<Point, Point>> connections;
+  for (const auto &segment : segments) {
+    connections.push_back(make_pair(segment.p1, segment.p2));
+  }
+  return connections;
+}
 
 // Trả về true nếu trong segment có đoạn AB hoặc BA
 bool hasExistedSegment(set<Segment> &segments, Point &pA, Point &pB) {
@@ -282,9 +391,9 @@ bool checkPointInSidePolygon(Point point, vector<Point> polygonPoints) {
   return isInside;
 }
 
-set<vector<Point>> polygonAtZ(vector<Point> shapePoints, vector<vector<int>> faceSet, int z) {
-  vector<Point> output;
-  set<Segment> segments;
+vector<vector<Point>> polygonAtZ(vector<Point> shapePoints, vector<vector<int>> faceSet, int z) {
+  // vector<Point> output;
+  vector<Segment> segments;
   cout << "faceSet " << faceSet.size() << endl;
   for (auto face : faceSet) {
     try {
@@ -301,45 +410,29 @@ set<vector<Point>> polygonAtZ(vector<Point> shapePoints, vector<vector<int>> fac
       //   continue;
       // }
 
-      segments.insert(mySegment);
+      segments.push_back(mySegment);
       // segments.push_back(mySegment);
 
-      if (!hasExistedPoint(output, sourcePoint)) {
-        // cout << "Add point " << sourcePoint.x << " " << sourcePoint.y << endl;
-        output.push_back(sourcePoint);
-      } else {
-        // cout << "\tExisted point " << sourcePoint.x << " " << sourcePoint.y << endl;
-        output.push_back(sourcePoint);
-      }
+      // if (!hasExistedPoint(output, sourcePoint)) {
+      //   // cout << "Add point " << sourcePoint.x << " " << sourcePoint.y << endl;
+      //   output.push_back(sourcePoint);
+      // } else {
+      //   // cout << "\tExisted point " << sourcePoint.x << " " << sourcePoint.y << endl;
+      //   output.push_back(sourcePoint);
+      // }
 
-      if (!hasExistedPoint(output, targetPoint)) {
-        // cout << "Add point " << targetPoint.x << " " << targetPoint.y << endl;
-        output.push_back(targetPoint);
-      } else {
-        // cout << "\tExisted point " << targetPoint.x << " " << targetPoint.y << endl;
-        output.push_back(targetPoint);
-      }
+      // if (!hasExistedPoint(output, targetPoint)) {
+      //   // cout << "Add point " << targetPoint.x << " " << targetPoint.y << endl;
+      //   output.push_back(targetPoint);
+      // } else {
+      //   // cout << "\tExisted point " << targetPoint.x << " " << targetPoint.y << endl;
+      //   output.push_back(targetPoint);
+      // }
 
     } catch (const std::runtime_error &e) {
       // throw runtime_error("polygonAtZ: An error occurred: " + string(e.what()));
       // std::cerr << "polygonAtZ: An error occurred: " << e.what() << std::endl;
     }
   }
-  cout << "CUT POINTS --- \n\n";
-  printVectorPoints(output);
-  cout << "\n\n\n END CUT POINTS --- \n";
-
-  FindPolygonFunction findPolygonFunction;
-  findPolygonFunction.inputSegments = segments;
-  auto result = findPolygonFunction.find();
-
-  // auto removePoint = findPointsInSegment(output);
-  // output = excludePoints(output, removePoint);
-
-  // // In (10, 0), (15, -2.5), (2.5, 0), (20, 2.5),
-  // // Out: (15, 7.5), (15, -7.5)
-
-  // checkPointInSidePolygon(Point(20, 2.5), output);
-
-  return *result.begin();
+  return findPolygonPath(createConnections(segments));
 }

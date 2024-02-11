@@ -18,10 +18,10 @@ void testGeo3D(vector<Point> &points, vector<vector<int>> &faces, int z) {
   // void *shape = createShape3D(points, faces);
   printMinMaxPoint(points);
   vector<Point> poly = *(polygonAtZ(points, faces, z).begin());
-
+  printVectorPoints(poly);
   DBBoard db;
-  db.size = BOARD_SIZE::_1_000;
-  db.zoom = ZOOM_RATIO::X10;
+  db.size = BOARD_SIZE::_5_000;
+  db.zoom = ZOOM_RATIO::X1;
 
   DBShape *shapePoly = new DBShape();
   shapePoly->appendPoints(poly);
@@ -61,7 +61,7 @@ int main(int argc, char **argv) {
   VrmlFaceSet *faceSet = dynamic_cast<VrmlFaceSet *>(vrmlObjects[0]);
 
   if (faceSet != NULL) {
-    testGeo3D(faceSet->points, faceSet->faces, -6050.4);
+    testGeo3D(faceSet->points, faceSet->faces, -6050);
   }
 
   outputFile.close();

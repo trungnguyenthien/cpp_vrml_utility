@@ -23,20 +23,32 @@ struct Point {
     return oss.str();
   }
 
-  bool operator==(const Point &other) const {
-    return std::fabs(x - other.x) < 1e-6 && std::fabs(y - other.y) < 1e-6 &&
-           std::fabs(z - other.z) < 1e-6;
+  std::string toStringXY() const {
+    std::ostringstream oss;
+    oss << "(" << x << ", " << y << ")";
+    return oss.str();
   }
+
+  bool operator==(const Point &other) const { return x == other.x && y == other.y && z == other.z; }
 
   bool operator<(const Point &other) const { return tie(x, y, z) < tie(other.x, other.y, other.z); }
 
-  // Cần định nghĩa hàm hash cho Point để sử dụng làm key trong std::unordered_map
-  struct Hash {
-    size_t operator()(const Point &p) const {
-      return hash<float>()(p.x) ^ hash<float>()(p.y) ^ hash<float>()(p.z);
-    }
-  };
+  // // Cần định nghĩa hàm hash cho Point để sử dụng làm key trong std::unordered_map
+  // struct Hash {
+  //   size_t operator()(const Point &p) const {
+  //     return hash<float>()(p.x) ^ hash<float>()(p.y) ^ hash<float>()(p.z);
+  //   }
+  // };
 };
+
+namespace std {
+template <>
+struct hash<Point> {
+  size_t operator()(const Point &p) const {
+    return hash<float>()(p.x) ^ hash<float>()(p.y) ^ hash<float>()(p.z);
+  }
+};
+}  // namespace std
 
 struct Segment {
   Point p1;

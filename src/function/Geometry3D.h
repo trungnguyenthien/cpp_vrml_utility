@@ -37,7 +37,7 @@ typedef Traits::Point_2 Trait_Point_2;
 typedef Traits::Polygon_2 Trait_Polygon_2;
 
 using namespace std;
-set<vector<Point>> polygonAtZ(vector<Point> shapePoints, vector<vector<int>> faceSet, int z);
+vector<vector<Point>> polygonAtZ(vector<Point> shapePoints, vector<vector<int>> faceSet, int z);
 
 Point_3 convertToPoint_3(Point p);
 Point convertFromPoint_3(Point_3 p3);
