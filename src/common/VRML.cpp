@@ -181,7 +181,7 @@ Point parsePoint(string token) {
     y = values[1];
   if (values.size() >= 3)
     z = values[2];
-  cout << "Point parsePoint XYZ " << x << " " << y << " " << z << endl;
+  // cout << "Point parsePoint XYZ " << x << " " << y << " " << z << endl;
   return Point(x, y, z);
 }
 
@@ -417,7 +417,7 @@ vector<VrmlObject *> read_vrml_file(string file) {
       flag_read = FLG_READ_START;
       number_set = NUMBERSET_UNKNOWN;
 
-      PRINT_DEBUG_INFO(token, number_set, flag_read);
+      // PRINT_DEBUG_INFO(token, number_set, flag_read);
       continue;
     }
 
@@ -469,12 +469,9 @@ vector<VrmlObject *> read_vrml_file(string file) {
     faceSet->points = points;
     faceSet->faces = makeFaces(faces);
     vrmlObjects.push_back(faceSet);
-
-    points = {};
-    faces = {};
   }
 
-  cout << "faces points" << faces.size() << "," << points.size() << endl;
+  cout << "faces points " << faces.size() << "," << points.size() << endl;
   cout << "vrmlObjects.size()=" << vrmlObjects.size() << endl;
   // for (VrmlObject *vrml : vrmlObjects) {
   //   VrmlFaceSet *faceSet = dynamic_cast<VrmlFaceSet *>(vrml);

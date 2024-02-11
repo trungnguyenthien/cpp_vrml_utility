@@ -74,24 +74,6 @@ int ascii(char c) {
   return static_cast<int>(c);  // Ép kiểu ký tự sang số nguyên để lấy mã ASCII
 }
 
-bool isEqual(const std::string &str1, const std::string &str2) {
-  // Nếu độ dài của hai chuỗi khác nhau, chúng không bằng nhau
-  if (str1.length() != str2.length()) {
-    // cout << "str1.length() != str2.length()" << std::endl;
-    return false;
-  }
-
-  // Duyệt qua từng ký tự và so sánh
-  for (size_t i = 0; i < str1.length(); ++i) {
-    if (ascii(str1[i]) != ascii(str2[i])) {
-      return false;  // Nếu tìm thấy một ký tự không khớp, trả về false
-    }
-  }
-
-  // Tất cả các ký tự đều khớp, trả về true
-  return true;
-}
-
 bool isMatch(string test, vector<std::string> matchs) {
   // Bước 1: Trim khoảng trắng đầu và cuối chuỗi
   test = trim(test);
@@ -109,7 +91,7 @@ bool isMatch(string test, vector<std::string> matchs) {
       return true;
     }
 
-    if (isEqual(matchs[0], text)) {
+    if (matchs[0] == text) {
       matchs.erase(matchs.begin());
     }
   }
@@ -135,7 +117,7 @@ vector<int> splitInts(const string &input) {
   vector<int> result;
   vector<string> components = splitString(input);
   // cout << "splitInts components";
-  printVectorString(components);
+  // printVectorString(components);
   for (auto com : components) {
     if (isInt(com)) {
       result.push_back(stoi(com));

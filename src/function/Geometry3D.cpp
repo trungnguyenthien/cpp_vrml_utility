@@ -383,7 +383,7 @@ bool checkPointInSidePolygon(Point point, vector<Point> polygonPoints) {
 set<vector<Point>> polygonAtZ(vector<Point> shapePoints, vector<vector<int>> faceSet, int z) {
   vector<Point> output;
   set<Segment> segments;
-  // cout << "polygonAtZ 1" << endl;
+  cout << "faceSet " << faceSet.size() << endl;
   for (auto face : faceSet) {
     try {
       // cout << "polygonAtZ 2" << endl;
