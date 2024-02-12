@@ -199,21 +199,6 @@ Point parsePoint(string token) {
 // Trả về đối tượng FaceDef chứa các chữ số còn lại (theo đúng thứ tự)
 FaceDef parseFace(string token) {
   FaceDef face = splitInts(token);
-  // std::istringstream iss(token);
-  // int num;
-  // char delim;
-
-  // while (iss >> num) {
-  //   face.push_back(num);
-  //   // Đọc qua dấu phẩy hoặc khoảng trắng
-  //   if (iss.peek() == ',' || iss.peek() == ' ') {
-  //     iss >> delim;
-  //   }
-  // }
-  // cout << "parseFace Token:" << token << endl;
-  // cout << "Face Parse Face: ";
-  // printVectorInt("Face: ", face);
-
   return face;
 }
 
@@ -473,65 +458,8 @@ vector<VrmlObject *> read_vrml_file(string file) {
 
   cout << "faces points " << faces.size() << "," << points.size() << endl;
   cout << "vrmlObjects.size()=" << vrmlObjects.size() << endl;
-  // for (VrmlObject *vrml : vrmlObjects) {
-  //   VrmlFaceSet *faceSet = dynamic_cast<VrmlFaceSet *>(vrml);
-  //   if (faceSet != NULL) {
-  //     cout << faceSet->debug_description() << endl;
-  //   }
-  // }
 
   return vrmlObjects;
 }
 
 VrmlObject::VrmlObject() : diffuseColor(0, 0, 0), emissiveColor(0, 0, 0) {}
-
-// Với mỗi FaceDef có {n} vertex sẽ có cạnh đầu được tạo bởi FaceDef[0] và FaceDef[1]
-// Và cạnh cuối FaceDef được tạo bởi FaceDef[n - 2] và FaceDef[n-1]
-// Tôi muốn sort lại thứ tự f2 sao cho cạnh cuối f1 trùng với cạnh đầu f2.
-// Ví dụ: f1[1,2,3] và f2[7,6,2,3] --> sort f2[2,3,7, 6]
-void sortVertex(FaceDef &f1, FaceDef &f2) {
-  if (f1.size() < 2 || f2.size() < 2) {
-    // Không đủ đỉnh để tạo cạnh
-    return;
-  }
-
-  // Tìm cạnh cuối cùng của f1
-  int lastVertex1 = f1[f1.size() - 2];
-  int lastVertex2 = f1[f1.size() - 1];
-
-  // Tìm vị trí của cạnh này trong f2
-  auto it = std::find(f2.begin(), f2.end(), lastVertex1);
-  if (it != f2.end() && it + 1 != f2.end() && *(it + 1) == lastVertex2) {
-    // Xoay f2 để cạnh cuối của f1 trở thành cạnh đầu của f2
-    cout << "std::rotate(f2.begin(), it, f2.end());" << endl;
-    std::rotate(f2.begin(), it, f2.end());
-  }
-}
-
-// Hãy gom các cặp vertex cạnh nhau thành 1 set.
-// Ví dụ: [0,3,2,1] ==> [0,3], [3,2], [2,1], [1,0]
-set<set<int>> makeSet2Verties(std::vector<int> vertices) {
-  set<set<int>> edgeSet;
-  for (size_t i = 0; i < vertices.size(); ++i) {
-    set<int> edge;
-    edge.insert(vertices[i]);
-    edge.insert(vertices[(i + 1) % vertices.size()]);
-    edgeSet.insert(edge);
-  }
-  // printSetOfSets(edgeSet);
-  return edgeSet;
-}
-
-// Kiểm tra xem hai FaceDef có cạnh chung hay không
-bool haveCommonEdge(FaceDef &f1, FaceDef &f2) {
-  auto edges1 = makeSet2Verties(f1);
-  auto edges2 = makeSet2Verties(f2);
-  auto result = hasCommonEdge(edges1, edges2);
-
-  cout << "COMPARE SET" << endl;
-  printSetOfSets(edges1);
-  printSetOfSets(edges2);
-  cout << "RESULT = " << result << endl;
-
-  return result;
-}
