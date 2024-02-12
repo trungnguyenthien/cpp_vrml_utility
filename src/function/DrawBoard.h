@@ -24,9 +24,6 @@ int boardSizeValue(BOARD_SIZE value);
 // Trả về vector<pair<double, double>>
 vector<pair<double, double>> makePair(vector<float> &source);
 
-// In từng cặp double theo thứ tự để debug
-void printPairDouble(vector<pair<double, double>> &pair);
-
 struct DBObject {
   Color color = Color(0, 0, 0);
   int thickness = 1;

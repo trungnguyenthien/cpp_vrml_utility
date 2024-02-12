@@ -31,10 +31,6 @@ std::string &replaceAll(std::string &str, const std::string &from, const std::st
 // theo đúng thứ tự trong {matchs}
 bool isMatch(string test, vector<string> matchs);
 
-// Return TRUE nếu str1 bằng str2.
-// Không dùng toán tử `=` của str::string, thực hiện compare từng ký tự trong 2 string.
-bool isEqual(const std::string &str1, const std::string &str2);
-
 int ascii(char c);
 
 // Loại bỏ các ký tự NULL (có mã ascii là 0) trong chuỗi {str}
