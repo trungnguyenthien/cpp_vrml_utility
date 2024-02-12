@@ -20,8 +20,8 @@ void testGeo3D(vector<Point> &points, vector<vector<int>> &faces, int z) {
   vector<Point> poly = *(polygonAtZ(points, faces, z).begin());
   printVectorPoints(poly);
   DBBoard db;
-  db.size = BOARD_SIZE::_5_000;
-  db.zoom = ZOOM_RATIO::X1;
+  db.size = BOARD_SIZE::_10_000;
+  db.zoom = ZOOM_RATIO::X10;
 
   DBShape *shapePoly = new DBShape();
   shapePoly->appendPoints(poly);

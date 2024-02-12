@@ -13,6 +13,7 @@
 #include <CGAL/partition_2.h>
 
 #include <boost/optional.hpp>
+#include <utility>
 #include <vector>
 
 #include "../common/Model.h"
@@ -42,20 +43,19 @@ vector<vector<Point>> polygonAtZ(vector<Point> shapePoints, vector<vector<int>> 
 Point_3 convertToPoint_3(Point p);
 Point convertFromPoint_3(Point_3 p3);
 
-// Return TRUE nếu: Điểm X nằm trên đoạn thẳng AB
-// Các trường hợp return FALSE: X không nằm trên đoạn AB, X trùng với A hoặc B
-bool isPointsInSegment(Point x, Point a, Point b);
-
-// Trả về danh sách Points sau khi {sourcePoints} đã excude các point trong {removePoints}
-vector<Point> excludePoints(vector<Point> sourcePoints, vector<Point> removePoints);
-
-vector<Point> findPointsInSegment(vector<Point> segmentPoints);
-
 // {connections} là bộ dữ liệu các đỉnh tạo thành 1 hay nhiều polygon (diểm đầu và cuối trùng nhau)
 // Kết quả cần tìm của hàm này là bộ dữ liệu các đỉnh của các polygon.
 // Lưu ý:
 // - có thể có nhiều polygon.
 // - connection mỗi polygon được chứa trong vector<Point>
 vector<vector<Point>> findPolygonPath(vector<pair<Point, Point>> connections);
+
+// Return (minPoint, maxPoint) của các point trong {points}
+// Trong đó minPoint(xMin, yMin, zMin), maxPoint(xMax, yMax, zMax)
+// Cấu trúc Point(float x, float y, float z)
+pair<Point, Point> getMinMaxPoint(vector<vector<Point>> points);
+
+// Tạo ngẫu nhiên Point(float x, float y, float z) trong khoảng min-max cho trước.
+Point randomPoint(float xMin, float yMin, float zMin, float xMax, float yMax, float zMax);
 
 #endif  // FUNCTION_GEOMETRY3D_H_
