@@ -13,23 +13,31 @@
 #include "function/G4DCM.h"
 #include "function/Geometry3D.h"
 
-void testGeo3D(vector<Point> &points, vector<vector<int>> &faces, int z) {
-  // cout << "Testing Geo3D " << points.size() << " faces " << faces.size() << endl;
-  // void *shape = createShape3D(points, faces);
+void process(vector<Point> &points, vector<vector<int>> &faces, int numberCube, float sizeCube) {
   printMinMaxPoint(points);
-  vector<Point> poly = *(polygonAtZ(points, faces, z).begin());
-  printVectorPoints(poly);
-  DBBoard db;
-  db.size = BOARD_SIZE::_10_000;
-  db.zoom = ZOOM_RATIO::X10;
+  auto minMaxPoints = getMinMaxPoint(points);
+  auto minPoint = minMaxPoints.first;
+  auto maxPoint = minMaxPoints.second;
+  int count = 0;
+  vector<Point> randInsidePoints;
+  while (count < numberCube) {
+    auto rz = randomFloat(minPoint.z, maxPoint.z);
 
-  DBShape *shapePoly = new DBShape();
-  shapePoly->appendPoints(poly);
-  shapePoly->color = Color::parseColorFromHex("#3366FF");
-  shapePoly->fillColor = Color::parseColorFromHex("#E5E968");
-  db.addObject(shapePoly);
+    vector<vector<Point>> polys = polygonAtZ(points, faces, rz);
+    auto minMaxPointAtZ = getMinMaxPoint(polys);
 
-  db.render();
+    auto rx = randomFloat(minMaxPointAtZ.first.x, minMaxPointAtZ.second.x);
+    auto ry = randomFloat(minMaxPointAtZ.first.y, minMaxPointAtZ.second.y);
+    Point randPoint(rx, ry, rz);
+    cout << "TRY POINT:" << randPoint.toString() << endl;
+    // bool isInside = false;
+    if (checkPointInSidePolygons(randPoint, polys)) {
+      // isInside = true;
+      count++;
+      randInsidePoints.push_back(randPoint);
+      cout << "✅" << count << endl;
+    }
+  }
 }
 
 int main(int argc, char **argv) {
@@ -61,7 +69,7 @@ int main(int argc, char **argv) {
   VrmlFaceSet *faceSet = dynamic_cast<VrmlFaceSet *>(vrmlObjects[0]);
 
   if (faceSet != NULL) {
-    testGeo3D(faceSet->points, faceSet->faces, -6050);
+    process(faceSet->points, faceSet->faces, numberCube, sizeCube);
   }
 
   outputFile.close();

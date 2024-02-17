@@ -12,6 +12,15 @@
 #include "../common/Debug.h"
 #include "../common/VRML.h"
 
+float randomFloat(float min, float max) {
+  // Mersenne Twister: Một bộ sinh số ngẫu nhiên tốt cho mục đích tổng quát
+  std::mt19937 gen(std::random_device{}());
+  // Phân phối đều trong khoảng [min, max]
+  std::uniform_real_distribution<float> dis(min, max);
+
+  return dis(gen);
+}
+
 Point randomPoint(float xMin, float xMax, float yMin, float yMax, float zMin, float zMax) {
   // Khởi tạo một đối tượng phát sinh số ngẫu nhiên
   std::random_device rd;  // Sử dụng để khởi tạo (seed) cho đối tượng sinh số ngẫu nhiên
@@ -28,6 +37,28 @@ Point randomPoint(float xMin, float xMax, float yMin, float yMax, float zMin, fl
   float z = disZ(gen);
 
   return Point(x, y, z);
+}
+
+// Hàm tìm min và max point
+pair<Point, Point> getMinMaxPoint(const vector<Point> &points) {
+  // Khởi tạo min và max points với giá trị cực đại và cực tiểu
+  Point minPoint(std::numeric_limits<float>::max(), std::numeric_limits<float>::max(),
+                 std::numeric_limits<float>::max());
+  Point maxPoint(std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest(),
+                 std::numeric_limits<float>::lowest());
+
+  // Duyệt qua từng điểm để cập nhật min và max points
+  for (const auto &point : points) {
+    minPoint.x = std::min(minPoint.x, point.x);
+    minPoint.y = std::min(minPoint.y, point.y);
+    minPoint.z = std::min(minPoint.z, point.z);
+
+    maxPoint.x = std::max(maxPoint.x, point.x);
+    maxPoint.y = std::max(maxPoint.y, point.y);
+    maxPoint.z = std::max(maxPoint.z, point.z);
+  }
+
+  return {minPoint, maxPoint};
 }
 
 pair<Point, Point> getMinMaxPoint(const vector<vector<Point>> &points) {
@@ -223,11 +254,14 @@ pair<Point, Point> intersectionZ(vector<Point> plane, int z) {
   return pair<Point, Point>(Point(0, 0, 0), Point(0, 0, 0));
 }
 
-bool checkPointInSidePolygon(Point point, vector<Point> polygonPoints) {
+bool checkPointInSidePolygon(const Point &point, const vector<Point> &polygonPoints) {
   // Chuyển đổi điểm và đa giác từ cấu trúc Point sang kiểu CGAL
   Point_2 cgalPoint(point.x, point.y);
   Polygon_2 polygon;
   for (const auto &p : polygonPoints) {
+    if (polygon.size() > 0 && polygon[0].x() == static_cast<double>((p.x))) {
+      continue;
+    }
     polygon.push_back(Point_2(p.x, p.y));
   }
 
@@ -235,7 +269,19 @@ bool checkPointInSidePolygon(Point point, vector<Point> polygonPoints) {
   return polygon.bounded_side(cgalPoint) == CGAL::ON_BOUNDED_SIDE;
 }
 
-vector<vector<Point>> polygonAtZ(vector<Point> shapePoints, vector<vector<int>> faceSet, int z) {
+bool checkPointInSidePolygons(const Point &point, const vector<vector<Point>> &polygonPoints) {
+  for (const auto &p : polygonPoints) {
+    cout << "Polygon :" << p.size() << endl;
+    printVectorPoints(p);
+    if (checkPointInSidePolygon(point, p)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+vector<vector<Point>> polygonAtZ(const vector<Point> &shapePoints,
+                                 const vector<vector<int>> &faceSet, int z) {
   vector<Segment> segments;
   cout << "faceSet " << faceSet.size() << endl;
   for (auto face : faceSet) {
@@ -250,5 +296,7 @@ vector<vector<Point>> polygonAtZ(vector<Point> shapePoints, vector<vector<int>> 
     } catch (const std::runtime_error &e) {
     }
   }
-  return findPolygonPath(createConnections(segments));
+  auto polygonPath = findPolygonPath(createConnections(segments));
+
+  return polygonPath;
 }

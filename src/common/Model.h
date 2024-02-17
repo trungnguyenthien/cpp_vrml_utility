@@ -19,7 +19,7 @@ struct Point {
 
   std::string toString() const {
     std::ostringstream oss;
-    oss << "(" << x << ", " << y << ", " << z << ")";
+    oss << "[" << x << ", " << y << ", " << z << "]";
     return oss.str();
   }
 

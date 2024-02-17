@@ -38,7 +38,10 @@ typedef Traits::Point_2 Trait_Point_2;
 typedef Traits::Polygon_2 Trait_Polygon_2;
 
 using namespace std;
-vector<vector<Point>> polygonAtZ(vector<Point> shapePoints, vector<vector<int>> faceSet, int z);
+bool checkPointInSidePolygon(const Point &point, const vector<Point> &polygonPoints);
+bool checkPointInSidePolygons(const Point &point, const vector<vector<Point>> &polygonPoints);
+vector<vector<Point>> polygonAtZ(const vector<Point> &shapePoints,
+                                 const vector<vector<int>> &faceSet, int z);
 
 Point_3 convertToPoint_3(Point p);
 Point convertFromPoint_3(Point_3 p3);
@@ -53,9 +56,15 @@ vector<vector<Point>> findPolygonPath(vector<pair<Point, Point>> connections);
 // Return (minPoint, maxPoint) của các point trong {points}
 // Trong đó minPoint(xMin, yMin, zMin), maxPoint(xMax, yMax, zMax)
 // Cấu trúc Point(float x, float y, float z)
-pair<Point, Point> getMinMaxPoint(vector<vector<Point>> points);
+pair<Point, Point> getMinMaxPoint(const vector<vector<Point>> &points);
+
+// Return (minPoint, maxPoint) của các point trong {points}
+// Trong đó minPoint(xMin, yMin, zMin), maxPoint(xMax, yMax, zMax)
+// Cấu trúc Point(float x, float y, float z)
+pair<Point, Point> getMinMaxPoint(const vector<Point> &points);
 
 // Tạo ngẫu nhiên Point(float x, float y, float z) trong khoảng min-max cho trước.
 Point randomPoint(float xMin, float yMin, float zMin, float xMax, float yMax, float zMax);
 
+float randomFloat(float min, float max);
 #endif  // FUNCTION_GEOMETRY3D_H_

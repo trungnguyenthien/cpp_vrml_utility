@@ -121,7 +121,7 @@ void printVectorPoints(const vector<Point> &points) {
   int index = 0;
   cout << "printVectorPoints { " << endl;
   for (const Point &point : points) {
-    std::cout << index++ << "\t" << point.toString() << std::endl;
+    std::cout << point.toString() << "," << std::endl;
   }
   cout << " }" << endl;
 }
