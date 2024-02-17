@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Layout Bootstrap</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+      .flex-row {
+        display: flex;
+        height: 100vh;
+        /* Chiều cao toàn màn hình */
+      }
+
+      #input_text {
+        width: 400px;
+        /* Chiều rộng cố định */
+        height: 100%;
+        /* Chiều cao toàn màn hình */
+        background-color: grey;
+        /* Màu nền xám */
+        resize: none;
+        /* Không cho phép thay đổi kích thước */
+      }
+
+      #output_div {
+        flex-grow: 1;
+        /* Cho phép div này mở rộng chiếm phần còn lại */
+        background-color: rgb(55, 47, 47);
+        /* Màu nền đen */
+        border: solid 1px purple;
+        scrollbar-color: pink lightblue;
+        /* Border màu tím */
+      }
+
+      ::-webkit-scrollbar {
+        -webkit-appearance: none;
+        width: 4px;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        border-radius: 4px;
+        background-color: rgba(251, 0, 0);
+        -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="flex-row">
+      <textarea id="input_text"></textarea>
+      <div id="output_div">
+        <div id="draw_div"></div>
+        <!-- Nội dung của div bên phải -->
+      </div>
+    </div>
+    <script src="./draw2D.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+    <script>
+      // parentId: id của thẻ <div> bên ngoài
+      // contentId: id của thẻ <div> bên trong {parentId}
+      // width, height: kích thước content của <div>.
+      // bgColor: background_color của content.
+      // Yêu cầu:
+      // - {contentId} có kích thước là width, height.
+      // - {parentId} Xuất hiện scroller để scroll được hết content của <div>, scroller luôn luôn hiển thị.
+      function setup_board_div(parentId, contentId, width, height, bgColor) {
+        // Tìm thẻ <div> bên ngoài bằng parentId
+        var parentDiv = document.getElementById(parentId);
+
+        // Tìm thẻ <div> bên trong bằng contentId
+        var contentDiv = document.getElementById(contentId);
+
+        // Kiểm tra xem cả hai thẻ <div> có tồn tại không
+        if (parentDiv && contentDiv) {
+          // Thiết lập kích thước cho thẻ <div> bên trong
+          contentDiv.style.width = width + 'px';
+          contentDiv.style.height = height + 'px';
+          contentDiv.style.backgroundColor = bgColor;
+
+          // Thiết lập scroller cho thẻ <div> bên ngoài
+          parentDiv.style.overflow = 'scroll';
+          // Đảm bảo thẻ bên ngoài có kích thước đủ để hiển thị scroller
+          // Kích thước của parentDiv phải nhỏ hơn hoặc bằng contentDiv để scroller xuất hiện
+          parentDiv.style.width = '100%'; // Hoặc bạn có thể thiết lập một giá trị cố định tùy thuộc vào layout của bạn
+          parentDiv.style.height = '100%'; // Tương tự như trên
+        } else {
+          console.error('Không tìm thấy thẻ <div> với ID: ' + (parentDiv ? contentId : parentId));
+        }
+      }
+
+      function update_input() {
+        setup_board_div("output_div", "draw_div", input_data.board.width, input_data.board.height, input_data.board.background);
+        redraw();
+        scrollToMinXY();
+      }
+
+      function setup() {
+        // Tạo một canvas p5.js và gắn nó vào một thẻ <div> với ID là 'myCanvas'
+        // Điều này cho phép bạn định vị canvas ở bất cứ đâu trong trang web của mình
+        let canvas = createCanvas(input_data.board.width, input_data.board.height);
+        canvas.parent('draw_div');
+        noLoop();
+      }
+
+      // Hàm draw() được gọi liên tục để tạo ra đồ họa động
+      function draw() {
+        background(input_data.board.background); // Đặt màu nền cho canvas
+        input_data.objects.forEach((obj) => {
+          if (obj.type == 'polyline') {
+            draw_polyline(input_data, obj);
+          }
+        });
+      }
+
+      function draw_polyline(config, object) {
+        let tx = config.board.width / 2;
+        let ty = config.board.height / 2;
+        let zoom = config.zoom;
+
+        // Thiết lập màu và độ dày của đường
+        stroke(object.stroke); // Màu sắc của đường
+        strokeWeight(object.strokeWeight); // Độ dày của đường
+
+        // stroke('red');
+        // strokeWeight(4);
+
+        // Bắt đầu một đường mới
+        beginShape();
+        object.points.forEach((point) => {
+          let new_x = point[0] + tx;
+          let new_y = point[1] + ty;
+          vertex(new_x * zoom, new_y * zoom);
+        });
+        endShape(CLOSE);
+      }
+
+      function scrollToMinXY() {
+        let tx = input_data.board.width / 2;
+        let ty = input_data.board.height / 2;
+        let zoom = input_data.zoom;
+
+        const all_points = _.flatMap(input_data.objects, (o) => o.points);
+        const xmin = zoom * (_.min(_.map(all_points, (p) => p[0])) + tx);
+        const ymin = zoom * (_.min(_.map(all_points, (p) => p[1])) + ty);
+        scrollTo("output_div", xmin, ymin);
+      }
+
+      // div_id: id của thẻ <div>
+      // x, y: vị trí sẽ scroll đến.
+      // Yêu cầu: Tự scroll thanh cuộn của thẻ <div> có id {div_id} đến vị trí (x, y))
+      function scrollTo(div_id, x, y) {
+        // Tìm thẻ <div> dựa trên id được cung cấp
+        var element = document.getElementById(div_id);
+
+        // Sử dụng phương thức scrollTo để cuộn đến vị trí xác định
+        element.scrollTo({
+          left: x, // Vị trí cuộn ngang đến x
+          top: y, // Vị trí cuộn dọc đến y
+          behavior: 'smooth' // Cuộn mượt mà
+        });
+      }
+
+      $(document).ready(function () {
+        $('#input_text').text(JSON.stringify(input_data, undefined, 4));
+
+        update_input();
+
+        $('#input_text').on('input', function () {
+          try {
+            input_data = JSON.parse($(this).val()); // Parse JSON từ giá trị nhập vào
+            $('#input_text').text(JSON.stringify(input_data, undefined, 4));
+            update_input();
+
+            console.log(input_data); // Hiển thị dữ liệu parse được trong console (dùng để debug)
+            // Cập nhật UI hoặc thực hiện logic khác với dữ liệu JSON ở đây nếu cần
+          } catch (e) {
+            console.error("Lỗi parse JSON: ", e.message);
+            // Xử lý lỗi parse JSON ở đây nếu cần
+          }
+        });
+      });
+    </script>
+
+  </body>
+
+</html>
