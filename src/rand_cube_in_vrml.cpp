@@ -32,7 +32,7 @@ void process(vector<Point> &points, vector<vector<int>> &faces, int numberCube, 
 
     // bool isInside = false;
     if (checkPointInSidePolygons(randPoint, polys)) {
-      cout << "TRY POINT:" << randPoint.toString() << "\v\v";
+      cout << "TRY POINT:" << randPoint.toString() << "\t\t\t\t\t";
       // isInside = true;
       count++;
       randInsidePoints.push_back(randPoint);
