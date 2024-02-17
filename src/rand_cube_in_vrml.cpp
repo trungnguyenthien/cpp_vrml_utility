@@ -14,7 +14,7 @@
 #include "function/Geometry3D.h"
 
 void process(vector<Point> &points, vector<vector<int>> &faces, int numberCube, float sizeCube) {
-  printMinMaxPoint(points);
+  // printMinMaxPoint(points);
   auto minMaxPoints = getMinMaxPoint(points);
   auto minPoint = minMaxPoints.first;
   auto maxPoint = minMaxPoints.second;
@@ -29,9 +29,10 @@ void process(vector<Point> &points, vector<vector<int>> &faces, int numberCube, 
     auto rx = randomFloat(minMaxPointAtZ.first.x, minMaxPointAtZ.second.x);
     auto ry = randomFloat(minMaxPointAtZ.first.y, minMaxPointAtZ.second.y);
     Point randPoint(rx, ry, rz);
-    cout << "TRY POINT:" << randPoint.toString() << endl;
+
     // bool isInside = false;
     if (checkPointInSidePolygons(randPoint, polys)) {
+      cout << "TRY POINT:" << randPoint.toString() << "\v\v";
       // isInside = true;
       count++;
       randInsidePoints.push_back(randPoint);

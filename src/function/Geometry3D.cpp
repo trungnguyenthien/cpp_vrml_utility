@@ -174,7 +174,7 @@ vector<vector<Point>> findPolygonPath(vector<pair<Point, Point>> connections) {
       visited[i] = true;
       // Xác định path
       if (findNextPoint(allPoints[i], graphEdge, path, visited, allPoints)) {
-        cout << "Found path" << endl;
+        // cout << "Found path" << endl;
         polygons.push_back(path);
       }
     }
@@ -254,8 +254,9 @@ pair<Point, Point> intersectionZ(vector<Point> plane, int z) {
   return pair<Point, Point>(Point(0, 0, 0), Point(0, 0, 0));
 }
 
-bool checkPointInSidePolygon(const Point &point, const vector<Point> &polygonPoints) {
-  // Chuyển đổi điểm và đa giác từ cấu trúc Point sang kiểu CGAL
+bool checkPointInSidePolygon(const Point &point,
+                             const vector<Point> &polygonPoints) {  // Chuyển đổi điểm và đa giác từ
+                                                                    // cấu trúc Point sang kiểu CGAL
   Point_2 cgalPoint(point.x, point.y);
   Polygon_2 polygon;
   for (const auto &p : polygonPoints) {
@@ -264,15 +265,18 @@ bool checkPointInSidePolygon(const Point &point, const vector<Point> &polygonPoi
     }
     polygon.push_back(Point_2(p.x, p.y));
   }
-
-  // Sử dụng hàm CGAL để kiểm tra điểm có nằm bên trong đa giác không
-  return polygon.bounded_side(cgalPoint) == CGAL::ON_BOUNDED_SIDE;
+  try {
+    // Sử dụng hàm CGAL để kiểm tra điểm có nằm bên trong đa giác không
+    return polygon.bounded_side(cgalPoint) == CGAL::ON_BOUNDED_SIDE;
+  } catch (...) {
+    return false;
+  }
 }
 
 bool checkPointInSidePolygons(const Point &point, const vector<vector<Point>> &polygonPoints) {
   for (const auto &p : polygonPoints) {
-    cout << "Polygon :" << p.size() << endl;
-    printVectorPoints(p);
+    // cout << "Polygon :" << p.size() << endl;
+    // printVectorPoints(p);
     if (checkPointInSidePolygon(point, p)) {
       return true;
     }
@@ -283,7 +287,7 @@ bool checkPointInSidePolygons(const Point &point, const vector<vector<Point>> &p
 vector<vector<Point>> polygonAtZ(const vector<Point> &shapePoints,
                                  const vector<vector<int>> &faceSet, int z) {
   vector<Segment> segments;
-  cout << "faceSet " << faceSet.size() << endl;
+  // cout << "faceSet " << faceSet.size() << endl;
   for (auto face : faceSet) {
     try {
       auto facePoint = getFacePoint(shapePoints, face);
