@@ -59,43 +59,46 @@ void removePoint(std::vector<Point> &points) {
   }
 }
 
+// Cấu trúc Point(float x, float y, float z)
 // Giả sử vector {points} có các điểm {A1, A2, A3, A4, C, B1, B2, B3, B4, B5, C, A6, A7, A8, A9}
-// Hãy tách thành 2 vector: { {A1, A2, A3, A4, C, A6, A7, A8, A9 }, {C, B1, B2, B3, B4, B5} }
+// Hãy tách thành 2 vector: { {A1, A2, A3, A4, C, A6, A7, A8, A9 }, {C, B1, B2, B3, B4, B5} } Mỗi
+// vector chỉ có 1 điểm C
 vector<vector<Point>> splitPolygon(const vector<Point> &points, Point C) {
-  vector<vector<Point>> result(2);  // Chuẩn bị 2 vector để chứa kết quả
-  size_t firstCIndex = 0, secondCIndex = 0;
-  bool foundFirstC = false;
+  std::vector<std::vector<Point>> result(2);  // Chuẩn bị 2 vector để chứa kết quả
+  int firstCIndex = -1, secondCIndex = -1;
 
   // Tìm chỉ số của 2 điểm C
-  for (size_t i = 0; i < points.size(); ++i) {
+  for (int i = 0; i < points.size(); ++i) {
     if (points[i] == C) {
-      if (!foundFirstC) {
+      if (firstCIndex == -1) {
         firstCIndex = i;
-        foundFirstC = true;
       } else {
         secondCIndex = i;
-        break;
+        break;  // Tìm thấy 2 điểm C, dừng tìm kiếm
       }
     }
   }
 
-  // Tách vector
-  for (size_t i = 0; i <= secondCIndex; ++i) {
-    if (i <= firstCIndex || i == secondCIndex) {
+  if (firstCIndex != -1 && secondCIndex != -1) {
+    // Tạo vector đầu tiên từ A1 đến C và từ C đến A9
+    for (int i = 0; i < firstCIndex; ++i) {
       result[0].push_back(points[i]);
-    } else {
+    }
+    for (int i = secondCIndex; i < points.size(); ++i) {
+      result[0].push_back(points[i]);
+    }
+
+    // Tạo vector thứ hai từ C đến B5
+    for (int i = firstCIndex; i < secondCIndex; ++i) {
       result[1].push_back(points[i]);
     }
-  }
-  // Thêm phần còn lại của vector vào vector đầu tiên
-  for (size_t i = secondCIndex + 1; i < points.size(); ++i) {
-    result[0].push_back(points[i]);
   }
 
   return result;
 }
 
 vector<vector<Point>> splitPolygon(const vector<Point> &points) {
+  cout << "splitPolygon points.size()" << points.size() << endl;
   // cout << "splitPolygon input " << points.size() << endl;
   int n = points.size();
   // Kiểm tra từng cặp cạnh của đa giác
@@ -110,17 +113,22 @@ vector<vector<Point>> splitPolygon(const vector<Point> &points) {
       // endl;
       Point *ipoint = intersectionPoint(points[i], points[next_i], points[j], points[next_j]);
       if (ipoint != NULL) {
+        cout << "splitPolygon ipoint " << ipoint->toString() << endl;
         auto copyPoints = points;
         auto splitPoint = *ipoint;
         delete ipoint;
         insertPoint(splitPoint, copyPoints, j);
         insertPoint(splitPoint, copyPoints, i);
+        cout << "splitPolygon copyPoints.size() " << copyPoints.size() << endl;
         auto result = splitPolygon(copyPoints, splitPoint);
         // cout << "splitPolygon return " << result.size() << endl;
+        cout << "splitPolygon return result.size() " << points.size() << endl;
+        printVectorVectorPoint(result);
         return result;
       }
     }
   }
+  cout << "splitPolygon return {}" << endl;
   return {};
 }
 
@@ -131,11 +139,16 @@ vector<vector<Point>> simplePolygons(vector<vector<Point>> sourcePolygons) {
   cout << "__simplePolygons() " << sourcePolygons.size() << endl;
   vector<vector<Point>> result;
   for (auto polygon : sourcePolygons) {
+    cout << "simplePolygons Before removePoint " << polygon.size() << endl;
     removePoint(polygon);
+    cout << "simplePolygons After removePoint " << polygon.size() << endl;
     if (isSimplePolygon(polygon)) {
+      cout << "simplePolygons isSimplePolygon = TRUE " << endl;
       result.push_back(polygon);
       continue;
     }
+
+    cout << "simplePolygons = FALSE, start splitPolygon" << endl;
 
     auto splitPolys = splitPolygon(polygon);
     // if(splitPolys.size() > ) {}
@@ -193,7 +206,8 @@ Point *intersectionPoint(const Point &p1, const Point &q1, const Point &p2, cons
       // Điểm giao nhau không nằm ở đầu hoặc cuối của đoạn thẳng
       if (*ipoint != start1 && *ipoint != end1 && *ipoint != start2 && *ipoint != end2) {
         // cout << "intersectionPoint OK" << endl;
-        return new Point(CGAL::to_double(ipoint->x()), CGAL::to_double(ipoint->y()), 0);
+        return new Point(CGAL::to_double(ipoint->x()), CGAL::to_double(ipoint->y()),
+                         CGAL::to_double(p1.z));
       }
     }
   }
