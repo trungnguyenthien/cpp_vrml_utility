@@ -28,18 +28,8 @@ set(executable_sources
 )
 # Link to cli11
 add_subdirectory(modules/cli11)
-add_subdirectory(modules/geos)
 
 find_package(PkgConfig REQUIRED)
-
-pkg_search_module(CAIRO REQUIRED cairo)
-include_directories(${CAIRO_INCLUDE_DIRS})
-link_directories(${CAIRO_LIBRARY_DIRS})
-add_definitions(${CAIRO_CFLAGS_OTHER})
-
-message(STATUS "LOG: CAIRO_INCLUDE_DIRS ${CAIRO_INCLUDE_DIRS}")
-message(STATUS "LOG: CAIRO_LIBRARIES ${CAIRO_LIBRARIES}")
-message(STATUS "LOG: CAIRO_CFLAGS_OTHER ${CAIRO_CFLAGS_OTHER}")
 
 pkg_check_modules(GMP REQUIRED gmp)
 include_directories(${GMP_INCLUDE_DIRS})
@@ -59,14 +49,10 @@ foreach(source ${executable_sources})
     # Tạo target cho mỗi file mã nguồn
     add_executable(${exec_name} ${source} ${SOURCES} ${HEADERS})
     target_include_directories(${exec_name} PRIVATE modules/cli11/include)
-    target_include_directories(${exec_name} PRIVATE modules/geos/include)
 
     target_link_libraries(${exec_name} ${GMP_LIBRARIES})
     # target_link_libraries(${exec_name} CGAL::Core)
     target_link_libraries(${exec_name}  ${CGAL_LIBRARIES})
-
-    # Liên kết thư viện Cairo với target của bạn
-    target_link_libraries(${exec_name} ${CAIRO_LIBRARIES})
 endforeach()
 # target_include_directories(${APP_NAME} PRIVATE modules/cli11/include)
 

@@ -1,7 +1,6 @@
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <CGAL/Polyhedron_3.h>
 #include <CGAL/Polyhedron_incremental_builder_3.h>
-#include <cairo/cairo.h>
 
 #include <CLI/CLI.hpp>
 #include <algorithm>
@@ -12,7 +11,6 @@
 #include "common/Model.h"
 #include "common/StringUtils.h"
 #include "common/VRML.h"
-#include "function/DrawBoard.h"
 #include "function/G4DCM.h"
 #include "function/Geometry3D.h"
 #include "function/WRLHelper.h"
