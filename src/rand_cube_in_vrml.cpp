@@ -12,6 +12,7 @@
 #include "function/DrawBoard.h"
 #include "function/G4DCM.h"
 #include "function/Geometry3D.h"
+#include  <algorithm>
 
 void process(vector<Point> &points, vector<vector<int>> &faces, int numberCube, float sizeCube) {
   // printMinMaxPoint(points);
@@ -59,6 +60,7 @@ void process(vector<Point> &points, vector<vector<int>> &faces, int numberCube, 
 }
 
 int main(int argc, char **argv) {
+  std::srand ( unsigned ( std::time(0) ) );
   CLI::App app{"---"};
   std::string filename = "";
   app.add_option("-f,--file", filename, "Path to input file");
