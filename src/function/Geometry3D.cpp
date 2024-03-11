@@ -48,7 +48,7 @@ void removePoint(std::vector<Point> &points) {
     float angle = angleBetweenVectors(v1, v2);
 
     if ((angle >= 0 && angle <= 1) || (angle >= 359 && angle <= 360)) {
-      cout << "pointsToRemove.push_back " << i << endl;
+      // cout << "pointsToRemove.push_back " << i << endl;
       pointsToRemove.push_back(i);
     }
   }
@@ -98,7 +98,7 @@ vector<vector<Point>> splitPolygon(const vector<Point> &points, Point C) {
 }
 
 vector<vector<Point>> splitPolygon(const vector<Point> &points) {
-  cout << "splitPolygon points.size()" << points.size() << endl;
+  // cout << "splitPolygon points.size()" << points.size() << endl;
   // cout << "splitPolygon input " << points.size() << endl;
   int n = points.size();
   // Kiểm tra từng cặp cạnh của đa giác
@@ -113,17 +113,17 @@ vector<vector<Point>> splitPolygon(const vector<Point> &points) {
       // endl;
       Point *ipoint = intersectionPoint(points[i], points[next_i], points[j], points[next_j]);
       if (ipoint != NULL) {
-        cout << "splitPolygon ipoint " << ipoint->toString() << endl;
+        // cout << "splitPolygon ipoint " << ipoint->toString() << endl;
         auto copyPoints = points;
         auto splitPoint = *ipoint;
         delete ipoint;
         insertPoint(splitPoint, copyPoints, j);
         insertPoint(splitPoint, copyPoints, i);
-        cout << "splitPolygon copyPoints.size() " << copyPoints.size() << endl;
+        // cout << "splitPolygon copyPoints.size() " << copyPoints.size() << endl;
         auto result = splitPolygon(copyPoints, splitPoint);
         // cout << "splitPolygon return " << result.size() << endl;
-        cout << "splitPolygon return result.size() " << points.size() << endl;
-        printVectorVectorPoint(result);
+        // cout << "splitPolygon return result.size() " << points.size() << endl;
+        // printVectorVectorPoint(result);
         return result;
       }
     }
@@ -136,19 +136,19 @@ vector<vector<Point>> splitPolygon(const vector<Point> &points) {
 // cắt nhau hay không (FALSE là có tự cắt). Nếu {sourcePolygon} có tự cắt nhau như hình chữ số 8.
 // Hãy tách thành nhiều polygon.
 vector<vector<Point>> simplePolygons(vector<vector<Point>> sourcePolygons) {
-  cout << "__simplePolygons() " << sourcePolygons.size() << endl;
+  // cout << "__simplePolygons() " << sourcePolygons.size() << endl;
   vector<vector<Point>> result;
   for (auto polygon : sourcePolygons) {
-    cout << "simplePolygons Before removePoint " << polygon.size() << endl;
+    // cout << "simplePolygons Before removePoint " << polygon.size() << endl;
     removePoint(polygon);
-    cout << "simplePolygons After removePoint " << polygon.size() << endl;
+    // cout << "simplePolygons After removePoint " << polygon.size() << endl;
     if (isSimplePolygon(polygon)) {
-      cout << "simplePolygons isSimplePolygon = TRUE " << endl;
+      // cout << "simplePolygons isSimplePolygon = TRUE " << endl;
       result.push_back(polygon);
       continue;
     }
 
-    cout << "simplePolygons = FALSE, start splitPolygon" << endl;
+    // cout << "simplePolygons = FALSE, start splitPolygon" << endl;
 
     auto splitPolys = splitPolygon(polygon);
     // if(splitPolys.size() > ) {}
@@ -262,7 +262,7 @@ float randomFloat(float min, float max) {
 
   // srand(static_cast<unsigned>(time(0)));
   // auto result = min + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (max - min)));
-  cout << "randomFloat(" << min << ", " << max << ") = " << result << endl;
+  // cout << "randomFloat(" << min << ", " << max << ") = " << result << endl;
   return result;
 }
 
@@ -286,7 +286,7 @@ Point randomPoint(float xMin, float xMax, float yMin, float yMax, float zMin, fl
 
 // Hàm tìm min và max point
 pair<Point, Point> getMinMaxPoint1(const vector<Point> &points) {
-  cout << "getMinMaxPoint1 " << points.size() << endl;
+  // cout << "getMinMaxPoint1 " << points.size() << endl;
   // Khởi tạo min và max points với giá trị cực đại và cực tiểu
   Point minPoint(std::numeric_limits<float>::max(), std::numeric_limits<float>::max(),
                  std::numeric_limits<float>::max());
@@ -303,24 +303,23 @@ pair<Point, Point> getMinMaxPoint1(const vector<Point> &points) {
     maxPoint.y = std::max(maxPoint.y, point.y);
     maxPoint.z = std::max(maxPoint.z, point.z);
   }
-  cout << "output getMinMaxPoint1 " << minPoint.toStringXY() << " " << maxPoint.toStringXY()
-       << endl;
+  // cout << "output getMinMaxPoint1 " << minPoint.toStringXY() << " " << maxPoint.toStringXY() << endl;
   return {minPoint, maxPoint};
 }
 
 pair<Point, Point> getMinMaxPoint2(const vector<vector<Point>> &points) {
-  cout << "getMinMaxPoint2 " << points.size() << endl;
+  // cout << "getMinMaxPoint2 " << points.size() << endl;
   // Khởi tạo min và max với giá trị cực đại và cực tiểu
   Point minPoint(numeric_limits<float>::max(), numeric_limits<float>::max(),
                  numeric_limits<float>::max());
   Point maxPoint(numeric_limits<float>::lowest(), numeric_limits<float>::lowest(),
                  numeric_limits<float>::lowest());
-  cout << "Find min max in Points (size) " << points.size() << endl;
+  // cout << "Find min max in Points (size) " << points.size() << endl;
   // Duyệt qua tất cả các vector chứa điểm
   for (const auto &pointVector : points) {
     // Duyệt qua từng điểm trong vector
     for (const auto &point : pointVector) {
-      cout << "Find min max in pointVector (size) " << points.size() << endl;
+      // cout << "Find min max in pointVector (size) " << points.size() << endl;
       // Cập nhật min và max cho mỗi trục
       minPoint.x = min(minPoint.x, point.x);
       minPoint.y = min(minPoint.y, point.y);
@@ -332,8 +331,7 @@ pair<Point, Point> getMinMaxPoint2(const vector<vector<Point>> &points) {
     }
   }
 
-  cout << "output getMinMaxPoint2 " << minPoint.toStringXY() << " " << maxPoint.toStringXY()
-       << endl;
+  // cout << "output getMinMaxPoint2 " << minPoint.toStringXY() << " " << maxPoint.toStringXY() << endl;
 
   return {minPoint, maxPoint};
 }
@@ -507,33 +505,32 @@ pair<Point, Point> intersectionZ(vector<Point> plane, int z) {
 }
 
 bool checkPointInSidePolygon(const Point &point, const vector<Point> &polygonPoints) {
-  cout << "checkPointInSidePolygon polygonPoints.size() = " << polygonPoints.size() << endl;
+  // cout << "checkPointInSidePolygon polygonPoints.size() = " << polygonPoints.size() << endl;
   // Chuyển đổi điểm và đa giác từ
   // cấu trúc Point sang kiểu CGAL
-  cout << "polygonPoints Origins " << endl;
-  printVectorPoints(polygonPoints);
+  // cout << "polygonPoints Origins " << endl;
+  // printVectorPoints(polygonPoints);
   if (!isSimplePolygon(polygonPoints)) {
-    cout << "\nNOT SIMPLE POLYGON" << endl;
+    // cout << "\nNOT SIMPLE POLYGON" << endl;
     // printVectorPoints(polygonPoints);
 
     auto poly2s = simplePolygons({polygonPoints});
-    cout << "checkPointInSidePolygon poly2s.size() = " << poly2s.size() << endl;
+    // cout << "checkPointInSidePolygon poly2s.size() = " << poly2s.size() << endl;
     int countPoly2 = 0;
     for (auto p2 : poly2s) {
-      cout << "checkPointInSidePolygon polygonPoints After make Simple " << countPoly2++ << "  "
-           << endl;
-      cout << "checkPointInSidePolygon p2.size() After make Simple " << p2.size() << "  " << endl;
-      printVectorPoints(p2);
+      // cout << "checkPointInSidePolygon polygonPoints After make Simple " << countPoly2++ << "  "
+      // << endl; cout << "checkPointInSidePolygon p2.size() After make Simple " << p2.size() << "
+      // " << endl; printVectorPoints(p2);
       if (checkPointInSidePolygon(point, p2)) {
-        cout << "checkPointInSidePolygon TRUE" << endl;
+        // cout << "checkPointInSidePolygon TRUE" << endl;
         return true;
       }
     }
-    cout << "checkPointInSidePolygon FALSE" << endl;
+    // cout << "checkPointInSidePolygon FALSE" << endl;
     return false;
   }
 
-  cout << "Simple Polygons" << endl;
+  // cout << "Simple Polygons" << endl;
   Point_2 cgalPoint(point.x, point.y);
   Polygon_2 polygon;
   for (const auto &p : polygonPoints) {
@@ -552,7 +549,7 @@ bool checkPointInSidePolygon(const Point &point, const vector<Point> &polygonPoi
 
 bool checkPointInSidePolygons(const Point &point, const vector<vector<Point>> &polygonPoints) {
   for (const auto &p : polygonPoints) {
-    cout << "Polygon :" << p.size() << endl;
+    // cout << "Polygon :" << p.size() << endl;
     // printVectorPoints(p);
     if (checkPointInSidePolygon(point, p)) {
       return true;

@@ -25,35 +25,36 @@ void process(vector<Point> &points, vector<vector<int>> &faces, int numberCube, 
   // vector<vector<Point>> polys = polygonAtZ(points, faces, rz);
   // printVectorVectorPoint(polys);
 
-  // while (count < numberCube) {
-  // -6103.69
+  while (count < numberCube) {
+    // -6103.69
 
-  // float rz = randomFloat(minPoint.z, maxPoint.z);
-  float rz = -6028.69;
+    float rz = randomFloat(minPoint.z, maxPoint.z);
+    // float rz = -6028.69;
 
-  vector<vector<Point>> polys = polygonAtZ(points, faces, rz);
-  auto minMaxPointAtZ = getMinMaxPoint2(polys);
+    vector<vector<Point>> polys = polygonAtZ(points, faces, rz);
+    auto minMaxPointAtZ = getMinMaxPoint2(polys);
 
-  cout << "RAND Z " << rz << endl;
-  // while (true) {  // START WHILE
-  auto rx = randomFloat(minMaxPointAtZ.first.x, minMaxPointAtZ.second.x);
-  auto ry = randomFloat(minMaxPointAtZ.first.y, minMaxPointAtZ.second.y);
-  Point randPoint(rx, ry, rz);
-  cout << "rx = " << rx << ", ry = " << ry << ", rz = " << rz << endl;
-  cout << "TEST POINT:" << randPoint.toStringXY() << "\t\t\t\t\t";
-  // bool isInside = false;
-  if (checkPointInSidePolygons(randPoint, polys)) {
-    // isInside = true;
-    count++;
-    randInsidePoints.push_back(randPoint);
-    cout << "✅" << count << endl;
-    // break;
-  } else {
-    cout << "❌" << endl;
-    // break;
+    
+    while (true) {  // START WHILE
+      auto rx = randomFloat(minMaxPointAtZ.first.x, minMaxPointAtZ.second.x);
+      auto ry = randomFloat(minMaxPointAtZ.first.y, minMaxPointAtZ.second.y);
+      Point randPoint(rx, ry, rz);
+      // cout << "rx = " << rx << ", ry = " << ry << ", rz = " << rz << endl;
+      cout << "-- RAND Z " << rz << "\t\t";
+      cout << randPoint.toStringXY() << "\t\t";
+      // bool isInside = false;
+      if (checkPointInSidePolygons(randPoint, polys)) {
+        // isInside = true;
+        count++;
+        randInsidePoints.push_back(randPoint);
+        cout << "✅\t\t" << count << endl;
+        break;
+      } else {
+        cout << "❌" << endl;
+        // break;
+      }
+    }  // END WHILE
   }
-  // }  // END WHILE
-  // }
 }
 
 int main(int argc, char **argv) {
