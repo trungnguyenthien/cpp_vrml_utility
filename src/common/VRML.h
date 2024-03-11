@@ -41,15 +41,15 @@ public:
   vector<Point> polylines;
 };
 
-bool doIntersect(Point p1, Point q1, Point p2, Point q2);
+// bool doIntersect(Point p1, Point q1, Point p2, Point q2);
 
-bool isSelfCross(vector<Point> polyPoints);
+// bool isSelfCross(vector<Point> polyPoints);
 
-bool isSelfCross(set<vector<Point>> setPolyPoints);
+// bool isSelfCross(set<vector<Point>> setPolyPoints);
 
-bool is2PolyCross(vector<Point> poly1, vector<Point> poly2);
+// bool is2PolyCross(vector<Point> poly1, vector<Point> poly2);
 
-bool is2PolyCross(set<vector<Point>> setPoly);
+// bool is2PolyCross(set<vector<Point>> setPoly);
 
 bool isNumberArray(string str);
 Point parsePoint(string token);

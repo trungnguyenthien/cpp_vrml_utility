@@ -1,7 +1,7 @@
 #ifndef COMMON_MODEL_H_
 #define COMMON_MODEL_H_
 #include <algorithm>
-#include <iomanip>  // Cho std::setprecision
+#include <iomanip>
 #include <iostream>
 #include <map>
 #include <set>
@@ -19,13 +19,23 @@ struct Point {
 
   std::string toString() const {
     std::ostringstream oss;
-    oss << "[" << x << ", " << y << ", " << z << "]";
+    oss << std::fixed << std::setprecision(3);
+    oss << "[" << std::setw(8) << x << ", " << std::setw(8) << y << ", " << std::setw(8) << z
+        << "]";
     return oss.str();
   }
 
   std::string toStringXY() const {
     std::ostringstream oss;
-    oss << "(" << x << ", " << y << ")";
+    oss << std::fixed << std::setprecision(3);
+    oss << "[" << std::setw(8) << x << "," << std::setw(8) << y << "]";
+    return oss.str();
+  }
+
+  std::string toStringXY(int xn) const {
+    std::ostringstream oss;
+    oss << std::fixed << std::setprecision(3);
+    oss << "" << std::setw(8) << x * xn << "," << std::setw(8) << y * xn;
     return oss.str();
   }
 

@@ -44,9 +44,10 @@ void printVectorVectorInt(const std::vector<std::vector<int>> &ints) {
 }
 
 void printVectorVectorPoint(const vector<vector<Point>> &points) {
-  for (const auto &vec : points) {   // Duyệt qua từng vector<Point>
+  for (const auto &vec : points) {  // Duyệt qua từng vector<Point>
+    cout << "-------------" << endl;
     for (const auto &point : vec) {  // Duyệt qua từng Point trong vector
-      std::cout << "\t(" << point.x << ", " << point.y << ", " << point.z << ") ";
+      std::cout << point.toString() << "," << endl;
     }
     std::cout << std::endl;  // In dấu xuống dòng sau mỗi vector<Point>
   }

@@ -24,6 +24,7 @@ typedef CGAL::Partition_traits_2<Kernel> Traits;
 // typedef Polyhedron::Halfedge_around_facet_circulator Halfedge_facet_circulator;
 // typedef Kernel::Point_3 CGALPoint;
 typedef Kernel::Segment_3 Segment_3;
+typedef Kernel::Segment_2 Segment_2;
 typedef Kernel::Plane_3 Plane_3;
 typedef Kernel::Point_3 Point_3;
 typedef CGAL::Object Object;
@@ -56,15 +57,23 @@ vector<vector<Point>> findPolygonPath(vector<pair<Point, Point>> connections);
 // Return (minPoint, maxPoint) của các point trong {points}
 // Trong đó minPoint(xMin, yMin, zMin), maxPoint(xMax, yMax, zMax)
 // Cấu trúc Point(float x, float y, float z)
-pair<Point, Point> getMinMaxPoint(const vector<vector<Point>> &points);
+pair<Point, Point> getMinMaxPoint2(const vector<vector<Point>> &points);
 
 // Return (minPoint, maxPoint) của các point trong {points}
 // Trong đó minPoint(xMin, yMin, zMin), maxPoint(xMax, yMax, zMax)
 // Cấu trúc Point(float x, float y, float z)
-pair<Point, Point> getMinMaxPoint(const vector<Point> &points);
+pair<Point, Point> getMinMaxPoint1(const vector<Point> &points);
 
 // Tạo ngẫu nhiên Point(float x, float y, float z) trong khoảng min-max cho trước.
 Point randomPoint(float xMin, float yMin, float zMin, float xMax, float yMax, float zMax);
+
+void insertPoint(const Point p, vector<Point> &points, int afterIndex);
+
+Point *intersectionPoint(const Point &p1, const Point &q1, const Point &p2, const Point &q2);
+
+bool doIntersect(const Point &p1, const Point &q1, const Point &p2, const Point &q2);
+
+bool isSimplePolygon(const vector<Point> &points);
 
 float randomFloat(float min, float max);
 #endif  // FUNCTION_GEOMETRY3D_H_

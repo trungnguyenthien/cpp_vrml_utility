@@ -10,103 +10,103 @@
 #include "FileUtils.h"
 #include "StringUtils.h"
 
-// Hàm kiểm tra sự giao nhau của hai đoạn thẳng
-bool doIntersect(Point p1, Point q1, Point p2, Point q2) {
-  // Hàm phụ để kiểm tra sự sắp xếp theo chiều của ba điểm
-  // và kiểm tra xem điểm q có nằm trên đoạn thẳng pr không
-  auto onSegment = [](Point p, Point q, Point r) {
-    if (q.x <= max(p.x, r.x) && q.x >= min(p.x, r.x) && q.y <= max(p.y, r.y) &&
-        q.y >= min(p.y, r.y))
-      return true;
-    return false;
-  };
+// // Hàm kiểm tra sự giao nhau của hai đoạn thẳng
+// bool doIntersect(Point p1, Point q1, Point p2, Point q2) {
+//   // Hàm phụ để kiểm tra sự sắp xếp theo chiều của ba điểm
+//   // và kiểm tra xem điểm q có nằm trên đoạn thẳng pr không
+//   auto onSegment = [](Point p, Point q, Point r) {
+//     if (q.x <= max(p.x, r.x) && q.x >= min(p.x, r.x) && q.y <= max(p.y, r.y) &&
+//         q.y >= min(p.y, r.y))
+//       return true;
+//     return false;
+//   };
 
-  // Hàm phụ để tìm hướng xoay: trả về các giá trị khác nhau
-  // cho các trường hợp Colinear (0), Clockwise (1) và Counterclockwise (2)
-  auto orientation = [](Point p, Point q, Point r) {
-    float val = (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
-    if (val == 0)
-      return 0;                // colinear
-    return (val > 0) ? 1 : 2;  // clock or counterclock wise
-  };
+//   // Hàm phụ để tìm hướng xoay: trả về các giá trị khác nhau
+//   // cho các trường hợp Colinear (0), Clockwise (1) và Counterclockwise (2)
+//   auto orientation = [](Point p, Point q, Point r) {
+//     float val = (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
+//     if (val == 0)
+//       return 0;                // colinear
+//     return (val > 0) ? 1 : 2;  // clock or counterclock wise
+//   };
 
-  // Kiểm tra bốn điều kiện của sự giao nhau
-  int o1 = orientation(p1, q1, p2);
-  int o2 = orientation(p1, q1, q2);
-  int o3 = orientation(p2, q2, p1);
-  int o4 = orientation(p2, q2, q1);
+//   // Kiểm tra bốn điều kiện của sự giao nhau
+//   int o1 = orientation(p1, q1, p2);
+//   int o2 = orientation(p1, q1, q2);
+//   int o3 = orientation(p2, q2, p1);
+//   int o4 = orientation(p2, q2, q1);
 
-  // Trường hợp chính: các điểm cắt nhau không phải là đầu mút
-  if (o1 != o2 && o3 != o4)
-    return true;
+//   // Trường hợp chính: các điểm cắt nhau không phải là đầu mút
+//   if (o1 != o2 && o3 != o4)
+//     return true;
 
-  // Trường hợp đặc biệt: các điểm colinear và giao nhau tại đầu mút
-  // Được loại bỏ vì yêu cầu của câu hỏi
+//   // Trường hợp đặc biệt: các điểm colinear và giao nhau tại đầu mút
+//   // Được loại bỏ vì yêu cầu của câu hỏi
 
-  return false;  // Không có trường hợp giao nhau
-}
+//   return false;  // Không có trường hợp giao nhau
+// }
 
-// {polyPoints} là tập các Point(float x, float y, float z) theo thứ tự tạo thành 1 polygon
-// Return TRUE nếu polygon có 2 cạnh bất kỳ cắt nhau tại điểm giữa mỗi cạnh.
-// Chú ý: điểm cắt nhau phải khác điểm đầu và cuối mỗi cạnh
-bool isSelfCross(vector<Point> polyPoints) {
-  int n = polyPoints.size();
-  for (int i = 0; i < n; i++) {
-    for (int j = i + 1; j < n; j++) {
-      // Bỏ qua kiểm tra giao nhau cho các cạnh kề nhau và cặp cạnh cuối cùng với cạnh đầu tiên
-      if (abs(i - j) > 1 && i != 0 && j != n - 1) {
-        if (doIntersect(polyPoints[i], polyPoints[(i + 1) % n], polyPoints[j],
-                        polyPoints[(j + 1) % n])) {
-          return true;
-        }
-      }
-    }
-  }
-  return false;
-}
+// // {polyPoints} là tập các Point(float x, float y, float z) theo thứ tự tạo thành 1 polygon
+// // Return TRUE nếu polygon có 2 cạnh bất kỳ cắt nhau tại điểm giữa mỗi cạnh.
+// // Chú ý: điểm cắt nhau phải khác điểm đầu và cuối mỗi cạnh
+// bool isSelfCross(vector<Point> polyPoints) {
+//   int n = polyPoints.size();
+//   for (int i = 0; i < n; i++) {
+//     for (int j = i + 1; j < n; j++) {
+//       // Bỏ qua kiểm tra giao nhau cho các cạnh kề nhau và cặp cạnh cuối cùng với cạnh đầu tiên
+//       if (abs(i - j) > 1 && i != 0 && j != n - 1) {
+//         if (doIntersect(polyPoints[i], polyPoints[(i + 1) % n], polyPoints[j],
+//                         polyPoints[(j + 1) % n])) {
+//           return true;
+//         }
+//       }
+//     }
+//   }
+//   return false;
+// }
 
-bool isSelfCross(set<vector<Point>> setPolyPoints) {
-  for (auto poly : setPolyPoints) {
-    if (isSelfCross(poly)) {
-      return true;
-    }
-  }
+// bool isSelfCross(set<vector<Point>> setPolyPoints) {
+//   for (auto poly : setPolyPoints) {
+//     if (isSelfCross(poly)) {
+//       return true;
+//     }
+//   }
 
-  return false;
-}
+//   return false;
+// }
 
-bool is2PolyCross(vector<Point> poly1, vector<Point> poly2) {
-  if (poly1.size() < 2 || poly2.size() < 2) {
-    return false;
-  }
-  poly1.push_back(poly1[0]);
-  poly2.push_back(poly2[0]);
+// bool is2PolyCross(vector<Point> poly1, vector<Point> poly2) {
+//   if (poly1.size() < 2 || poly2.size() < 2) {
+//     return false;
+//   }
+//   poly1.push_back(poly1[0]);
+//   poly2.push_back(poly2[0]);
 
-  for (int i1 = 0; i1 < poly1.size() - 1; i1++) {
-    for (int i2 = 0; i2 < poly2.size() - 1; i2++) {
-      if (doIntersect(poly1[i1], poly1[i1 + 1], poly2[i2], poly2[i2 + 1])) {
-        return true;
-      }
-    }
-  }
+//   for (int i1 = 0; i1 < poly1.size() - 1; i1++) {
+//     for (int i2 = 0; i2 < poly2.size() - 1; i2++) {
+//       if (doIntersect(poly1[i1], poly1[i1 + 1], poly2[i2], poly2[i2 + 1])) {
+//         return true;
+//       }
+//     }
+//   }
 
-  return false;
-}
+//   return false;
+// }
 
-bool is2PolyCross(set<vector<Point>> setPoly) {
-  vector<vector<Point>> vectorPoly;
-  for (auto poly : setPoly) {
-    vectorPoly.push_back(poly);
-  }
+// bool is2PolyCross(set<vector<Point>> setPoly) {
+//   vector<vector<Point>> vectorPoly;
+//   for (auto poly : setPoly) {
+//     vectorPoly.push_back(poly);
+//   }
 
-  for (int i = 0; i < vectorPoly.size() - 1; i++) {
-    if (is2PolyCross(vectorPoly[i], vectorPoly[i + 1])) {
-      return true;
-    }
-  }
+//   for (int i = 0; i < vectorPoly.size() - 1; i++) {
+//     if (is2PolyCross(vectorPoly[i], vectorPoly[i + 1])) {
+//       return true;
+//     }
+//   }
 
-  return false;
-}
+//   return false;
+// }
 
 // Nếu {vertices1} và {vertices2} có 1 set<int> giống nhau thì return true
 bool hasCommonEdge(set<set<int>> vertices1, set<set<int>> vertices2) {

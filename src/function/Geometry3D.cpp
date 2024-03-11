@@ -1,5 +1,7 @@
 #include "Geometry3D.h"
 
+#include <algorithm>
+#include <initializer_list>
 #include <iostream>
 #include <limits>
 #include <map>
@@ -12,13 +14,242 @@
 #include "../common/Debug.h"
 #include "../common/VRML.h"
 
-float randomFloat(float min, float max) {
-  // Mersenne Twister: Một bộ sinh số ngẫu nhiên tốt cho mục đích tổng quát
-  std::mt19937 gen(std::random_device{}());
-  // Phân phối đều trong khoảng [min, max]
-  std::uniform_real_distribution<float> dis(min, max);
+// Hàm tính vector từ 2 điểm
+Point vectorBetweenPoints(const Point &from, const Point &to) {
+  return Point(to.x - from.x, to.y - from.y, to.z - from.z);
+}
 
-  return dis(gen);
+// Hàm tính độ dài của vector
+float vectorLength(const Point &v) { return sqrt(v.x * v.x + v.y * v.y + v.z * v.z); }
+
+// Hàm tính tích vô hướng của 2 vector
+float dotProduct(const Point &v1, const Point &v2) {
+  return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+}
+
+// Hàm tính góc giữa 2 vector (trả về đơn vị độ)
+float angleBetweenVectors(const Point &v1, const Point &v2) {
+  float dot = dotProduct(v1, v2);
+  float lengthProduct = vectorLength(v1) * vectorLength(v2);
+  float cosAngle = dot / lengthProduct;
+  return acos(cosAngle) * (180 / M_PI);
+}
+
+// {points} là tập điểm theo thứ tự của một polyline
+// Giả sử có các điểm sau: A, B, C, D, E, F, G, H, I, J, K, L
+// Nếu góc C và G có số đo góc trong khoảng [0, 1] độ và [359, 360] độ thì loại bỏ 2 điểm C và G.
+// Kết quả mảng {points} sau khi xử lý là A, B, D, E, F, H, I, J, K, L
+void removePoint(std::vector<Point> &points) {
+  std::vector<size_t> pointsToRemove;
+
+  for (size_t i = 1; i < points.size() - 1; ++i) {
+    Point v1 = vectorBetweenPoints(points[i - 1], points[i]);
+    Point v2 = vectorBetweenPoints(points[i], points[i + 1]);
+    float angle = angleBetweenVectors(v1, v2);
+
+    if ((angle >= 0 && angle <= 1) || (angle >= 359 && angle <= 360)) {
+      cout << "pointsToRemove.push_back " << i << endl;
+      pointsToRemove.push_back(i);
+    }
+  }
+
+  // Loại bỏ các điểm từ cuối danh sách để không làm thay đổi chỉ số của các điểm cần xóa tiếp theo
+  for (auto it = pointsToRemove.rbegin(); it != pointsToRemove.rend(); ++it) {
+    points.erase(points.begin() + *it);
+  }
+}
+
+// Giả sử vector {points} có các điểm {A1, A2, A3, A4, C, B1, B2, B3, B4, B5, C, A6, A7, A8, A9}
+// Hãy tách thành 2 vector: { {A1, A2, A3, A4, C, A6, A7, A8, A9 }, {C, B1, B2, B3, B4, B5} }
+vector<vector<Point>> splitPolygon(const vector<Point> &points, Point C) {
+  vector<vector<Point>> result(2);  // Chuẩn bị 2 vector để chứa kết quả
+  size_t firstCIndex = 0, secondCIndex = 0;
+  bool foundFirstC = false;
+
+  // Tìm chỉ số của 2 điểm C
+  for (size_t i = 0; i < points.size(); ++i) {
+    if (points[i] == C) {
+      if (!foundFirstC) {
+        firstCIndex = i;
+        foundFirstC = true;
+      } else {
+        secondCIndex = i;
+        break;
+      }
+    }
+  }
+
+  // Tách vector
+  for (size_t i = 0; i <= secondCIndex; ++i) {
+    if (i <= firstCIndex || i == secondCIndex) {
+      result[0].push_back(points[i]);
+    } else {
+      result[1].push_back(points[i]);
+    }
+  }
+  // Thêm phần còn lại của vector vào vector đầu tiên
+  for (size_t i = secondCIndex + 1; i < points.size(); ++i) {
+    result[0].push_back(points[i]);
+  }
+
+  return result;
+}
+
+vector<vector<Point>> splitPolygon(const vector<Point> &points) {
+  // cout << "splitPolygon input " << points.size() << endl;
+  int n = points.size();
+  // Kiểm tra từng cặp cạnh của đa giác
+  for (int i = 0; i < n; ++i) {
+    for (int j = i + 1; j < n; ++j) {
+      int next_i = (i + 1) % n;
+      int next_j = (j + 1) % n;
+      // Không kiểm tra cạnh kề
+      if (i == j || next_i == j || i == next_j || (i == 0 && next_j == n - 1))
+        continue;
+      // cout << "check point [" << i << " " << next_i << "] x [" << j << " " << next_j << "]" <<
+      // endl;
+      Point *ipoint = intersectionPoint(points[i], points[next_i], points[j], points[next_j]);
+      if (ipoint != NULL) {
+        auto copyPoints = points;
+        auto splitPoint = *ipoint;
+        delete ipoint;
+        insertPoint(splitPoint, copyPoints, j);
+        insertPoint(splitPoint, copyPoints, i);
+        auto result = splitPolygon(copyPoints, splitPoint);
+        // cout << "splitPolygon return " << result.size() << endl;
+        return result;
+      }
+    }
+  }
+  return {};
+}
+
+// Sử dụng hàm `bool isSimplePolygon(const vector<Point> &points)` để kiểm tra {sourcePolygon} có tự
+// cắt nhau hay không (FALSE là có tự cắt). Nếu {sourcePolygon} có tự cắt nhau như hình chữ số 8.
+// Hãy tách thành nhiều polygon.
+vector<vector<Point>> simplePolygons(vector<vector<Point>> sourcePolygons) {
+  cout << "__simplePolygons() " << sourcePolygons.size() << endl;
+  vector<vector<Point>> result;
+  for (auto polygon : sourcePolygons) {
+    removePoint(polygon);
+    if (isSimplePolygon(polygon)) {
+      result.push_back(polygon);
+      continue;
+    }
+
+    auto splitPolys = splitPolygon(polygon);
+    // if(splitPolys.size() > ) {}
+    auto result2 = simplePolygons(splitPolys);
+    for (auto p : result2) {
+      result.push_back(p);
+    }
+  }
+  return result;
+}
+
+// Hàm để kiểm tra hướng của ba điểm: p, q, r.
+// Trả về 0 nếu colinear, 1 nếu clockwise, -1 nếu counterclockwise
+int orientation(const Point &p, const Point &q, const Point &r) {
+  float val = (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
+  if (val == 0)
+    return 0;                 // colinear
+  return (val > 0) ? 1 : -1;  // clock or counterclock wise
+}
+
+bool onSegment(const Point &p, const Point &q, const Point &r) {
+  return (q.x <= std::max(p.x, r.x) && q.x >= std::min(p.x, r.x) && q.y <= std::max(p.y, r.y) &&
+          q.y >= std::min(p.y, r.y));
+}
+
+// Insert {p} sau vị trí {afterIndex}
+void insertPoint(const Point p, vector<Point> &points, int afterIndex) {
+  // Kiểm tra xem chỉ số có hợp lệ không
+  if (afterIndex >= 0 && afterIndex < points.size()) {
+    // Sử dụng phương thức insert() của vector để chèn điểm
+    // Lưu ý: iterator trỏ đến vị trí afterIndex + 1, vì chúng ta muốn chèn sau afterIndex
+    points.insert(points.begin() + afterIndex + 1, p);
+  } else {
+    std::cout << "Index out of range. Point not inserted." << std::endl;
+  }
+}
+
+// Tìm điểm giao nhau của đoạn (segment) a và b.
+// Nếu a và b không giao nhau hoặc giao tại điểm đầu hoặc cuối đoạn thì trả về NULL
+Point *intersectionPoint(const Point &p1, const Point &q1, const Point &p2, const Point &q2) {
+  // Chuyển đổi Point sang Point_2 của CGAL
+  Point_2 start1(p1.x, p1.y), end1(q1.x, q1.y);
+  Point_2 start2(p2.x, p2.y), end2(q2.x, q2.y);
+
+  // Tạo các đoạn thẳng từ điểm
+  Segment_2 seg1(start1, end1), seg2(start2, end2);
+
+  // Kiểm tra giao nhau
+  auto result = CGAL::intersection(seg1, seg2);
+
+  if (result) {
+    // cout << "intersectionPoint if (result) {" << endl;
+    // Nếu có giao nhau, kiểm tra loại giao nhau
+    if (const Point_2 *ipoint = boost::get<Point_2>(&*result)) {
+      // Điểm giao nhau không nằm ở đầu hoặc cuối của đoạn thẳng
+      if (*ipoint != start1 && *ipoint != end1 && *ipoint != start2 && *ipoint != end2) {
+        // cout << "intersectionPoint OK" << endl;
+        return new Point(CGAL::to_double(ipoint->x()), CGAL::to_double(ipoint->y()), 0);
+      }
+    }
+  }
+  // cout << "intersectionPoint NULL" << endl;
+  return nullptr;
+}
+// Hàm kiểm tra xem hai đoạn thẳng có giao nhau không
+bool doIntersect(const Point &p1, const Point &q1, const Point &p2, const Point &q2) {
+  // Tìm bốn hướng cho hai cặp điểm và đoạn thẳng
+  int o1 = orientation(p1, q1, p2);
+  int o2 = orientation(p1, q1, q2);
+  int o3 = orientation(p2, q2, p1);
+  int o4 = orientation(p2, q2, q1);
+
+  // Kiểm tra điều kiện chung
+  if (o1 != o2 && o3 != o4)
+    return true;
+
+  return false;
+}
+
+// Kiểm tra và xử lý đa giác:
+// Return TRUE nếu: đa giác không tự giao và không có cạnh nào cắt nhau hoặc chồng lên nhau
+// Không sử dụng thư viện CGAL
+bool isSimplePolygon(const vector<Point> &points) {
+  int n = points.size();
+  // Kiểm tra từng cặp cạnh của đa giác
+  for (int i = 0; i < n; ++i) {
+    for (int j = i + 1; j < n; ++j) {
+      int next_i = (i + 1) % n;
+      int next_j = (j + 1) % n;
+      // Không kiểm tra cạnh kề
+      if (i == j || next_i == j || i == next_j || (i == 0 && next_j == n - 1))
+        continue;
+      if (doIntersect(points[i], points[next_i], points[j], points[next_j])) {
+        // cout << "n = " << n << ", i = " << i << ", j = " << j << ", next_i = " << next_i
+        //      << ", next_j =" << next_j << endl;
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
+float randomFloat(float min, float max) {
+  std::vector<float> numbers;
+  for (float num = min; num < max; num += 0.01f) {
+    numbers.push_back(num);
+  }
+  std::random_shuffle(numbers.begin(), numbers.end());
+  auto result = numbers.front();
+
+  // srand(static_cast<unsigned>(time(0)));
+  // auto result = min + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (max - min)));
+  cout << "randomFloat(" << min << ", " << max << ") = " << result << endl;
+  return result;
 }
 
 Point randomPoint(float xMin, float xMax, float yMin, float yMax, float zMin, float zMax) {
@@ -40,7 +271,8 @@ Point randomPoint(float xMin, float xMax, float yMin, float yMax, float zMin, fl
 }
 
 // Hàm tìm min và max point
-pair<Point, Point> getMinMaxPoint(const vector<Point> &points) {
+pair<Point, Point> getMinMaxPoint1(const vector<Point> &points) {
+  cout << "getMinMaxPoint1 " << points.size() << endl;
   // Khởi tạo min và max points với giá trị cực đại và cực tiểu
   Point minPoint(std::numeric_limits<float>::max(), std::numeric_limits<float>::max(),
                  std::numeric_limits<float>::max());
@@ -57,21 +289,24 @@ pair<Point, Point> getMinMaxPoint(const vector<Point> &points) {
     maxPoint.y = std::max(maxPoint.y, point.y);
     maxPoint.z = std::max(maxPoint.z, point.z);
   }
-
+  cout << "output getMinMaxPoint1 " << minPoint.toStringXY() << " " << maxPoint.toStringXY()
+       << endl;
   return {minPoint, maxPoint};
 }
 
-pair<Point, Point> getMinMaxPoint(const vector<vector<Point>> &points) {
+pair<Point, Point> getMinMaxPoint2(const vector<vector<Point>> &points) {
+  cout << "getMinMaxPoint2 " << points.size() << endl;
   // Khởi tạo min và max với giá trị cực đại và cực tiểu
   Point minPoint(numeric_limits<float>::max(), numeric_limits<float>::max(),
                  numeric_limits<float>::max());
   Point maxPoint(numeric_limits<float>::lowest(), numeric_limits<float>::lowest(),
                  numeric_limits<float>::lowest());
-
+  cout << "Find min max in Points (size) " << points.size() << endl;
   // Duyệt qua tất cả các vector chứa điểm
   for (const auto &pointVector : points) {
     // Duyệt qua từng điểm trong vector
     for (const auto &point : pointVector) {
+      cout << "Find min max in pointVector (size) " << points.size() << endl;
       // Cập nhật min và max cho mỗi trục
       minPoint.x = min(minPoint.x, point.x);
       minPoint.y = min(minPoint.y, point.y);
@@ -82,6 +317,9 @@ pair<Point, Point> getMinMaxPoint(const vector<vector<Point>> &points) {
       maxPoint.z = max(maxPoint.z, point.z);
     }
   }
+
+  cout << "output getMinMaxPoint2 " << minPoint.toStringXY() << " " << maxPoint.toStringXY()
+       << endl;
 
   return {minPoint, maxPoint};
 }
@@ -254,9 +492,34 @@ pair<Point, Point> intersectionZ(vector<Point> plane, int z) {
   return pair<Point, Point>(Point(0, 0, 0), Point(0, 0, 0));
 }
 
-bool checkPointInSidePolygon(const Point &point,
-                             const vector<Point> &polygonPoints) {  // Chuyển đổi điểm và đa giác từ
-                                                                    // cấu trúc Point sang kiểu CGAL
+bool checkPointInSidePolygon(const Point &point, const vector<Point> &polygonPoints) {
+  cout << "checkPointInSidePolygon polygonPoints.size() = " << polygonPoints.size() << endl;
+  // Chuyển đổi điểm và đa giác từ
+  // cấu trúc Point sang kiểu CGAL
+  cout << "polygonPoints Origins " << endl;
+  printVectorPoints(polygonPoints);
+  if (!isSimplePolygon(polygonPoints)) {
+    cout << "\nNOT SIMPLE POLYGON" << endl;
+    // printVectorPoints(polygonPoints);
+
+    auto poly2s = simplePolygons({polygonPoints});
+    cout << "checkPointInSidePolygon poly2s.size() = " << poly2s.size() << endl;
+    int countPoly2 = 0;
+    for (auto p2 : poly2s) {
+      cout << "checkPointInSidePolygon polygonPoints After make Simple " << countPoly2++ << "  "
+           << endl;
+      cout << "checkPointInSidePolygon p2.size() After make Simple " << p2.size() << "  " << endl;
+      printVectorPoints(p2);
+      if (checkPointInSidePolygon(point, p2)) {
+        cout << "checkPointInSidePolygon TRUE" << endl;
+        return true;
+      }
+    }
+    cout << "checkPointInSidePolygon FALSE" << endl;
+    return false;
+  }
+
+  cout << "Simple Polygons" << endl;
   Point_2 cgalPoint(point.x, point.y);
   Polygon_2 polygon;
   for (const auto &p : polygonPoints) {
@@ -275,7 +538,7 @@ bool checkPointInSidePolygon(const Point &point,
 
 bool checkPointInSidePolygons(const Point &point, const vector<vector<Point>> &polygonPoints) {
   for (const auto &p : polygonPoints) {
-    // cout << "Polygon :" << p.size() << endl;
+    cout << "Polygon :" << p.size() << endl;
     // printVectorPoints(p);
     if (checkPointInSidePolygon(point, p)) {
       return true;

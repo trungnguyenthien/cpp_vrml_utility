@@ -15,30 +15,45 @@
 
 void process(vector<Point> &points, vector<vector<int>> &faces, int numberCube, float sizeCube) {
   // printMinMaxPoint(points);
-  auto minMaxPoints = getMinMaxPoint(points);
+  auto minMaxPoints = getMinMaxPoint1(points);
   auto minPoint = minMaxPoints.first;
   auto maxPoint = minMaxPoints.second;
   int count = 0;
   vector<Point> randInsidePoints;
-  while (count < numberCube) {
-    auto rz = randomFloat(minPoint.z, maxPoint.z);
+  // float rz = -6103.69;
 
-    vector<vector<Point>> polys = polygonAtZ(points, faces, rz);
-    auto minMaxPointAtZ = getMinMaxPoint(polys);
+  // vector<vector<Point>> polys = polygonAtZ(points, faces, rz);
+  // printVectorVectorPoint(polys);
 
-    auto rx = randomFloat(minMaxPointAtZ.first.x, minMaxPointAtZ.second.x);
-    auto ry = randomFloat(minMaxPointAtZ.first.y, minMaxPointAtZ.second.y);
-    Point randPoint(rx, ry, rz);
+  // while (count < numberCube) {
+  // -6103.69
 
-    // bool isInside = false;
-    if (checkPointInSidePolygons(randPoint, polys)) {
-      cout << "TRY POINT:" << randPoint.toString() << "\t\t\t\t\t";
-      // isInside = true;
-      count++;
-      randInsidePoints.push_back(randPoint);
-      cout << "✅" << count << endl;
-    }
+  // float rz = randomFloat(minPoint.z, maxPoint.z);
+  float rz = -6028.69;
+
+  vector<vector<Point>> polys = polygonAtZ(points, faces, rz);
+  auto minMaxPointAtZ = getMinMaxPoint2(polys);
+
+  cout << "RAND Z " << rz << endl;
+  // while (true) {  // START WHILE
+  auto rx = randomFloat(minMaxPointAtZ.first.x, minMaxPointAtZ.second.x);
+  auto ry = randomFloat(minMaxPointAtZ.first.y, minMaxPointAtZ.second.y);
+  Point randPoint(rx, ry, rz);
+  cout << "rx = " << rx << ", ry = " << ry << ", rz = " << rz << endl;
+  cout << "TEST POINT:" << randPoint.toStringXY() << "\t\t\t\t\t";
+  // bool isInside = false;
+  if (checkPointInSidePolygons(randPoint, polys)) {
+    // isInside = true;
+    count++;
+    randInsidePoints.push_back(randPoint);
+    cout << "✅" << count << endl;
+    // break;
+  } else {
+    cout << "❌" << endl;
+    // break;
   }
+  // }  // END WHILE
+  // }
 }
 
 int main(int argc, char **argv) {
@@ -68,7 +83,7 @@ int main(int argc, char **argv) {
   vector<VrmlObject *> vrmlObjects = read_vrml_file(filename);
 
   VrmlFaceSet *faceSet = dynamic_cast<VrmlFaceSet *>(vrmlObjects[0]);
-
+  cout << "faceSet->points = " << faceSet->points.size() << endl;
   if (faceSet != NULL) {
     process(faceSet->points, faceSet->faces, numberCube, sizeCube);
   }
