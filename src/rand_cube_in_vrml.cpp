@@ -13,6 +13,8 @@
 #include "function/G4DCM.h"
 #include "function/Geometry3D.h"
 #include  <algorithm>
+#include <iostream>
+#include <iomanip>
 
 void process(vector<Point> &points, vector<vector<int>> &faces, int numberCube, float sizeCube) {
   // printMinMaxPoint(points);
@@ -60,6 +62,8 @@ void process(vector<Point> &points, vector<vector<int>> &faces, int numberCube, 
 }
 
 int main(int argc, char **argv) {
+  std::cout << std::fixed << std::setprecision(3); // Thiết lập độ chính xác là 3 chữ số phần thập phân
+
   std::srand ( unsigned ( std::time(0) ) );
   CLI::App app{"---"};
   std::string filename = "";
