@@ -42,7 +42,7 @@ using namespace std;
 bool checkPointInSidePolygon(const Point &point, const vector<Point> &polygonPoints);
 bool checkPointInSidePolygons(const Point &point, const vector<vector<Point>> &polygonPoints);
 vector<vector<Point>> polygonAtZ(const vector<Point> &shapePoints,
-                                 const vector<vector<int>> &faceSet, int z);
+                                 const vector<vector<int>> &faceSet, float z);
 
 Point_3 convertToPoint_3(Point p);
 Point convertFromPoint_3(Point_3 p3);

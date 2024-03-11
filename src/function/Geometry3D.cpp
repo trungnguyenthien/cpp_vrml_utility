@@ -303,7 +303,7 @@ pair<Point, Point> getMinMaxPoint1(const vector<Point> &points) {
     maxPoint.y = std::max(maxPoint.y, point.y);
     maxPoint.z = std::max(maxPoint.z, point.z);
   }
-  // cout << "output getMinMaxPoint1 " << minPoint.toStringXY() << " " << maxPoint.toStringXY() << endl;
+  // cout << "output getMinMaxPoint1 " << minPoint.toString() << " " << maxPoint.toString() << endl;
   return {minPoint, maxPoint};
 }
 
@@ -444,7 +444,7 @@ vector<pair<Point, Point>> createConnections(const vector<Segment> &segments) {
   return connections;
 }
 
-Plane_3 createPlane3Z(int z) {
+Plane_3 createPlane3Z(float z) {
   Point_3 point_on_plane(0, 0, z);
 
   // Tạo vector pháp tuyến cho mặt phẳng. Đối với mặt phẳng song song với Oxy và có tọa độ z là 222,
@@ -486,7 +486,7 @@ vector<Point> getFacePoint(vector<Point> shapePoints, vector<int> faceSet) {
 Point convertFromPoint_3(Point_3 p3) { return Point(p3.x(), p3.y(), p3.z()); }
 Point_3 convertToPoint_3(Point p) { return Point_3(p.x, p.y, p.z); }
 
-pair<Point, Point> intersectionZ(vector<Point> plane, int z) {
+pair<Point, Point> intersectionZ(vector<Point> plane, float z) {
   Plane_3 planez = createPlane3Z(z);
   // cout << "intersectionZ 2" << endl;
   try {
@@ -559,9 +559,11 @@ bool checkPointInSidePolygons(const Point &point, const vector<vector<Point>> &p
 }
 
 vector<vector<Point>> polygonAtZ(const vector<Point> &shapePoints,
-                                 const vector<vector<int>> &faceSet, int z) {
+                                 const vector<vector<int>> &faceSet, float z) {
   vector<Segment> segments;
-  // cout << "faceSet " << faceSet.size() << endl;
+  // cout << "polygonAtZ shapePoints.size() = " << shapePoints.size() << endl;
+  // cout << "polygonAtZ faceSet.size() = " << faceSet.size() << endl;
+  // cout << "polygonAtZ z = " << z << endl;
   for (auto face : faceSet) {
     try {
       auto facePoint = getFacePoint(shapePoints, face);
@@ -574,6 +576,7 @@ vector<vector<Point>> polygonAtZ(const vector<Point> &shapePoints,
     } catch (const std::runtime_error &e) {
     }
   }
+  // cout << "polygonAtZ segments.size() = " << segments.size() << endl;
   auto polygonPath = findPolygonPath(createConnections(segments));
 
   return polygonPath;

@@ -24,13 +24,14 @@ void process(vector<Point> &points, vector<vector<int>> &faces, int numberCube, 
 
   // vector<vector<Point>> polys = polygonAtZ(points, faces, rz);
   // printVectorVectorPoint(polys);
-
+  // cout << "minpoint = " << minPoint.toString <<
   while (count < numberCube) {
     // -6103.69
 
     float rz = randomFloat(minPoint.z, maxPoint.z);
-    // float rz = -6028.69;
-
+    
+    // float rz = -6025.58;
+    // cout << "RZ = " << rz << endl;
     vector<vector<Point>> polys = polygonAtZ(points, faces, rz);
     auto minMaxPointAtZ = getMinMaxPoint2(polys);
 
