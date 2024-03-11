@@ -57,6 +57,7 @@ void process(vector<Point> &points, vector<vector<int>> &faces, int numberCube, 
         cout << "✅\t" << count << "/" << numberCube << endl;
         WrlShapeCubic cubic("-", Point(randPoint.x, randPoint.y, randPoint.z),
                             string("InnerPoint_") + intToString(count));
+        cubic.size = Size3D(sizeCube);
         outputFile << cubic.print() << endl;
         break;
       } else {
