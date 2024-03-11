@@ -35,7 +35,7 @@ void process(vector<Point> &points, vector<vector<int>> &faces, int numberCube, 
 
     float rz = randomFloat(minPoint.z, maxPoint.z);
 
-    // float rz = -6025.58;
+    // float rz = -6102.187;
     // cout << "RZ = " << rz << endl;
     vector<vector<Point>> polys = polygonAtZ(points, faces, rz);
     auto minMaxPointAtZ = getMinMaxPoint2(polys);

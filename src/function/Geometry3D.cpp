@@ -1,6 +1,7 @@
 #include "Geometry3D.h"
 
 #include <algorithm>
+#include <chrono>
 #include <initializer_list>
 #include <iostream>
 #include <limits>
@@ -10,7 +11,7 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
-#include <chrono>
+
 #include "../common/Debug.h"
 #include "../common/VRML.h"
 
@@ -253,10 +254,10 @@ bool isSimplePolygon(const vector<Point> &points) {
 }
 
 float randomFloat(float min, float max) {
-    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-    mt19937 gen(seed);
-    uniform_real_distribution<float> dis(min, max);
-    auto result = dis(gen);
+  unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+  mt19937 gen(seed);
+  uniform_real_distribution<float> dis(min, max);
+  auto result = dis(gen);
   // cout << "randomFloat(" << min << ", " << max << ") = " << result << endl;
   return result;
 }
@@ -298,7 +299,7 @@ pair<Point, Point> getMinMaxPoint1(const vector<Point> &points) {
     maxPoint.y = std::max(maxPoint.y, point.y);
     maxPoint.z = std::max(maxPoint.z, point.z);
   }
-  // cout << "output getMinMaxPoint1 " << minPoint.toString() << " " << maxPoint.toString() << endl;
+  cout << "getMinMaxPoint1 " << minPoint.toString() << " " << maxPoint.toString() << endl;
   return {minPoint, maxPoint};
 }
 
@@ -326,7 +327,8 @@ pair<Point, Point> getMinMaxPoint2(const vector<vector<Point>> &points) {
     }
   }
 
-  // cout << "output getMinMaxPoint2 " << minPoint.toStringXY() << " " << maxPoint.toStringXY() << endl;
+  // cout << "output getMinMaxPoint2 " << minPoint.toStringXY() << " " << maxPoint.toStringXY() <<
+  // endl;
 
   return {minPoint, maxPoint};
 }
