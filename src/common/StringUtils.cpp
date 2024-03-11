@@ -183,6 +183,12 @@ std::string toLowerCase(const std::string &str) {
   return lowerCaseStr;  // Trả về chuỗi mới đã được chuyển đổi
 }
 
+string intToString(int number) {
+  std::stringstream ss;
+  ss << number;
+  return ss.str();
+}
+
 bool isSpace(char test) {
   vector<int> whitespaces = {9, 10, 11, 13, 32, 0};
   int testInt = static_cast<int>(test);

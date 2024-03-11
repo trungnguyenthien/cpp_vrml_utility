@@ -4,6 +4,9 @@
 #include <cairo/cairo.h>
 
 #include <CLI/CLI.hpp>
+#include <algorithm>
+#include <iomanip>
+#include <iostream>
 
 #include "common/Debug.h"
 #include "common/Model.h"
@@ -12,11 +15,10 @@
 #include "function/DrawBoard.h"
 #include "function/G4DCM.h"
 #include "function/Geometry3D.h"
-#include  <algorithm>
-#include <iostream>
-#include <iomanip>
+#include "function/WRLHelper.h"
 
-void process(vector<Point> &points, vector<vector<int>> &faces, int numberCube, float sizeCube) {
+void process(vector<Point> &points, vector<vector<int>> &faces, int numberCube, float sizeCube,
+             std::ofstream &outputFile) {
   // printMinMaxPoint(points);
   auto minMaxPoints = getMinMaxPoint1(points);
   auto minPoint = minMaxPoints.first;
@@ -24,6 +26,7 @@ void process(vector<Point> &points, vector<vector<int>> &faces, int numberCube, 
   int count = 0;
   int failed = 0;
   vector<Point> randInsidePoints;
+  ostringstream outputStream;
   // float rz = -6103.69;
 
   // vector<vector<Point>> polys = polygonAtZ(points, faces, rz);
@@ -33,13 +36,12 @@ void process(vector<Point> &points, vector<vector<int>> &faces, int numberCube, 
     // -6103.69
 
     float rz = randomFloat(minPoint.z, maxPoint.z);
-    
+
     // float rz = -6025.58;
     // cout << "RZ = " << rz << endl;
     vector<vector<Point>> polys = polygonAtZ(points, faces, rz);
     auto minMaxPointAtZ = getMinMaxPoint2(polys);
 
-    
     while (true) {  // START WHILE
       auto rx = randomFloat(minMaxPointAtZ.first.x, minMaxPointAtZ.second.x);
       auto ry = randomFloat(minMaxPointAtZ.first.y, minMaxPointAtZ.second.y);
@@ -53,6 +55,9 @@ void process(vector<Point> &points, vector<vector<int>> &faces, int numberCube, 
         count++;
         randInsidePoints.push_back(randPoint);
         cout << "✅\t" << count << "/" << numberCube << endl;
+        WrlShapeCubic cubic("-", Point(randPoint.x, randPoint.y, randPoint.z),
+                            string("InnerPoint_") + intToString(count));
+        outputFile << cubic.print() << endl;
         break;
       } else {
         cout << "❌\tFail: " << failed++ << endl;
@@ -60,12 +65,14 @@ void process(vector<Point> &points, vector<vector<int>> &faces, int numberCube, 
       }
     }  // END WHILE
   }
+  // appendAfterLine(wrlFile, logFile + ".wrl", "#End of file.", outputFile.str());
 }
 
 int main(int argc, char **argv) {
-  std::cout << std::fixed << std::setprecision(3); // Thiết lập độ chính xác là 3 chữ số phần thập phân
+  std::cout << std::fixed
+            << std::setprecision(3);  // Thiết lập độ chính xác là 3 chữ số phần thập phân
 
-  std::srand ( unsigned ( std::time(0) ) );
+  std::srand(unsigned(std::time(0)));
   CLI::App app{"---"};
   std::string filename = "";
   app.add_option("-f,--file", filename, "Path to input file");
@@ -94,7 +101,7 @@ int main(int argc, char **argv) {
   VrmlFaceSet *faceSet = dynamic_cast<VrmlFaceSet *>(vrmlObjects[0]);
   cout << "faceSet->points = " << faceSet->points.size() << endl;
   if (faceSet != NULL) {
-    process(faceSet->points, faceSet->faces, numberCube, sizeCube);
+    process(faceSet->points, faceSet->faces, numberCube, sizeCube, outputFile);
   }
 
   outputFile.close();

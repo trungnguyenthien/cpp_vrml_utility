@@ -1,0 +1,330 @@
+#---------- SOLID: cubic: InnerPoint_1
+Shape {
+	appearance Appearance {
+		material Material {
+			diffuseColor 1 1 1  # -
+			transparency 0.7
+		}
+	}
+	geometry IndexedFaceSet {
+		coord Coordinate {
+			point [
+				-2878.99 -705.119 -6025.74,
+				-2878.49 -705.119 -6025.74,
+				-2878.49 -704.619 -6025.74,
+				-2878.99 -704.619 -6025.74,
+				-2878.99 -705.119 -6025.24,
+				-2878.49 -705.119 -6025.24,
+				-2878.49 -704.619 -6025.24,
+				-2878.99 -704.619 -6025.24,
+			]
+		}
+		coordIndex [
+			0, 3, 2, 1, -1,
+			4, 7, 3, 0, -1,
+			7, 6, 2, 3, -1,
+			6, 5, 1, 2, -1,
+			5, 4, 0, 1, -1,
+			4, 5, 6, 7, -1,
+		]
+		solid FALSE
+	}
+}
+
+#---------- SOLID: cubic: InnerPoint_2
+Shape {
+	appearance Appearance {
+		material Material {
+			diffuseColor 1 1 1  # -
+			transparency 0.7
+		}
+	}
+	geometry IndexedFaceSet {
+		coord Coordinate {
+			point [
+				-2877.53 -696.652 -6040.01,
+				-2877.03 -696.652 -6040.01,
+				-2877.03 -696.152 -6040.01,
+				-2877.53 -696.152 -6040.01,
+				-2877.53 -696.652 -6039.51,
+				-2877.03 -696.652 -6039.51,
+				-2877.03 -696.152 -6039.51,
+				-2877.53 -696.152 -6039.51,
+			]
+		}
+		coordIndex [
+			0, 3, 2, 1, -1,
+			4, 7, 3, 0, -1,
+			7, 6, 2, 3, -1,
+			6, 5, 1, 2, -1,
+			5, 4, 0, 1, -1,
+			4, 5, 6, 7, -1,
+		]
+		solid FALSE
+	}
+}
+
+#---------- SOLID: cubic: InnerPoint_3
+Shape {
+	appearance Appearance {
+		material Material {
+			diffuseColor 1 1 1  # -
+			transparency 0.7
+		}
+	}
+	geometry IndexedFaceSet {
+		coord Coordinate {
+			point [
+				-2928.06 -689.554 -6080.21,
+				-2927.56 -689.554 -6080.21,
+				-2927.56 -689.054 -6080.21,
+				-2928.06 -689.054 -6080.21,
+				-2928.06 -689.554 -6079.71,
+				-2927.56 -689.554 -6079.71,
+				-2927.56 -689.054 -6079.71,
+				-2928.06 -689.054 -6079.71,
+			]
+		}
+		coordIndex [
+			0, 3, 2, 1, -1,
+			4, 7, 3, 0, -1,
+			7, 6, 2, 3, -1,
+			6, 5, 1, 2, -1,
+			5, 4, 0, 1, -1,
+			4, 5, 6, 7, -1,
+		]
+		solid FALSE
+	}
+}
+
+#---------- SOLID: cubic: InnerPoint_4
+Shape {
+	appearance Appearance {
+		material Material {
+			diffuseColor 1 1 1  # -
+			transparency 0.7
+		}
+	}
+	geometry IndexedFaceSet {
+		coord Coordinate {
+			point [
+				-2873.92 -717.541 -6029.5,
+				-2873.42 -717.541 -6029.5,
+				-2873.42 -717.041 -6029.5,
+				-2873.92 -717.041 -6029.5,
+				-2873.92 -717.541 -6029,
+				-2873.42 -717.541 -6029,
+				-2873.42 -717.041 -6029,
+				-2873.92 -717.041 -6029,
+			]
+		}
+		coordIndex [
+			0, 3, 2, 1, -1,
+			4, 7, 3, 0, -1,
+			7, 6, 2, 3, -1,
+			6, 5, 1, 2, -1,
+			5, 4, 0, 1, -1,
+			4, 5, 6, 7, -1,
+		]
+		solid FALSE
+	}
+}
+
+#---------- SOLID: cubic: InnerPoint_5
+Shape {
+	appearance Appearance {
+		material Material {
+			diffuseColor 1 1 1  # -
+			transparency 0.7
+		}
+	}
+	geometry IndexedFaceSet {
+		coord Coordinate {
+			point [
+				-2886.25 -731.372 -6078.28,
+				-2885.75 -731.372 -6078.28,
+				-2885.75 -730.872 -6078.28,
+				-2886.25 -730.872 -6078.28,
+				-2886.25 -731.372 -6077.78,
+				-2885.75 -731.372 -6077.78,
+				-2885.75 -730.872 -6077.78,
+				-2886.25 -730.872 -6077.78,
+			]
+		}
+		coordIndex [
+			0, 3, 2, 1, -1,
+			4, 7, 3, 0, -1,
+			7, 6, 2, 3, -1,
+			6, 5, 1, 2, -1,
+			5, 4, 0, 1, -1,
+			4, 5, 6, 7, -1,
+		]
+		solid FALSE
+	}
+}
+
+#---------- SOLID: cubic: InnerPoint_6
+Shape {
+	appearance Appearance {
+		material Material {
+			diffuseColor 1 1 1  # -
+			transparency 0.7
+		}
+	}
+	geometry IndexedFaceSet {
+		coord Coordinate {
+			point [
+				-2888.35 -722.724 -6037,
+				-2887.85 -722.724 -6037,
+				-2887.85 -722.224 -6037,
+				-2888.35 -722.224 -6037,
+				-2888.35 -722.724 -6036.5,
+				-2887.85 -722.724 -6036.5,
+				-2887.85 -722.224 -6036.5,
+				-2888.35 -722.224 -6036.5,
+			]
+		}
+		coordIndex [
+			0, 3, 2, 1, -1,
+			4, 7, 3, 0, -1,
+			7, 6, 2, 3, -1,
+			6, 5, 1, 2, -1,
+			5, 4, 0, 1, -1,
+			4, 5, 6, 7, -1,
+		]
+		solid FALSE
+	}
+}
+
+#---------- SOLID: cubic: InnerPoint_7
+Shape {
+	appearance Appearance {
+		material Material {
+			diffuseColor 1 1 1  # -
+			transparency 0.7
+		}
+	}
+	geometry IndexedFaceSet {
+		coord Coordinate {
+			point [
+				-2923.61 -692.841 -6064.32,
+				-2923.11 -692.841 -6064.32,
+				-2923.11 -692.341 -6064.32,
+				-2923.61 -692.341 -6064.32,
+				-2923.61 -692.841 -6063.82,
+				-2923.11 -692.841 -6063.82,
+				-2923.11 -692.341 -6063.82,
+				-2923.61 -692.341 -6063.82,
+			]
+		}
+		coordIndex [
+			0, 3, 2, 1, -1,
+			4, 7, 3, 0, -1,
+			7, 6, 2, 3, -1,
+			6, 5, 1, 2, -1,
+			5, 4, 0, 1, -1,
+			4, 5, 6, 7, -1,
+		]
+		solid FALSE
+	}
+}
+
+#---------- SOLID: cubic: InnerPoint_8
+Shape {
+	appearance Appearance {
+		material Material {
+			diffuseColor 1 1 1  # -
+			transparency 0.7
+		}
+	}
+	geometry IndexedFaceSet {
+		coord Coordinate {
+			point [
+				-2898.01 -716.166 -6090.54,
+				-2897.51 -716.166 -6090.54,
+				-2897.51 -715.666 -6090.54,
+				-2898.01 -715.666 -6090.54,
+				-2898.01 -716.166 -6090.04,
+				-2897.51 -716.166 -6090.04,
+				-2897.51 -715.666 -6090.04,
+				-2898.01 -715.666 -6090.04,
+			]
+		}
+		coordIndex [
+			0, 3, 2, 1, -1,
+			4, 7, 3, 0, -1,
+			7, 6, 2, 3, -1,
+			6, 5, 1, 2, -1,
+			5, 4, 0, 1, -1,
+			4, 5, 6, 7, -1,
+		]
+		solid FALSE
+	}
+}
+
+#---------- SOLID: cubic: InnerPoint_9
+Shape {
+	appearance Appearance {
+		material Material {
+			diffuseColor 1 1 1  # -
+			transparency 0.7
+		}
+	}
+	geometry IndexedFaceSet {
+		coord Coordinate {
+			point [
+				-2902.67 -694.004 -6038.2,
+				-2902.17 -694.004 -6038.2,
+				-2902.17 -693.504 -6038.2,
+				-2902.67 -693.504 -6038.2,
+				-2902.67 -694.004 -6037.7,
+				-2902.17 -694.004 -6037.7,
+				-2902.17 -693.504 -6037.7,
+				-2902.67 -693.504 -6037.7,
+			]
+		}
+		coordIndex [
+			0, 3, 2, 1, -1,
+			4, 7, 3, 0, -1,
+			7, 6, 2, 3, -1,
+			6, 5, 1, 2, -1,
+			5, 4, 0, 1, -1,
+			4, 5, 6, 7, -1,
+		]
+		solid FALSE
+	}
+}
+
+#---------- SOLID: cubic: InnerPoint_10
+Shape {
+	appearance Appearance {
+		material Material {
+			diffuseColor 1 1 1  # -
+			transparency 0.7
+		}
+	}
+	geometry IndexedFaceSet {
+		coord Coordinate {
+			point [
+				-2898.21 -684.206 -6048.39,
+				-2897.71 -684.206 -6048.39,
+				-2897.71 -683.706 -6048.39,
+				-2898.21 -683.706 -6048.39,
+				-2898.21 -684.206 -6047.89,
+				-2897.71 -684.206 -6047.89,
+				-2897.71 -683.706 -6047.89,
+				-2898.21 -683.706 -6047.89,
+			]
+		}
+		coordIndex [
+			0, 3, 2, 1, -1,
+			4, 7, 3, 0, -1,
+			7, 6, 2, 3, -1,
+			6, 5, 1, 2, -1,
+			5, 4, 0, 1, -1,
+			4, 5, 6, 7, -1,
+		]
+		solid FALSE
+	}
+}
+

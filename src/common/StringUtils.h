@@ -14,7 +14,7 @@ string joinVector(const vector<int> &vec, const string &separator);
 vector<string> splitStringBySpace(const string &input);
 
 string toLowerCase(const string &str);
-
+string intToString(int number);
 // Loại bỏ các ký tự khoảng trắng, tab, xuống dòng ở đầu và cuối {str}.
 // Return chuỗi mới sau khi xử lý
 // Không sử dụng isspace, hãy trim các ký tự sau "\t\n\v\f\r "

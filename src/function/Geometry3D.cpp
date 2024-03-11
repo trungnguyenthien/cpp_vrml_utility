@@ -254,12 +254,9 @@ bool isSimplePolygon(const vector<Point> &points) {
 
 float randomFloat(float min, float max) {
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-    std::mt19937 gen(seed);
-    std::uniform_real_distribution<float> dis(min, max);
+    mt19937 gen(seed);
+    uniform_real_distribution<float> dis(min, max);
     auto result = dis(gen);
-
-  // srand(static_cast<unsigned>(time(0)));
-  // auto result = min + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (max - min)));
   // cout << "randomFloat(" << min << ", " << max << ") = " << result << endl;
   return result;
 }

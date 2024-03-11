@@ -456,8 +456,8 @@ vector<VrmlObject *> read_vrml_file(string file) {
     vrmlObjects.push_back(faceSet);
   }
 
-  cout << "faces points " << faces.size() << "," << points.size() << endl;
-  cout << "vrmlObjects.size()=" << vrmlObjects.size() << endl;
+  // cout << "faces points " << faces.size() << "," << points.size() << endl;
+  // cout << "vrmlObjects.size()=" << vrmlObjects.size() << endl;
 
   return vrmlObjects;
 }
