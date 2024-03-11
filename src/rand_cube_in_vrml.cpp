@@ -11,7 +11,7 @@
 #include "common/Model.h"
 #include "common/StringUtils.h"
 #include "common/VRML.h"
-#include "function/G4DCM.h"
+// #include "function/G4DCM.h"
 #include "function/Geometry3D.h"
 #include "function/WRLHelper.h"
 
