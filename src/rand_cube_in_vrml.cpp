@@ -22,6 +22,7 @@ void process(vector<Point> &points, vector<vector<int>> &faces, int numberCube, 
   auto minPoint = minMaxPoints.first;
   auto maxPoint = minMaxPoints.second;
   int count = 0;
+  int failed = 0;
   vector<Point> randInsidePoints;
   // float rz = -6103.69;
 
@@ -44,17 +45,17 @@ void process(vector<Point> &points, vector<vector<int>> &faces, int numberCube, 
       auto ry = randomFloat(minMaxPointAtZ.first.y, minMaxPointAtZ.second.y);
       Point randPoint(rx, ry, rz);
       // cout << "rx = " << rx << ", ry = " << ry << ", rz = " << rz << endl;
-      cout << "-- RAND Z " << rz << "\t\t";
-      cout << randPoint.toStringXY() << "\t\t";
+      cout << "RAND_Z " << rz << "\tRAND_X_Y ";
+      cout << randPoint.toStringXY() << "\t";
       // bool isInside = false;
       if (checkPointInSidePolygons(randPoint, polys)) {
         // isInside = true;
         count++;
         randInsidePoints.push_back(randPoint);
-        cout << "✅\t\t" << count << endl;
+        cout << "✅\t" << count << "/" << numberCube << endl;
         break;
       } else {
-        cout << "❌" << endl;
+        cout << "❌\tFail: " << failed++ << endl;
         // break;
       }
     }  // END WHILE
